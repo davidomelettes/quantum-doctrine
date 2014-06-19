@@ -1,6 +1,6 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for ZF2",
+    "name": "omelettes/quantum-doctrine",
+    "description": "Quantum project based on Doctrine-MongoDB ORM",
     "license": "BSD-3-Clause",
     "keywords": [
         "framework",
@@ -10,7 +10,8 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.3.*",
-        "doctrine/doctrine-orm-module": "0.*"
+        "doctrine/doctrine-orm-module": "0.*",
+        "zendframework/zend-developer-tools": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.*"
