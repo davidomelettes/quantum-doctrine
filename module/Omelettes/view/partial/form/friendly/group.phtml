@@ -1,0 +1,16 @@
+<?php
+
+$element = $this->element;
+$elementType = $element->getAttribute('type');
+if (!$elementType) {
+	throw new \Exception('Missing element type for: ' . get_class($element));
+}
+
+?>
+<div class="form-group <?php echo $elementType; ?><?php if ($this->formElementErrors($element)) echo " has-error"; ?><?php if ($element->getOption('group_class')) echo ' ' . $element->getOption('group_class'); ?>">
+    <?php echo $this->partial(
+        'partial/form/friendly/element.phtml',
+        array(
+            'element' => $element,
+        )); ?>
+</div>

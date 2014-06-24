@@ -1,10 +1,12 @@
-<h2>Login</h2>
-
-<p>Form:</p>
-<?php
-    $form = $this->form;
-    $form->prepare();
-?>
-<?php echo $this->form()->openTag($form); ?>
-<?php echo $this->formCollection($form); ?>y
-<?php echo $this->form()->closeTag($form); ?>
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
+            </div>
+            <div class="panel-body">
+                <?php echo $this->partial('form/friendly', array('form' => $this->form)); ?>
+            </div>
+        </div>
+    </div>
+</div>

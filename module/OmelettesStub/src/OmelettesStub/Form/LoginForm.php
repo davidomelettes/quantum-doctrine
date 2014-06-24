@@ -13,6 +13,7 @@ class LoginForm
     /**
      * @Form\Type("Zend\Form\Element\Email")
      * @Form\Options({"label":"Email Address"})
+     * @Form\Attributes({"placeholder":"Email Address"}) 
      */
     public $emailAddress;
     
@@ -20,12 +21,12 @@ class LoginForm
      * @Form\Type("Zend\Form\Element\Password")
      * @Form\Filter({"name":"StringTrim"})
      * @Form\Options({"label":"Password"})
+     * @Form\Attributes({"placeholder":"Password"}) 
      */
     public $password;
     
     /**
-     * @Form\Type("Zend\Form\Element\Submit")
-     * @Form\Attributes({"value":"Login"}) 
+     * @Form\ComposedObject("OmelettesStub\Form\SubmitFieldset") 
      */
     public $submit;
     

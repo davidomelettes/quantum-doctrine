@@ -10,15 +10,22 @@ class AuthController extends AbstractController
 {
     public function loginAction()
     {
-        $result = $this->authenticateUser('david@omelett.es', 'password');
-        if ($result->isValid()) {
-        } else {
-        }
+        //$result = $this->authenticateUser('david@omelett.es', 'password');
         
         $builder = new AnnotationBuilder();
         $form = $builder->createForm('OmelettesStub\Form\LoginForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->flashSuccess('Success');
+            } else {
+                // Failure
+            }
+        }
         
         return $this->returnViewModel(array(
+            'title' => 'Login',
             'form' => $form,
         ));
     }
