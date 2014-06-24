@@ -3,8 +3,9 @@
 namespace Omelettes;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
-class Module implements ConfigProviderInterface
+class Module implements ConfigProviderInterface, ServiceProviderInterface
 {
     public function getConfig()
     {
@@ -18,6 +19,14 @@ class Module implements ConfigProviderInterface
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
+            ),
+        );
+    }
+    
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
             ),
         );
     }

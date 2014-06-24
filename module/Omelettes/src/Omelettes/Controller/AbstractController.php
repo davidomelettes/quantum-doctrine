@@ -34,4 +34,19 @@ class AbstractController extends AbstractActionController
         return $viewModel;
     }
     
+    public function flashError($message)
+    {
+        return $this->flashMessenger()->addErrorMessage($message);
+    }
+    
+    public function flashSuccess($message)
+    {
+        return $this->flashMessenger()->addSuccessMessage($message);
+    }
+    
+    public function flashInfo($message)
+    {
+        return $this->flashMessenger()->addInfoMessage($message);
+    }
+    
 }

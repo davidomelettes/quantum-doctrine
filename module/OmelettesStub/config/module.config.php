@@ -4,6 +4,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
+            'Stub\Controller\Auth' => 'OmelettesStub\Controller\AuthController',
             'Stub\Controller\Stub' => 'OmelettesStub\Controller\StubController',
         ),
     ),
@@ -17,6 +18,28 @@ return array(
                     'defaults'		=> array(
                         'controller'	=> 'Stub\Controller\Stub',
                         'action'		=> 'hello-world',
+                    ),
+                ),
+            ),
+            
+            'login' => array(
+                'type'		=> 'Literal',
+                'options'	=> array(
+                    'route'			=> '/login',
+                    'defaults'		=> array(
+                        'controller'	=> 'Stub\Controller\Auth',
+                        'action'		=> 'login',
+                    ),
+                ),
+            ),
+            
+            'logout' => array(
+                'type'		=> 'Literal',
+                'options'	=> array(
+                    'route'			=> '/logout',
+                    'defaults'		=> array(
+                        'controller'	=> 'Stub\Controller\Auth',
+                        'action'		=> 'logout',
                     ),
                 ),
             ),
