@@ -17,7 +17,7 @@ class SubmitFieldset
     
     /**
      * @Form\Type("Zend\Form\Element\Submit")
-     * @Form\Attributes({"value":"Login", "class":"btn btn-lg btn-block btn-primary"}) 
+     * @Form\Attributes({"value":"Save", "class":"btn btn-lg btn-block btn-primary"}) 
      */
     public $submit;
     

@@ -6,6 +6,7 @@ return array(
         'invokables' => array(
             'Stub\Controller\Auth' => 'OmelettesStub\Controller\AuthController',
             'Stub\Controller\Stub' => 'OmelettesStub\Controller\StubController',
+            'Stub\Controller\Signup' => 'OmelettesStub\Controller\SignupController',
         ),
     ),
     
@@ -18,6 +19,17 @@ return array(
                     'defaults'		=> array(
                         'controller'	=> 'Stub\Controller\Stub',
                         'action'		=> 'hello-world',
+                    ),
+                ),
+            ),
+            
+            'signup' => array(
+                'type'		=> 'Literal',
+                'options'	=> array(
+                    'route'			=> '/signup',
+                    'defaults'		=> array(
+                        'controller'	=> 'Stub\Controller\Signup',
+                        'action'		=> 'signup',
                     ),
                 ),
             ),

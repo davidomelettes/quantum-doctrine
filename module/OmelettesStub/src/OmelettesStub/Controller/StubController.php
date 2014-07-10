@@ -16,10 +16,10 @@ class StubController extends AbstractController
         $this->flashError('Bad things');
         
         $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
-        $user = new OmDoc\User();
+        $user = $usersService->createDocument();
         $user->setFullName('David Edwards');
         $user->setEmailAddress('david@omelett.es');
-        $user->setPlaintextPassword('password');
+        //$user->setPlaintextPassword('password');
         $usersService->save($user);
         //$usersService->commit();
 

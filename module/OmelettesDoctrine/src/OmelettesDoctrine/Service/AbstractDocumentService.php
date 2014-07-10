@@ -26,11 +26,15 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      */
     protected $documentManager;
     
-    public function __construct(OmDoc\AbstractDocument $doc, DocumentManager $dm)
+    public function __construct(DocumentManager $dm)
     {
-        $this->document = $doc;
         $this->documentManager = $dm;
     }
+    
+    /**
+     * @return OmDoc\AbstractDocument
+     */
+    abstract function createDocument();
     
     /**
      * Allows us to specify default constraints
@@ -38,7 +42,7 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      */
     protected function getDefaultQueryBuilder()
     {
-        $qb = $this->documentManager->createQueryBuilder(get_class($this->document));
+        $qb = $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
         $qb->find()
            ->field('deleted')->exists(false);
         return $qb;

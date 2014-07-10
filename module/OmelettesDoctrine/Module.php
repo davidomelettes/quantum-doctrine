@@ -33,17 +33,21 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
             'factories' => array(
                 // Authentication
                 'Zend\Authentication\AuthenticationService' => function ($sm) {
-                    //$authAdapter = new DoctrineM
-                    //$storageAdapter = new DocumentR
-                    //$service = new Service\AuthService();
                     $service = $sm->get('doctrine.authenticationservice.odm_default');
-                
                     return $service;
                 },
                 
+                // Forms
+                'OmelettesDoctrine\Form\Factory' => function ($sm) {
+                    $dm = $sm->get('doctrine.documentmanager.odm_default');
+                    $factory = new Form\Factory();
+                    $factory->setDocumentManager($dm);
+                    return $factory;
+                },
+                
+                // Document Services
                 'OmelettesDoctrine\Service\UsersService' => function ($sm) {
                     $service = new Service\UsersService(
-                        new OmDoc\User(),
                         $sm->get('doctrine.documentmanager.odm_default')
                     );
                     return $service;

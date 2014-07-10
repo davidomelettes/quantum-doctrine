@@ -3,7 +3,7 @@
 $element = $this->element;
 $elementType = $element->getAttribute('type');
 if (!$elementType) {
-	throw new \Exception('Missing element type for: ' . get_class($element));
+	throw new \Exception('Missing type for ' . $element->getName() . ' element: ' . get_class($element));
 }
 
 ?>

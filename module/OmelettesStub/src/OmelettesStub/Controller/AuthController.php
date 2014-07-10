@@ -2,11 +2,11 @@
 
 namespace OmelettesStub\Controller;
 
-use Omelettes\Controller\AbstractController;
+use OmelettesDoctrine\Controller\AbstractDoctrineController;
 use Zend\Authentication;
 use Zend\Form\Annotation\AnnotationBuilder;
 
-class AuthController extends AbstractController
+class AuthController extends AbstractDoctrineController
 {
     public function loginAction()
     {
@@ -18,9 +18,16 @@ class AuthController extends AbstractController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $this->flashSuccess('Success');
-            } else {
-                // Failure
+                $data = $form->getData();
+                $authResult = $this->authenticateUser($data['emailAddress'], $data['password']);
+                if ($authResult->isValid()) {
+                    var_dump($authResult->getIdentity());
+                    //$this->getAuthenticationService()->getStorage()->write($authResult->getIdentity());
+                    $this->flashSuccess('Welcome back');
+                    //return $this->redirect()->toRoute('front');
+                } else {
+                    $this->flashError('Invalid email address and/or password');
+                }
             }
         }
         
@@ -37,7 +44,7 @@ class AuthController extends AbstractController
      */
     public function authenticateUser($username, $password)
     {
-        $authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
+        $authService = $this->getAuthenticationService();
         $authAdapter = $authService->getAdapter();
         $authAdapter->setIdentityValue($username) 
                     ->setCredentialValue($password);
@@ -45,6 +52,11 @@ class AuthController extends AbstractController
     }
     
     public function logoutAction()
+    {
+        
+    }
+    
+    public function signupAction()
     {
         
     }

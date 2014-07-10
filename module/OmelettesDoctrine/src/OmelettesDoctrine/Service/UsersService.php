@@ -9,6 +9,11 @@ use Zend\Paginator\Paginator;
 
 class UsersService extends AbstractDocumentService
 {
+    public function createDocument()
+    {
+        return new OmDoc\User($this);
+    }
+    
     public function save(OmDoc\User $user)
     {
         $now = new \DateTime();
