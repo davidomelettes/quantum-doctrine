@@ -21,6 +21,11 @@ class SignupController extends AbstractDoctrineController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
+                $accountsService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\AccountsService');
+                $account = $accountsService->createDocument();
+                $accountsService->save($account);
+                $user->setAccount($account);
+                
                 $usersService->save($user);
                 $usersService->commit();
                 $this->flashSuccess('Signup successful');

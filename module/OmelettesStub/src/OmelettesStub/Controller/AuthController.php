@@ -10,8 +10,6 @@ class AuthController extends AbstractDoctrineController
 {
     public function loginAction()
     {
-        //$result = $this->authenticateUser('david@omelett.es', 'password');
-        
         $builder = new AnnotationBuilder();
         $form = $builder->createForm('OmelettesStub\Form\LoginForm');
         $request = $this->getRequest();
@@ -21,10 +19,9 @@ class AuthController extends AbstractDoctrineController
                 $data = $form->getData();
                 $authResult = $this->authenticateUser($data['emailAddress'], $data['password']);
                 if ($authResult->isValid()) {
-                    var_dump($authResult->getIdentity());
-                    //$this->getAuthenticationService()->getStorage()->write($authResult->getIdentity());
+                    $this->getAuthenticationService()->getStorage()->write($authResult->getIdentity());
                     $this->flashSuccess('Welcome back');
-                    //return $this->redirect()->toRoute('front');
+                    return $this->redirect()->toRoute('front');
                 } else {
                     $this->flashError('Invalid email address and/or password');
                 }

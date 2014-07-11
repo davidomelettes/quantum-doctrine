@@ -12,6 +12,12 @@ use Zend\InputFilter;
 class User extends AbstractBaseClass
 {
     /**
+     * @var Account
+     * @ODM\ReferenceOne(targetDocument="Account")
+     */
+    protected $account;
+    
+    /**
      * @var string
      * @ODM\String
      */
@@ -35,6 +41,17 @@ class User extends AbstractBaseClass
      * @ODM\String
      */
     protected $salt;
+    
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+        return $this;
+    }
+    
+    public function getAccount()
+    {
+        return $this->account;
+    }
     
     public function setFullName($name)
     {

@@ -57,12 +57,6 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
         return new Paginator(new DoctrinePaginator($cursor));
     }
     
-    public function commit()
-    {
-        $this->documentManager->flush();
-        return $this;
-    }
-    
     public function find($id)
     {
         $qb = $this->getDefaultQueryBuilder()
@@ -84,6 +78,24 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     {
         $cursor = $this->getDefaultQueryBuilder()->find()->getQuery()->execute();
         return $this->getPaginator($cursor);
+    }
+    
+    public function save(OmDoc\AbstractBaseClass $document)
+    {
+        $now = new \DateTime();
+        if (!$document->getId()) {
+            $document->setCreated($now);
+        }
+        $document->setUpdated($now);
+        
+        $this->documentManager->persist($document);
+        return $this;
+    }
+    
+    public function commit()
+    {
+        $this->documentManager->flush();
+        return $this;
     }
     
 }

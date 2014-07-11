@@ -46,10 +46,12 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
                 },
                 
                 // Document Services
+                'OmelettesDoctrine\Service\AccountsService' => function ($sm) {
+                    $service = new Service\AccountsService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
                 'OmelettesDoctrine\Service\UsersService' => function ($sm) {
-                    $service = new Service\UsersService(
-                        $sm->get('doctrine.documentmanager.odm_default')
-                    );
+                    $service = new Service\UsersService($sm->get('doctrine.documentmanager.odm_default'));
                     return $service;
                 },
             ),

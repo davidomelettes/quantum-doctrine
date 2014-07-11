@@ -27,7 +27,11 @@ class StubController extends AbstractController
         //$paginator->setCurrentPageNumber(1)->setItemCountPerPage(5);
         
         foreach ($paginator as $foo) {
-            var_dump($foo);
+            //var_dump($foo);
+            //$account = $foo->getAccount();
+            //var_dump($account);
+            //var_dump($account->getCreated());
+            //var_dump($account);
         } 
         
         return $this->returnViewModel();
