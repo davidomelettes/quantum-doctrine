@@ -13,7 +13,7 @@ class LoginForm
      * @Form\Type("Zend\Form\Element\Email")
      * @Form\Required(true)
      * @Form\Options({"label":"Email Address"})
-     * @Form\Attributes({"id":"login-email"})
+     * @Form\Attributes({"id":"login-emailAddress"})
      */
     public $emailAddress;
     
@@ -25,6 +25,20 @@ class LoginForm
      * @Form\Attributes({"id":"login-password"})
      */
     public $password;
+    
+    /**
+     * @Form\Type("Omelettes\Form\Element\StaticAnchor")
+     * @Form\Options({"label":"Forgot Password?", "route_name":"forgot-password", "group_class":"pull-right"})
+     * @Form\Attributes({"id":"login-forgotPassword"})
+     */
+    public $forgotPassword;
+    
+    /**
+     * @Form\Type("Zend\Form\Element\Checkbox")
+     * @Form\Options({"label":"Remember Me"})
+     * @Form\Attributes({"id":"login-rememberMe"})
+     */
+    public $rememberMe;
     
     /**
      * @Form\Type("Zend\Form\Element\Csrf");

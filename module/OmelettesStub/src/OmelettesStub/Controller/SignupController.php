@@ -12,8 +12,8 @@ class SignupController extends AbstractDoctrineController
 {
     public function signupAction()
     {
-        $form = $this->createForm('OmelettesStub\Form\SignupForm');
         $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+        $form = $this->createDocumentForm('OmelettesStub\Form\SignupForm', $usersService);
         $user = $usersService->createDocument();
         $form->bind($user);
         

@@ -55,6 +55,17 @@ return array(
                     ),
                 ),
             ),
+            
+            'forgot-password' => array(
+                'type'		=> 'Literal',
+                'options'	=> array(
+                    'route'			=> '/forgot-password',
+                    'defaults'		=> array(
+                        'controller'	=> 'Stub\Controller\Auth',
+                        'action'		=> 'forgot-password',
+                    ),
+                ),
+            ),
         ),
     ),
     

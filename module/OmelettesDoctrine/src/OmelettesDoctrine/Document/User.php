@@ -100,7 +100,6 @@ class User extends AbstractBaseClass
     {
         if (!$this->inputFilter) {
             $filter = parent::getInputFilter();
-            $factory = $filter->getFactory();
             
             $filter->add(array(
                 'name'			=> 'emailAddress',

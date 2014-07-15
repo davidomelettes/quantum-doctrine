@@ -1,0 +1,4 @@
+<?php $element = $this->element; ?>
+<p class="form-control-static">
+    <a href="<?php echo $this->url($element->getRouteName(), $element->getRouteParams(), $element->getRouteOptions(), $element->getRouteReuseMatchedParams()); ?>"><?php echo $this->escapeHtml($element->getLabel()); ?></a>
+</p>

@@ -4,4 +4,5 @@ body.has-navbar-fixed-top {
 
 .panel h2.panel-title { font-size: 30px; }
 
-form .form-group.submit { margin: 0; }
+form .form-group-hidden { display: none; }
+form .form-group-submit { margin: 0; }

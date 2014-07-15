@@ -32,6 +32,14 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     }
     
     /**
+     * @return DocumentManager
+     */
+    public function getDocumentManager()
+    {
+        return $this->documentManager;
+    }
+    
+    /**
      * @return OmDoc\AbstractDocument
      */
     abstract function createDocument();

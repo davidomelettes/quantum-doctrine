@@ -28,21 +28,11 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
     public function getServiceConfig()
     {
         return array(
-            'aliases' => array(
-            ),
             'factories' => array(
                 // Authentication
                 'Zend\Authentication\AuthenticationService' => function ($sm) {
                     $service = $sm->get('doctrine.authenticationservice.odm_default');
                     return $service;
-                },
-                
-                // Forms
-                'OmelettesDoctrine\Form\Factory' => function ($sm) {
-                    $dm = $sm->get('doctrine.documentmanager.odm_default');
-                    $factory = new Form\Factory();
-                    $factory->setDocumentManager($dm);
-                    return $factory;
                 },
                 
                 // Document Services

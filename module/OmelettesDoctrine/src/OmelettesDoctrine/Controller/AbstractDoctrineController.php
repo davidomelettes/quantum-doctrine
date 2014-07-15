@@ -3,6 +3,7 @@
 namespace OmelettesDoctrine\Controller;
 
 use Omelettes\Controller\AbstractController;
+use OmelettesDoctrine\Service\AbstractDocumentService;
 use Zend\Authentication;
 use Zend\Form;
 
@@ -20,10 +21,10 @@ abstract class AbstractDoctrineController extends AbstractController
      * @param string $type
      * @return Form\Form
      */
-    public function createForm($type)
+    public function getManagedForm($type)
     {
-        $factory = $this->getServiceLocator()->get('OmelettesDoctrine\Form\Factory');
-        return $factory->createForm(array('type' => $type));
+        $form = $this->getServiceLocator()->get('FormElementManager')->get($type);
+        return $form;
     }
     
 }

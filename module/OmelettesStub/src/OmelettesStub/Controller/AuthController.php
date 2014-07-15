@@ -50,12 +50,32 @@ class AuthController extends AbstractDoctrineController
     
     public function logoutAction()
     {
-        
+        $auth = $this->getAuthenticationService();
+        if ($auth->hasIdentity()) {
+            $auth->clearIdentity();
+        }
+        	
+        $this->flashMessenger()->addSuccessMessage('You have successfully logged out');
+        return $this->redirect()->toRoute('login');
     }
     
-    public function signupAction()
+    public function forgotPasswordAction()
     {
+        $form = $this->getManagedForm('OmelettesStub\Form\ForgotPasswordForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->flashSuccess('Yes');
+            } else {
+                $this->flashError('No');
+            }
+        }
         
+        return $this->returnViewModel(array(
+            'title'   => 'Request a password reset',
+            'form'    => $form,
+        ));
     }
     
 }
