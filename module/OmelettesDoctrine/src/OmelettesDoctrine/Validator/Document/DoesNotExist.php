@@ -15,6 +15,8 @@ class DoesNotExist extends AbstractDocumentValidator
     
     public function isValid($value)
     {
+        $this->setValue($value);
+        
         $result = $this->documentService->findBy($this->field, $value);
         if ($result) {
             $this->error(self::ERROR_DOCUMENT_EXISTS, $value);

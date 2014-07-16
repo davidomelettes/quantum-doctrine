@@ -171,6 +171,8 @@ class User extends AbstractBaseClass
                     ),
                 ),
             ));
+            
+            $this->inputFilter = $filter;
         }
         
         return $this->inputFilter;

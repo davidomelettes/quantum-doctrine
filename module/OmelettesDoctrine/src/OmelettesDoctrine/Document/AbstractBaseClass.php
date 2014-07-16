@@ -76,9 +76,6 @@ abstract class AbstractBaseClass extends AbstractDocument implements InputFilter
     {
         if (!$this->inputFilter) {
             $filter = new InputFilter\InputFilter();
-            $factory = $filter->getFactory();
-            
-            //$filter->add($factory->createInput());
             
             $this->inputFilter = $filter;
         }

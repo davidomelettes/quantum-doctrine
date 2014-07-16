@@ -36,9 +36,15 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Fo
                     $form->setDocumentService($sm->get('OmelettesDoctrine\Service\UsersService'));
                     return $form;
                 },
-                'OmelettesStub\Form\ForgotPasswordForm' => function ($sm) {
+                'OmelettesStub\Form\PasswordForgotForm' => function ($sm) {
                     $sm = $sm->getServiceLocator();
-                    $form = new Form\ForgotPasswordForm();
+                    $form = new Form\PasswordForgotForm();
+                    $form->setDocumentService($sm->get('OmelettesDoctrine\Service\UsersService'));
+                    return $form;
+                },
+                'OmelettesStub\Form\PasswordResetForm' => function ($sm) {
+                    $sm = $sm->getServiceLocator();
+                    $form = new Form\PasswordResetForm();
                     $form->setDocumentService($sm->get('OmelettesDoctrine\Service\UsersService'));
                     return $form;
                 },

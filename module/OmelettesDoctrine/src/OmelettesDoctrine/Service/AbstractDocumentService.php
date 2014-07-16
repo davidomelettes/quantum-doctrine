@@ -45,12 +45,21 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     abstract function createDocument();
     
     /**
-     * Allows us to specify default constraints
-     * Query Builders should not be reused
+     * Query Builders should not be reused!
+     * @return Query\Builder
      */
-    protected function getDefaultQueryBuilder()
+    final protected function createQueryBuilder()
     {
-        $qb = $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
+        return $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
+    }
+    
+    /**
+     * Allows us to specify default constraints
+     * @return Query\Builder
+     */
+    protected function createDefaultFindQuery()
+    {
+        $qb = $this->createQueryBuilder();
         $qb->find()
            ->field('deleted')->exists(false);
         return $qb;
@@ -67,15 +76,15 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     
     public function find($id)
     {
-        $qb = $this->getDefaultQueryBuilder()
-                   ->field('id')->equals($id);
+        $qb = $this->createDefaultFindQuery();
+        $qb->field('id')->equals($id);
         return $qb->getQuery()->getSingleResult();
     }
     
     public function findBy($field, $value)
     {
-        $qb = $this->getDefaultQueryBuilder()->find()
-                   ->field($field)->equals($value);
+        $qb = $this->createDefaultFindQuery();
+        $qb->field($field)->equals($value);
         return $qb->getQuery()->getSingleResult();
     }
     
@@ -84,7 +93,8 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      */
     public function fetchAll()
     {
-        $cursor = $this->getDefaultQueryBuilder()->find()->getQuery()->execute();
+        $qb = $this->createDefaultFindQuery();
+        $cursor = $qb->getQuery()->execute();
         return $this->getPaginator($cursor);
     }
     
@@ -96,6 +106,14 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
         }
         $document->setUpdated($now);
         
+        $this->documentManager->persist($document);
+        return $this;
+    }
+    
+    public function delete(OmDoc\AbstractBaseClass $document)
+    {
+        $now = new \DateTime();
+        $document->setDeleted($now);
         $this->documentManager->persist($document);
         return $this;
     }

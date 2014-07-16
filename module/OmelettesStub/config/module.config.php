@@ -4,8 +4,8 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Stub\Controller\Auth' => 'OmelettesStub\Controller\AuthController',
-            'Stub\Controller\Stub' => 'OmelettesStub\Controller\StubController',
+            'Stub\Controller\Auth'   => 'OmelettesStub\Controller\AuthController',
+            'Stub\Controller\Stub'   => 'OmelettesStub\Controller\StubController',
             'Stub\Controller\Signup' => 'OmelettesStub\Controller\SignupController',
         ),
     ),
@@ -13,30 +13,30 @@ return array(
     'router' => array(
         'routes' => array(
             'front' => array(
-                'type'		=> 'Literal',
-                'options'	=> array(
-                    'route'			=> '/',
-                    'defaults'		=> array(
-                        'controller'	=> 'Stub\Controller\Stub',
-                        'action'		=> 'hello-world',
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\Stub',
+                        'action'     => 'hello-world',
                     ),
                 ),
             ),
             
             'signup' => array(
-                'type'		=> 'Literal',
-                'options'	=> array(
-                    'route'			=> '/signup',
-                    'defaults'		=> array(
-                        'controller'	=> 'Stub\Controller\Signup',
-                        'action'		=> 'signup',
+                'type'	  => 'Literal',
+                'options' => array(
+                    'route'    => '/signup',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\Signup',
+                        'action'     => 'signup',
                     ),
                 ),
             ),
             
             'login' => array(
-                'type'		=> 'Literal',
-                'options'	=> array(
+                'type'    => 'Literal',
+                'options' => array(
                     'route'			=> '/login',
                     'defaults'		=> array(
                         'controller'	=> 'Stub\Controller\Auth',
@@ -46,23 +46,38 @@ return array(
             ),
             
             'logout' => array(
-                'type'		=> 'Literal',
-                'options'	=> array(
+                'type'    => 'Literal',
+                'options' => array(
                     'route'			=> '/logout',
                     'defaults'		=> array(
-                        'controller'	=> 'Stub\Controller\Auth',
-                        'action'		=> 'logout',
+                        'controller' => 'Stub\Controller\Auth',
+                        'action'     => 'logout',
                     ),
                 ),
             ),
             
             'forgot-password' => array(
-                'type'		=> 'Literal',
-                'options'	=> array(
-                    'route'			=> '/forgot-password',
-                    'defaults'		=> array(
-                        'controller'	=> 'Stub\Controller\Auth',
-                        'action'		=> 'forgot-password',
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/forgot-password',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\Auth',
+                        'action'     => 'forgot-password',
+                    ),
+                ),
+            ),
+            
+            'reset-password' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route'    => '/reset-password/:user/:secret',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\Auth',
+                        'action'     => 'reset-password',
+                    ),
+                    'constraints'	=> array(
+                        'user'   => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
+                        'secret' => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
                     ),
                 ),
             ),
@@ -76,6 +91,8 @@ return array(
         'not_found_template'		=> 'error/404',
         'exception_template'		=> 'error/index',
         'template_map' => array(
+            'mail/text/password-reset'	=> __DIR__ . '/../view/mail/text/password-reset.phtml',
+            'mail/html/password-reset'	=> __DIR__ . '/../view/mail/html/password-reset.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

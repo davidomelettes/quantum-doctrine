@@ -12,5 +12,7 @@
  */
 
 return array(
-    
+    'view_manager' => array(
+        'base_path' => 'http://localhost',
+    ),
 );

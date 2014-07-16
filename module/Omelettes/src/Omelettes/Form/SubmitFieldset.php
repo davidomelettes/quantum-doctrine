@@ -2,18 +2,25 @@
 
 namespace Omelettes\Form;
 
-use Zend\Form\Fieldset;
+use Zend\Form;
+use Zend\Validator;
 
-class SubmitFieldset extends Fieldset
+class SubmitFieldset extends Form\Fieldset
 {
     public function __construct($name = 'submit', $options = array())
     {
         parent::__construct($name, $options);
 
-        $this->add(array(
-            'name' => 'csrf',
-            'type' => 'Zend\Form\Element\Csrf',
+        $csrf = new Form\Element\Csrf('csrf', array(
+            'csrf_options' => array(
+                'timeout' => 600,
+            ),
         ));
+        $csrf->getCsrfValidator()->setMessage(
+            'The submitted form was too old, or did not come from this site',
+            \Zend\Validator\Csrf::NOT_SAME
+        );
+        $this->add($csrf);
         
         $this->add(array(
             'name' => 'submit',
@@ -23,6 +30,11 @@ class SubmitFieldset extends Fieldset
                 'value' => 'Hi',
             ),
         ));
+    }
+    
+    public function getInputFilter()
+    {
+        $filter = parent::getInputFilter();
     }
     
 }

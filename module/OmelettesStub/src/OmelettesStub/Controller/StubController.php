@@ -4,18 +4,27 @@ namespace OmelettesStub\Controller;
 
 use Omelettes\Controller\AbstractController;
 use OmelettesDoctrine\Document as OmDoc;
+use OmelettesDoctrine\Service;
 
 use DoctrineMongoODMModule\Paginator\Adapter\DoctrinePaginator;
 use Zend\Paginator\Paginator;
 
 class StubController extends AbstractController
 {
+    /**
+     * @return Service\UsersService
+     */
+    public function getUsersService()
+    {
+        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+    }
+    
     public function helloWorldAction()
     {
         $this->flashInfo('Hello World!');
         $this->flashError('Bad things');
         
-        $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+        $usersService = $this->getUsersService();
         $user = $usersService->createDocument();
         $user->setFullName('David Edwards');
         $user->setEmailAddress('david@omelett.es');
