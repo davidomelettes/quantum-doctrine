@@ -42,6 +42,11 @@ class User extends AbstractBaseClass
      */
     protected $salt;
     
+    /**
+     * @var boolean
+     */
+    protected $passwordAuthenticated = false;
+    
     public function setAccount(Account $account)
     {
         $this->account = $account;
@@ -94,6 +99,17 @@ class User extends AbstractBaseClass
     public function getPasswordHash()
     {
         return $this->passwordHash;
+    }
+    
+    public function setPasswordAuthenticated($authenticated = false)
+    {
+        $this->passwordAuthenticated = (boolean)$authenticated;
+        return $this;
+    }
+    
+    public function isPasswordAuthenticated()
+    {
+        return $this->passwordAuthenticated;
     }
     
     public function getInputFilter()

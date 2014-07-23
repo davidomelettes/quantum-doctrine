@@ -44,8 +44,12 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
                     $service = new Service\UsersService($sm->get('doctrine.documentmanager.odm_default'));
                     return $service;
                 },
-                'OmelettesDoctrine\Service\UserPasswordResetTokensService' => function ($sm) {
-                    $service = new Service\UserPasswordResetTokensService($sm->get('doctrine.documentmanager.odm_default'));
+                'OmelettesDoctrine\Service\Auth\PasswordResetTokensService' => function ($sm) {
+                    $service = new Service\Auth\PasswordResetTokensService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
+                'OmelettesDoctrine\Service\Auth\PersistentLoginTokensService' => function ($sm) {
+                    $service = new Service\Auth\PersistentLoginTokensService($sm->get('doctrine.documentmanager.odm_default'));
                     return $service;
                 },
             ),

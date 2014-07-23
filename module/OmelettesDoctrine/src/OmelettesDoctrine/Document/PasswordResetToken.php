@@ -8,7 +8,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 /**
  * @ODM\Document(collection="userPasswordResetTokens", requireIndexes=true)
  */
-class UserPasswordResetToken extends AbstractBaseClass
+class PasswordResetToken extends AbstractBaseClass
 {
     /**
      * @var User

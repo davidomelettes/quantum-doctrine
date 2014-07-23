@@ -20,6 +20,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <?php $session = new Zend\Session\Container('Omelettes'); ?>
+                            <span class="glyphicon glyphicon-user text-<?php echo $session->passwordAuthenticated ? 'success' : 'warning'; ?>"></span>
                             <?php echo $this->escapeHtml($identity->getEmailAddress()); ?>
                             <span class="caret"></span>
                         </a>

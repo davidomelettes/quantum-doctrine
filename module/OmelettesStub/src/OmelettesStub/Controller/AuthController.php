@@ -3,11 +3,14 @@
 namespace OmelettesStub\Controller;
 
 use Omelettes\Uuid\Uuid;
-use OmelettesDoctrine\Service;
 use OmelettesDoctrine\Controller\AbstractDoctrineController;
+use OmelettesDoctrine\Document as OmDoc;
+use OmelettesDoctrine\Service;
 use OmelettesStub\Form;
 use Zend\Authentication;
 use Zend\Form\Annotation\AnnotationBuilder;
+use Zend\Http\Header\SetCookie;
+use Zend\Session\Container;
 
 class AuthController extends AbstractDoctrineController
 {
@@ -20,15 +23,26 @@ class AuthController extends AbstractDoctrineController
     }
     
     /**
-     * @return Service\UserPasswordResetTokensService
+     * @return Service\Auth\PasswordResetTokensService
      */
     public function getPasswordResetTokensService()
     {
-        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\UserPasswordResetTokensService');
+        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\Auth\PasswordResetTokensService');
+    }
+    
+    public function getPersistentLoginTokensService()
+    {
+        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\Auth\PersistentLoginTokensService');
     }
     
     public function loginAction()
     {
+        $auth = $this->getAuthenticationService();
+        if ($auth->hasIdentity()) {
+            $this->flashSuccess('Welcome back');
+            return $this->redirect()->toRoute('front');
+        }
+        
         $builder = new AnnotationBuilder();
         $form = $builder->createForm('OmelettesStub\Form\LoginForm');
         $request = $this->getRequest();
@@ -38,7 +52,15 @@ class AuthController extends AbstractDoctrineController
                 $data = $form->getData();
                 $authResult = $this->authenticateUser($data['emailAddress'], $data['password']);
                 if ($authResult->isValid()) {
-                    $this->getAuthenticationService()->getStorage()->write($authResult->getIdentity());
+                    $identity = $auth->getIdentity();
+                    // TODO: Store the fact that this session has been password-authenticated
+                    $sessionContainer = new Container('Omelettes');
+                    $sessionContainer->passwordAuthenticated = true; 
+                    
+                    // Did they ask to be remembered?
+                    if ($data['rememberMe']) {
+                        $this->rememberMe($identity);
+                    }
                     $this->flashSuccess('Welcome back');
                     return $this->redirect()->toRoute('front');
                 } else {
@@ -52,19 +74,46 @@ class AuthController extends AbstractDoctrineController
             'form' => $form,
         ));
     }
+    
+    public function rememberMe(OmDoc\User $user)
+    {
+        // Create a token and store its hash
+        $expiry = new \DateTime(OmDoc\PersistentLoginToken::DEFAULT_TOKEN_EXPIRY);
+        $tokensService = $this->getPersistentLoginTokensService();
+        $tokenDocument = $tokensService->createDocument();
+        $uuid = new Uuid();
+        $token = $uuid->v4();
+        $tokenDocument->setUser($user)
+                      ->setToken($token)
+                      ->setExpiry($expiry);
+        $tokensService->save($tokenDocument);
+        
+        // Give the user agent a cookie
+        $setCookieHeader = new SetCookie(
+            'login',
+            sprintf('%s;%s', $user->getId(), $token),
+            (int)$expiry->format('U'),
+            '/'
+        );
+        $this->getResponse()->getHeaders()->addHeader($setCookieHeader);
+        
+        // Ok now we can save, but if the header is not received or rejected,
+        // the user agent will not have the correct token
+        $tokensService->commit();
+    }
 
     /**
      * @param string $username
      * @param string $password
      * @return Authentication\Result
      */
-    public function authenticateUser($username, $password)
+    public function authenticateUser($identity, $credential)
     {
         $authService = $this->getAuthenticationService();
         $authAdapter = $authService->getAdapter();
-        $authAdapter->setIdentityValue($username) 
-                    ->setCredentialValue($password);
-        return $authAdapter->authenticate();
+        $authAdapter->setIdentityValue($identity) 
+                    ->setCredentialValue($credential);
+        return $authService->authenticate();
     }
     
     public function logoutAction()
@@ -73,7 +122,16 @@ class AuthController extends AbstractDoctrineController
         if ($auth->hasIdentity()) {
             $auth->clearIdentity();
         }
-        	
+        
+        // Expire any login cookie on this machine
+        $setCookieHeader = new SetCookie(
+            'login',
+            '',
+            0,
+            '/'
+        );
+        $this->getResponse()->getHeaders()->addHeader($setCookieHeader);
+        
         $this->flashMessenger()->addSuccessMessage('You have successfully logged out');
         return $this->redirect()->toRoute('login');
     }
@@ -174,7 +232,7 @@ class AuthController extends AbstractDoctrineController
                 $user->setPassword($data['password']);
                 $usersService->save($user);
                 
-                // Discard token
+                // Discard reset token
                 $tokensService->removeToken($tokenDoc);
                 $tokensService->commit();
                 

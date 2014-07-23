@@ -5,6 +5,9 @@ namespace Omelettes;
 use Omelettes\Mail;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\Session\Container;
+use Zend\Session\SessionManager;
 
 class Module implements ConfigProviderInterface, ServiceProviderInterface
 {
@@ -28,6 +31,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
     {
         return array(
             'factories' => array(
+                // Email
                 'Omelettes\Mail\Mailer' => function ($sm) {
                     $config = $sm->get('config');
                     if (!isset($config['omelettes']['mail'])) {
@@ -42,8 +46,76 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
                         ->setFromName($defaultAddress['name']);
                     return $mailer;
                 },
+                
+                // Session management
+                'Zend\Session\SessionManager' => function ($sm) {
+                    $config = $sm->get('config');
+                    if (isset($config['session'])) {
+                        $session = $config['session'];
+                        
+                        // Create the session config
+                        $sessionConfig = null;
+                        if (isset($session['config'])) {
+                            $class = isset($session['config']['class'])  ? $session['config']['class'] : 'Zend\Session\Config\SessionConfig';
+                            $options = isset($session['config']['options']) ? $session['config']['options'] : array();
+                            $sessionConfig = new $class();
+                            $sessionConfig->setOptions($options);
+                        }
+                        
+                        // Create the session storage
+                        $sessionStorage = null;
+                        if (isset($session['storage'])) {
+                            $class = $session['storage'];
+                            $sessionStorage = new $class();
+                        }
+                        
+                        // Create the session save handler
+                        $sessionSaveHandler = null;
+                        if (isset($session['save_handler'])) {
+                            // class should be fetched from service manager since it will require constructor arguments
+                            $sessionSaveHandler = $sm->get($session['save_handler']);
+                        }
+                        
+                        // Create the session manager
+                        $sessionManager = new SessionManager($sessionConfig, $sessionStorage, $sessionSaveHandler);
+                        
+                        // Add session validators
+                        if (isset($session['validator'])) {
+                            $chain = $sessionManager->getValidatorChain();
+                            foreach ($session['validator'] as $validator) {
+                                $validator = new $validator();
+                                $chain->attach('session.validate', array($validator, 'isValid'));
+                            }
+                        }
+                    } else {
+                        $sessionManager = new SessionManager();
+                    }
+                    Container::setDefaultManager($sessionManager);
+                    return $sessionManager;
+                },
             ),
         );
+    }
+    
+    public function onBootstrap(MvcEvent $ev)
+    {
+        $app = $ev->getParam('application');
+        $eventManager = $app->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'bootstrapSession'));
+    }
+    
+    public function bootstrapSession(MvcEvent $ev)
+    {
+        $app = $ev->getParam('application');
+        $sm = $app->getServiceManager();
+        $session = $sm->get('Zend\Session\SessionManager');
+        $session->start();
+        
+        $container = new Container('initialized');
+        if (!isset($container->init)) {
+            $session->regenerateId(true);
+            $container->init = 1;
+        }
     }
     
 }

@@ -1,14 +1,15 @@
 <?php
 
-namespace OmelettesDoctrine\Service;
+namespace OmelettesDoctrine\Service\Auth;
 
 use OmelettesDoctrine\Document as OmDoc;
+use OmelettesDoctrine\Service;
 
-class UserPasswordResetTokensService extends AbstractDocumentService
+class PasswordResetTokensService extends Service\AbstractDocumentService
 {
     public function createDocument()
     {
-        return new OmDoc\UserPasswordResetToken($this);
+        return new OmDoc\PasswordResetToken($this);
     }
     
     public function removeExpiredTokens()
@@ -23,7 +24,8 @@ class UserPasswordResetTokensService extends AbstractDocumentService
     protected function createDefaultFindQuery()
     {
         $qb = $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
-        $qb->find();
+        $qb->find()
+           ->field('expiry')->gt(new \DateTime('now'));
         return $qb;
     }
     
@@ -36,7 +38,7 @@ class UserPasswordResetTokensService extends AbstractDocumentService
         $query->execute();
     }
     
-    public function save(OmDoc\UserPasswordResetToken $token)
+    public function save(OmDoc\PasswordResetToken $token)
     {
         //Delete existing token for user
         if (!$token->getUser()) {
@@ -44,6 +46,7 @@ class UserPasswordResetTokensService extends AbstractDocumentService
         }
         $this->removeTokensForUser($token->getUser());
         
+        // Save new token
         return parent::save($token);
     }
     
@@ -54,9 +57,6 @@ class UserPasswordResetTokensService extends AbstractDocumentService
      */
     public function findByUserIdAndToken($userId, $token)
     {
-        // Remove any expired tokens
-        $this->removeExpiredTokens();
-        
         // Hash token and find matching document
         $qb = $this->createDefaultFindQuery();
         $tokenHash = hash('sha256', $token);
@@ -69,7 +69,7 @@ class UserPasswordResetTokensService extends AbstractDocumentService
         return $result;
     }
     
-    public function removeToken(OmDoc\UserPasswordResetToken $token)
+    public function removeToken(OmDoc\PasswordResetToken $token)
     {
         $this->documentManager->remove($token);
     }

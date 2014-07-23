@@ -7,6 +7,7 @@ return array(
             'Stub\Controller\Auth'   => 'OmelettesStub\Controller\AuthController',
             'Stub\Controller\Stub'   => 'OmelettesStub\Controller\StubController',
             'Stub\Controller\Signup' => 'OmelettesStub\Controller\SignupController',
+            'Stub\Controller\User'   => 'OmelettesStub\Controller\UserController',
         ),
     ),
     
@@ -78,6 +79,17 @@ return array(
                     'constraints'	=> array(
                         'user'   => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
                         'secret' => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
+                    ),
+                ),
+            ),
+            
+            'user' => array(
+            'type' => 'Segment',
+                'options' => array(
+                    'route'    => '/user/:action',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\User',
+                        'action'     => 'preferences',
                     ),
                 ),
             ),

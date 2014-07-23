@@ -2,6 +2,7 @@
 
 namespace OmelettesStub\Form;
 
+use Omelettes\Form\Fieldset;
 use OmelettesDoctrine\Form\AbstractDocumentForm;
 use Zend\InputFilter\InputFilterAwareInterface;
 
@@ -50,6 +51,7 @@ class SignupForm extends AbstractDocumentForm
             ),
         ));
         
+        $this->add(new Fieldset\CsrfFieldset());
         $this->addSubmitFieldset('Sign Up', 'btn btn-lg btn-warning btn-block');
     }
     

@@ -2,14 +2,14 @@
 
 namespace OmelettesStub\Controller;
 
-use Omelettes\Controller\AbstractController;
+use OmelettesDoctrine\Controller\AbstractDoctrineController;
 use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Service;
 
 use DoctrineMongoODMModule\Paginator\Adapter\DoctrinePaginator;
 use Zend\Paginator\Paginator;
 
-class StubController extends AbstractController
+class StubController extends AbstractDoctrineController
 {
     /**
      * @return Service\UsersService
@@ -21,6 +21,7 @@ class StubController extends AbstractController
     
     public function helloWorldAction()
     {
+        $auth = $this->getAuthenticationService();
         $this->flashInfo('Hello World!');
         $this->flashError('Bad things');
         

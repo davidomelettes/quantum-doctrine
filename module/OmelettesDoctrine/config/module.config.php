@@ -7,8 +7,8 @@ return array(
     'doctrine' => array(
         'authentication' => array(
             'odm_default' => array(
-                'identityClass' => 'OmelettesDoctrine\Document\User',
-                'identityProperty' => 'emailAddress',
+                'identityClass'      => 'OmelettesDoctrine\Document\User',
+                'identityProperty'   => 'emailAddress',
                 'credentialProperty' => 'passwordHash',
                 'credentialCallable' => function (OmDoc\User $user, $plaintext) {
                     return $user->hashPassword($plaintext);
