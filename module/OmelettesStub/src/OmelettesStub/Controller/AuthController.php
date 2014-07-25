@@ -8,7 +8,6 @@ use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Service;
 use OmelettesStub\Form;
 use Zend\Authentication;
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Http\Header\SetCookie;
 use Zend\Session\Container;
 
@@ -43,8 +42,7 @@ class AuthController extends AbstractDoctrineController
             return $this->redirect()->toRoute('front');
         }
         
-        $builder = new AnnotationBuilder();
-        $form = $builder->createForm('OmelettesStub\Form\LoginForm');
+        $form = $this->getManagedForm('OmelettesStub\Form\LoginForm');
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -53,7 +51,7 @@ class AuthController extends AbstractDoctrineController
                 $authResult = $this->authenticateUser($data['emailAddress'], $data['password']);
                 if ($authResult->isValid()) {
                     $identity = $auth->getIdentity();
-                    // TODO: Store the fact that this session has been password-authenticated
+                    // Store the fact that this session has been password-authenticated
                     $sessionContainer = new Container('Omelettes');
                     $sessionContainer->passwordAuthenticated = true; 
                     
@@ -64,6 +62,7 @@ class AuthController extends AbstractDoctrineController
                     $this->flashSuccess('Welcome back');
                     return $this->redirect()->toRoute('front');
                 } else {
+                    //var_dump($authResult->getMessages());
                     $this->flashError('Invalid email address and/or password');
                 }
             }
@@ -243,6 +242,21 @@ class AuthController extends AbstractDoctrineController
         
         return $this->returnViewModel(array(
             'title'   => 'Reset your password',
+            'form'    => $form,
+        ));
+    }
+    
+    public function verifyPasswordAction()
+    {
+        $auth = $this->getAuthenticationService();
+        
+        $form = $this->getManagedForm('OmelettesStub\Form\VerifyPasswordForm');
+        $form->setData(array(
+            'emailAddress' => $auth->getIdentity()->getEmailAddress(),
+        ));
+        
+        return $this->returnViewModel(array(
+            'title'   => 'Verify your password',
             'form'    => $form,
         ));
     }

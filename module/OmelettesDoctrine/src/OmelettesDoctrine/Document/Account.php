@@ -7,7 +7,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 /**
  * @ODM\Document(collection="accounts", requireIndexes=true)
  */
-class Account extends AbstractBaseClass
+class Account extends AbstractHistoricDocument
 {
     /**
      * @var string

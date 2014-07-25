@@ -4,7 +4,7 @@ namespace OmelettesDoctrine\Service;
 
 use OmelettesDoctrine\Document as OmDoc;
 
-class UsersService extends AbstractDocumentService
+class UsersService extends AbstractHistoricDocumentService
 {
     public function createDocument()
     {

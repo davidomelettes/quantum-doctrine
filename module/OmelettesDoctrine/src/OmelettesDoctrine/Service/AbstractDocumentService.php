@@ -60,8 +60,7 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     protected function createDefaultFindQuery()
     {
         $qb = $this->createQueryBuilder();
-        $qb->find()
-           ->field('deleted')->exists(false);
+        $qb->find();
         return $qb;
     }
     
@@ -76,9 +75,7 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     
     public function find($id)
     {
-        $qb = $this->createDefaultFindQuery();
-        $qb->field('id')->equals($id);
-        return $qb->getQuery()->getSingleResult();
+        return $this->findBy('id', $id);
     }
     
     public function findBy($field, $value)
@@ -98,23 +95,16 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
         return $this->getPaginator($cursor);
     }
     
-    public function save(OmDoc\AbstractBaseClass $document)
+    public function save(OmDoc\AbstractDocument $document)
     {
-        $now = new \DateTime();
-        if (!$document->getId()) {
-            $document->setCreated($now);
-        }
-        $document->setUpdated($now);
-        
         $this->documentManager->persist($document);
         return $this;
     }
     
-    public function delete(OmDoc\AbstractBaseClass $document)
+    public function delete(OmDoc\AbstractDocument $document)
     {
-        $now = new \DateTime();
-        $document->setDeleted($now);
-        $this->documentManager->persist($document);
+        // Delete for reals!
+        $this->documentManager->remove($document);
         return $this;
     }
     

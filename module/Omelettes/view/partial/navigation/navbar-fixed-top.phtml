@@ -26,6 +26,9 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="<?php echo $this->url('user', array('action' => 'preferences')); ?>"><?php echo $this->translate('My Preferences'); ?></a>
+                            </li>
                             <li role="presentation" class="divider"></li>
                             <li>
                                 <a href="<?php echo $this->url('logout'); ?>"><span class="glyphicon glyphicon-log-out"></span> <?php echo $this->translate('Sign out'); ?></a>

@@ -2,6 +2,30 @@
 
 // OmelettesStub module config
 return array(
+    'acl' => array(
+        'roles' => array(
+            'guest' => array(),
+            'user' => array('guest'),
+            'admin' => array('user'),
+            'super' => array('admin'),
+            'system' => array('super'),
+        ),
+        'resources' => array(
+            'guest' => array(
+                'signup' => array(),
+                'login' => array(),
+                'logout' => array(),
+                'forgot-password' => array(),
+                'reset-password' => array(),
+            ),
+            'user' => array(
+                'front' => array(),
+                'verify-password' => array(),
+                'user' => array(),
+            ),
+        ),
+    ),
+    
     'controllers' => array(
         'invokables' => array(
             'Stub\Controller\Auth'   => 'OmelettesStub\Controller\AuthController',
@@ -83,8 +107,19 @@ return array(
                 ),
             ),
             
+            'verify-password' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/verify-password',
+                    'defaults' => array(
+                        'controller' => 'Stub\Controller\Auth',
+                        'action'     => 'verify-password',
+                    ),
+                ),
+            ),
+            
             'user' => array(
-            'type' => 'Segment',
+                'type' => 'Segment',
                 'options' => array(
                     'route'    => '/user/:action',
                     'defaults' => array(

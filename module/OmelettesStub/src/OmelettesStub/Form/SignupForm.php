@@ -13,19 +13,6 @@ class SignupForm extends AbstractDocumentForm
         parent::__construct($name, $options);
         
         $this->add(array(
-            'name' => 'emailAddress',
-            'type' => 'Zend\Form\Element\Email',
-            'options' => array(
-                'label' => 'Email Address',
-            ),
-            'attributes' => array(
-                'id'          => $this->getName() . '-emailAddress',
-                'required'    => true,
-                'placeholder' => "We won't send you any junk",
-            ),
-        ));
-        
-        $this->add(array(
             'name' => 'fullName',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
@@ -35,6 +22,19 @@ class SignupForm extends AbstractDocumentForm
                 'id'          => $this->getName() . '-fullName',
                 'required'    => true,
                 'placeholder' => 'What shall we call you?',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'emailAddress',
+            'type' => 'Zend\Form\Element\Email',
+            'options' => array(
+                'label' => 'Email Address',
+            ),
+            'attributes' => array(
+                'id'          => $this->getName() . '-emailAddress',
+                'required'    => true,
+                'placeholder' => "We won't send you any junk",
             ),
         ));
         

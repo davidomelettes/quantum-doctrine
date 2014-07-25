@@ -3,19 +3,26 @@
 namespace OmelettesDoctrine\Document;
 
 use Omelettes\Uuid\Uuid;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
 
 /**
  * @ODM\Document(collection="users", requireIndexes=true)
  */
-class User extends AbstractBaseClass
+class User extends AbstractHistoricDocument
 {
     /**
      * @var Account
      * @ODM\ReferenceOne(targetDocument="Account")
      */
     protected $account;
+    
+    /**
+     * @var string
+     * @ODM\String
+     */
+    protected $aclRole = 'guest';
     
     /**
      * @var string
@@ -43,9 +50,26 @@ class User extends AbstractBaseClass
     protected $salt;
     
     /**
-     * @var boolean
+     * @var ArrayCollection
+     * @ODM\ReferenceMany(
+     *     targetDocument="UserPreference",
+     *     discriminatorField="type",
+     *     discriminatorMap={
+     *         "boolean"="UserPreferenceBoolean",
+     *         "string"="UserPreferenceString",
+     *         "int"="UserPreferenceInteger",
+     *         "date"="UserPreferenceDate"
+     *     }
+     * )
      */
-    protected $passwordAuthenticated = false;
+    protected $preferences;
+    
+    protected function init()
+    {
+        parent::init();
+        $this->preferences = new ArrayCollection();
+        return $this;
+    }
     
     public function setAccount(Account $account)
     {
@@ -56,6 +80,17 @@ class User extends AbstractBaseClass
     public function getAccount()
     {
         return $this->account;
+    }
+    
+    public function setAclRole($role)
+    {
+        $this->aclRole = $role;
+        return $this;
+    }
+    
+    public function getAclRole()
+    {
+        return $this->aclRole;
     }
     
     public function setFullName($name)
@@ -101,15 +136,9 @@ class User extends AbstractBaseClass
         return $this->passwordHash;
     }
     
-    public function setPasswordAuthenticated($authenticated = false)
+    public function getPreferences()
     {
-        $this->passwordAuthenticated = (boolean)$authenticated;
-        return $this;
-    }
-    
-    public function isPasswordAuthenticated()
-    {
-        return $this->passwordAuthenticated;
+        return $this->preferences;
     }
     
     public function getInputFilter()

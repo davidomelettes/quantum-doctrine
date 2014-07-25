@@ -8,7 +8,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 /**
  * @ODM\Document(collection="userPersistentLoginTokens", requireIndexes=true)
  */
-class PersistentLoginToken extends AbstractBaseClass
+class PersistentLoginToken extends AbstractDocument
 {
     const DEFAULT_TOKEN_EXPIRY = '+1 week';
     

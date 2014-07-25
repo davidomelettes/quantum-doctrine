@@ -12,8 +12,8 @@ class SignupController extends AbstractDoctrineController
 {
     public function signupAction()
     {
+        $form = $this->getManagedForm('OmelettesStub\Form\SignupForm');
         $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
-        $form = $this->createDocumentForm('OmelettesStub\Form\SignupForm', $usersService);
         $user = $usersService->createDocument();
         $form->bind($user);
         
@@ -21,10 +21,12 @@ class SignupController extends AbstractDoctrineController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
+                // Create a new account
                 $accountsService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\AccountsService');
                 $account = $accountsService->createDocument();
                 $accountsService->save($account);
-                $user->setAccount($account);
+                $user->setAccount($account)
+                     ->setAclRole('admin');
                 
                 $usersService->save($user);
                 $usersService->commit();

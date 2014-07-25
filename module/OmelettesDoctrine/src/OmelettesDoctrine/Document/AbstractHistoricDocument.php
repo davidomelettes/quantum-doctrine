@@ -3,19 +3,12 @@
 namespace OmelettesDoctrine\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Zend\InputFilter;
 
 /**
  * @ODM\MappedSuperclass
  */
-abstract class AbstractBaseClass extends AbstractDocument implements InputFilter\InputFilterAwareInterface
+abstract class AbstractHistoricDocument extends AbstractDocument
 {
-    /**
-     * @var string
-     * @ODM\Id(strategy="UUID")
-     */
-    protected $id;
-    
     /**
      * @var \DateTime
      * @ODM\Date
@@ -65,21 +58,6 @@ abstract class AbstractBaseClass extends AbstractDocument implements InputFilter
     public function getUpdated()
     {
         return $this->updated;
-    }
-    
-    public function setInputFilter(InputFilter\InputFilterInterface $inputFilter)
-    {
-        throw new \Exception('Interface method not used');
-    }
-    
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $filter = new InputFilter\InputFilter();
-            
-            $this->inputFilter = $filter;
-        }
-        return $this->inputFilter;
     }
     
 }

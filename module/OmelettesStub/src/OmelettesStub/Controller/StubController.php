@@ -22,6 +22,7 @@ class StubController extends AbstractDoctrineController
     public function helloWorldAction()
     {
         $auth = $this->getAuthenticationService();
+        //var_dump($auth->getIdentity());
         $this->flashInfo('Hello World!');
         $this->flashError('Bad things');
         
