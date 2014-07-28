@@ -58,21 +58,6 @@ class VerifyPasswordForm extends AbstractDocumentForm
                     ),
                 ),
             ));
-            $filter->add(array(
-                'name'       => 'passwordConfirm',
-                'required'   => 'true',
-                'filters'    => array(
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'      => 'Identical',
-                        'options'   => array(
-                            'token' => 'password',
-                        ),
-                    ),
-                ),
-            ));
             $this->filter = $filter;
         }
         

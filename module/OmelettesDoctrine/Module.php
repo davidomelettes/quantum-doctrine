@@ -11,6 +11,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl;
+use Zend\Session\Container;
 use Zend\Stdlib\ResponseInterface as Response;
 
 class Module extends OmelettesModule implements ConfigProviderInterface, ServiceProviderInterface
@@ -107,30 +108,40 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
         $flash = $sm->get('ControllerPluginManager')->get('flashMessenger');
         
+        // What resource are we trying to access?
         $resource = $ev->getRouteMatch()->getMatchedRouteName();
+        if (!$acl->hasResource($resource)) {
+            throw new \Exception('Missing or undefined ACL resource: ' . $resource);
+        }
+        // What are we trying to do with that resource?
         $privilege = $ev->getRouteMatch()->getParam('action', 'index');
         
+        // Who is trying to do it?
         $role = 'guest';
         if ($auth->hasIdentity()) {
             $role = $auth->getIdentity()->getAclRole();
-            if (empty($role)) {
-                throw new \Exception('User has no ACL role');
-            }
         }
-        if (!$acl->hasResource($resource)) {
-            throw new \Exception('Undefined ACL resource: ' . $resource);
+        if (!$acl->hasRole($role)) {
+            throw new \Exception('Missing or undefined ACL role: ' . $role);
         }
+        
+        // Are they allowed to do it?
         if (!$acl->isAllowed($role, $resource, $privilege)) {
             // ACL role is not allowed to access this resource/privilege
             switch ($role) {
                 case 'guest':
                     // User is not logged in
+                    $session = new Container('Omelettes');
+                    $session->rememberedRoute = array(
+                        'name'   => $resource,
+                        'params' => $ev->getRouteMatch()->getParams(),
+                    );
                     $flash->addErrorMessage('You must be logged in to access that page');
-                    //return $this->redirectToRoute($ev, 'login');
+                    return $this->redirectToRoute($ev, 'login');
                 default:
                     // User is logged in, probably tried to access an admin-only resource/privilege
                     $flash->addErrorMessage('You do not have permission to access that page');
-                    //return $this->redirectToRoute($ev, 'front');
+                    return $this->redirectToRoute($ev, 'front');
             }
         }
     }

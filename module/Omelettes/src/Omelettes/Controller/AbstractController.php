@@ -3,6 +3,7 @@
 namespace Omelettes\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 
 class AbstractController extends AbstractActionController
 {
@@ -47,6 +48,42 @@ class AbstractController extends AbstractActionController
     public function flashInfo($message)
     {
         return $this->flashMessenger()->addInfoMessage($message);
+    }
+    
+    /**
+     * @return \Zend\Session\Container
+     */
+    public function getOmelettesSession()
+    {
+        return new Container('Omelettes');
+    }
+    
+    public function rememberCurrentRoute()
+    {
+        $session = $this->getOmelettesSession();
+        $route = null;
+        $routeMatch = $this->getEvent()->getRouteMatch();
+        if ($routeMatch) {
+            $route = array(
+                'name'    => $routeMatch->getMatchedRouteName(),
+                'params'  => $routeMatch->getParams(),
+            );
+        }
+        $session->rememberedRoute = $route;
+    }
+    
+    public function getRememberedRoute()
+    {
+        $session = $this->getOmelettesSession();
+        $route = $session->rememberedRoute;
+        $this->forgetRememberedRoute();
+        return $route;
+    }
+    
+    public function forgetRememberedRoute()
+    {
+        $session = $this->getOmelettesSession();
+        $session->rememberedRoute = null;
     }
     
 }

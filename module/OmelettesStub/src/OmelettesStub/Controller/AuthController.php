@@ -34,6 +34,12 @@ class AuthController extends AbstractDoctrineController
         return $this->getServiceLocator()->get('OmelettesDoctrine\Service\Auth\PersistentLoginTokensService');
     }
     
+    public function passwordAuthenticateSession($authenticated = false)
+    {
+        $session = $this->getOmelettesSession();
+        $session->passwordAuthenticated = $authenticated;
+    }
+    
     public function loginAction()
     {
         $auth = $this->getAuthenticationService();
@@ -52,15 +58,20 @@ class AuthController extends AbstractDoctrineController
                 if ($authResult->isValid()) {
                     $identity = $auth->getIdentity();
                     // Store the fact that this session has been password-authenticated
-                    $sessionContainer = new Container('Omelettes');
-                    $sessionContainer->passwordAuthenticated = true; 
+                    $this->passwordAuthenticateSession(true);
                     
                     // Did they ask to be remembered?
                     if ($data['rememberMe']) {
                         $this->rememberMe($identity);
                     }
                     $this->flashSuccess('Welcome back');
-                    return $this->redirect()->toRoute('front');
+                    
+                    $redirectTo = $this->getRememberedRoute();
+                    if (isset($redirectTo['name'])) {
+                        return $this->redirect()->toRoute($redirectTo['name'], $redirectTo['params']);
+                    } else {
+                        return $this->redirect()->toRoute('front');
+                    }
                 } else {
                     //var_dump($authResult->getMessages());
                     $this->flashError('Invalid email address and/or password');
@@ -205,6 +216,10 @@ class AuthController extends AbstractDoctrineController
         return $this->getManagedForm('OmelettesStub\Form\PasswordResetForm');
     }
     
+    /**
+     * Allows a guest to change the password of a user account, if they provide a valid reset token
+     * @throws \Exception
+     */
     public function resetPasswordAction()
     {
         $userId = $this->params('user');
@@ -248,12 +263,36 @@ class AuthController extends AbstractDoctrineController
     
     public function verifyPasswordAction()
     {
+        $session = $this->getOmelettesSession();
+        if ($session->passwordAuthenticated) {
+            $this->flashInfo('Your session is already password-authenticated');
+            return $this->redirect()->toRoute('front');
+        }
         $auth = $this->getAuthenticationService();
         
         $form = $this->getManagedForm('OmelettesStub\Form\VerifyPasswordForm');
         $form->setData(array(
             'emailAddress' => $auth->getIdentity()->getEmailAddress(),
         ));
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $result = $this->authenticateUser($auth->getIdentity()->getEmailAddress(), $data['password']);
+                if ($result->isValid()) {
+                    $this->passwordAuthenticateSession(true);
+                    $redirectTo = $this->getRememberedRoute();
+                    if (isset($redirectTo['name'])) {
+                        return $this->redirect()->toRoute($redirectTo['name'], $redirectTo['params']);
+                    } else {
+                        return $this->redirect()->toRoute('front');
+                    }
+                } else {
+                    $this->flashError('Invalid email address and/or password');
+                }
+            }
+        }
         
         return $this->returnViewModel(array(
             'title'   => 'Verify your password',

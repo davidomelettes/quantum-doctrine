@@ -102,16 +102,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
         $this->bootstrapSession($ev);
         $app = $ev->getParam('application');
         $eventManager = $app->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'rememberRoute'));
-    }
-    
-    public function rememberRoute(MvcEvent $ev)
-    {
-        $routeMatch = $ev->getRouteMatch();
-        $session = new Container('Omelettes');
-        $session->previousRoute = array(
-            'name' => $routeMatch->getMatchedRouteName(),
-        );
+        //$eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'doFoo'));
     }
     
     public function bootstrapSession(MvcEvent $ev)
