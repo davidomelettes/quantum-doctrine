@@ -4,6 +4,40 @@ use OmelettesDoctrine\Document as OmDoc;
 
 // OmelettesDoctrine module config
 return array(
+    'acl' => array(
+        'roles' => array(
+            'guest' => array(),
+            'user' => array('guest'),
+            'admin' => array('user'),
+            'super' => array('admin'),
+            'system' => array('super'),
+        ),
+        'resources' => array(
+            'system' => array(
+                'build' => array(),
+            ),
+        ),
+    ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'build' => array(
+                    'options' => array(
+                        'route' => 'build <assets>',
+                        'defaults' => array(
+                            'controller' => 'Console\Controller\Assets',
+                            'action' => 'build',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+    'controllers' => array(
+        'invokables' => array(
+            'Console\Controller\Assets' => 'OmelettesDoctrine\Controller\ConsoleAssetsController',
+        ),
+    ),
     'doctrine' => array(
         'authentication' => array(
             'odm_default' => array(

@@ -22,6 +22,12 @@ return array(
         ),
     ),
     
+    'layout' => array(
+        'login' => 'layout/front',
+        'forgot-password' => 'layout/front',
+        'reset-password' => 'layout/front',
+    ),
+    
     'router' => array(
         'routes' => array(
             'login' => array(

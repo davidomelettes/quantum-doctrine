@@ -2,7 +2,7 @@
 
 namespace TactileAuth\Form;
 
-use Omelettes\Form\Fieldset;
+use Omelettes\Form\Fieldset\CsrfFieldset;
 use OmelettesDoctrine\Form\AbstractDocumentForm;
 
 class LoginForm extends AbstractDocumentForm
@@ -27,7 +27,7 @@ class LoginForm extends AbstractDocumentForm
             'name' => 'password',
             'type' => 'Zend\Form\Element\Password',
             'options' => array(
-                'label' => 'Choose a Password',
+                'label' => 'Password',
             ),
             'attributes' => array(
                 'id'          => $this->getName() . '-password',
@@ -35,32 +35,11 @@ class LoginForm extends AbstractDocumentForm
             ),
         ));
         
-        $this->add(array(
-            'name' => 'forgotPassword',
-            'type' => 'Omelettes\Form\Element\StaticAnchor',
-            'options' => array(
-                'label'       => 'Forgot Password?',
-                'route_name'  => 'forgot-password',
-                'group_class' => 'pull-right',
-            ),
-            'attributes' => array(
-                'id'          => $this->getName() . '-forgotPassword',
-            ),
-        ));
+        $passwordManagementFieldset = new Fieldset\PasswordManagementFieldset();
+        $this->add($passwordManagementFieldset);
         
-        $this->add(array(
-            'name' => 'rememberMe',
-            'type' => 'Zend\Form\Element\Checkbox',
-            'options' => array(
-                'label'       => 'Remember Me',
-            ),
-            'attributes' => array(
-                'id'          => $this->getName() . '-rememberMe',
-            ),
-        ));
-        
-        $this->add(new Fieldset\CsrfFieldset());
-        $this->addSubmitFieldset('Sign in', 'btn btn-lg btn-warning btn-block');
+        $this->add(new CsrfFieldset());
+        $this->addSubmitFieldset('Sign in', 'btn btn-lg btn-primary btn-block');
     }
     
 }

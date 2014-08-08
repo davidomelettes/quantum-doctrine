@@ -45,7 +45,7 @@ class AuthController extends AbstractDoctrineController
         $auth = $this->getAuthenticationService();
         if ($auth->hasIdentity()) {
             $this->flashSuccess('Welcome back');
-            return $this->redirect()->toRoute('front');
+            return $this->redirect()->toRoute('dash');
         }
         
         $form = $this->getManagedForm('TactileAuth\Form\LoginForm');
@@ -61,7 +61,7 @@ class AuthController extends AbstractDoctrineController
                     $this->passwordAuthenticateSession(true);
                     
                     // Did they ask to be remembered?
-                    if ($data['rememberMe']) {
+                    if (isset($data['password-management']['rememberMe']) && $data['password-management']['rememberMe']) {
                         $this->rememberMe($identity);
                     }
                     $this->flashSuccess('Welcome back');
@@ -73,14 +73,13 @@ class AuthController extends AbstractDoctrineController
                         return $this->redirect()->toRoute('front');
                     }
                 } else {
-                    //var_dump($authResult->getMessages());
                     $this->flashError('Invalid email address and/or password');
                 }
             }
         }
         
         return $this->returnViewModel(array(
-            'title' => 'Login',
+            'title' => 'Sign in to Tactile CRM',
             'form' => $form,
         ));
     }

@@ -9,9 +9,11 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.*",
-        "doctrine/doctrine-mongo-odm-module": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
-        "bjyoungblood/bjy-profiler": "dev-master"
+        "doctrine/doctrine-mongo-odm-module": "dev-master",
+        "bjyoungblood/bjy-profiler": "dev-master",
+        "twbs/bootstrap": "3.2.*",
+        "oyejorge/less.php": "~1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "3.*"

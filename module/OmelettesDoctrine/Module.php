@@ -2,25 +2,24 @@
 
 namespace OmelettesDoctrine;
 
-use Omelettes\Module\OmelettesModule;
 use Omelettes\Uuid\Uuid;
 use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Service;
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\Console\Request as ConsoleRequest;
 use Zend\Http\Header\SetCookie;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl;
 use Zend\Session\Container;
 use Zend\Stdlib\ResponseInterface as Response;
 
-class Module extends OmelettesModule implements ConfigProviderInterface, ServiceProviderInterface
+class Module implements Feature\AutoloaderProviderInterface,
+                        Feature\ConfigProviderInterface,
+                        Feature\ConsoleBannerProviderInterface,
+                        Feature\ConsoleUsageProviderInterface,
+                        Feature\ServiceProviderInterface
 {
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
-    
     public function getAutoloaderConfig()
     {
         return array(
@@ -29,6 +28,27 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
             ),
+        );
+    }
+    
+    public function getConfig()
+    {
+        return include __DIR__ . '/config/module.config.php';
+    }
+    
+    public function getConsoleBanner(Console $console)
+    {
+        return
+        "==------------------------------------------------------==\n" .
+        "==        OMELETT.ES APPLICATION CONSOLE                ==\n" .
+        "==------------------------------------------------------=="
+                ;
+    }
+    
+    public function getConsoleUsage(Console $console)
+    {
+        return array(
+            'build <assets>'					=> '<assets> must be one of: css',
         );
     }
     
@@ -49,7 +69,7 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
                                 $service->addRole($role, $roleParents);
                             }
                         }
-                        
+                
                         // Resources
                         if (isset($acl['resources'])) {
                             foreach ($acl['resources'] as $role => $roleResources) {
@@ -92,6 +112,64 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
         );
     }
     
+    /**
+     * If an event returns a response, the event manger is
+     * short-ciruted and prevented from dispatching
+     * (if the event occurs before dispatch)
+     *
+     * @param MvcEvent $ev
+     * @param string $routeName
+     * @return Response
+     */
+    protected function redirectToRoute(MvcEvent $ev, $routeName = 'login')
+    {
+        $routeUrl = $ev->getRouter()->assemble(array(), array('name' => $routeName));
+        $response = $ev->getResponse();
+        $response->getHeaders()->addHeaderLine('Location', $ev->getRequest()->getBaseUrl() . $routeUrl);
+        $response->setStatusCode('302');
+        return $response;
+    }
+    
+    /**
+     * Adds a set-cookie header to the HTTP response
+     * @param Response $response
+     * @param string $name
+     * @param string $value
+     * @param string $expires
+     * @param string $path
+     * @param string $domain
+     * @param string $secure
+     * @param string $httponly
+     * @param string $maxAge
+     * @param string $version
+     */
+    protected function setCookie(
+            Response $response,
+            $name = null,
+            $value = null,
+            $expires = null,
+            $path = null,
+            $domain = null,
+            $secure = false,
+            $httponly = false,
+            $maxAge = null,
+            $version = null
+    )
+    {
+        $setCookieHeader = new SetCookie(
+                $name,
+                $value,
+                $expires,
+                $path,
+                $domain,
+                $secure,
+                $httponly,
+                $maxAge,
+                $version
+        );
+        $response->getHeaders()->addHeader($setCookieHeader);
+    }
+    
     public function onBootstrap(MvcEvent $ev)
     {
         $app = $ev->getParam('application');
@@ -107,7 +185,7 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
         $acl = $sm->get('OmelettesDoctrine\Service\AclService');
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
         $flash = $sm->get('ControllerPluginManager')->get('flashMessenger');
-        
+    
         // What resource are we trying to access?
         $resource = $ev->getRouteMatch()->getMatchedRouteName();
         if (!$acl->hasResource($resource)) {
@@ -115,16 +193,19 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
         }
         // What are we trying to do with that resource?
         $privilege = $ev->getRouteMatch()->getParam('action', 'index');
-        
+    
         // Who is trying to do it?
         $role = 'guest';
         if ($auth->hasIdentity()) {
-            $role = $auth->getIdentity()->getAclRole();
+            $identity = $auth->getIdentity();
+            if ($identity instanceof OmDoc\User) {
+                $role = $identity->getAclRole();
+            }
         }
         if (!$acl->hasRole($role)) {
             throw new \Exception('Missing or undefined ACL role: ' . $role);
         }
-        
+    
         // Are they allowed to do it?
         if (!$acl->isAllowed($role, $resource, $privilege)) {
             // ACL role is not allowed to access this resource/privilege
@@ -156,15 +237,26 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
         $app = $ev->getApplication();
         $sm = $app->getServiceManager();
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
-        
+    
         // Is the user logged in?
         if ($auth->hasIdentity()) {
             // User is logged in, session is fresh
             return;
     
         } else {
-            // HTTP request might provide cookie data
             $request = $ev->getRequest();
+            if ($request instanceof ConsoleRequest) {
+                // We're using the console
+                $usersService = $sm->get('OmelettesDoctrine\Service\UsersService');
+                $systemIdentity = $usersService->find('console');
+                if (!$systemIdentity) {
+                    throw new \Exception('Expected system identity');
+                }
+                $auth->getStorage()->write($systemIdentity);
+                return;
+            }
+    
+            // HTTP request might provide cookie data
             $cookie = $request->getCookie();
             if ($cookie && $cookie->offsetExists('login')) {
                 // No auth identity in the current session, but we have a login cookie
@@ -191,7 +283,7 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
                 ));
                 $auth->setAdapter($tokenAuthAdapter);
                 $tokenAuthAdapter->setIdentity($userId)
-                                 ->setCredential($token);
+                ->setCredential($token);
                 $authResult = $tokenAuthAdapter->authenticate();
                 if ($authResult->isValid()) {
                     // Successful authentication via persistent login cookie
@@ -211,22 +303,22 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Service
                     $newTokenDoc = $tokensService->createDocument();
                     $expiry = new \DateTime(OmDoc\PersistentLoginToken::DEFAULT_TOKEN_EXPIRY);
                     $newTokenDoc->setUser($identity)
-                                ->setToken($newToken)
-                                ->setExpiry($expiry);
+                    ->setToken($newToken)
+                    ->setExpiry($expiry);
                     $tokensService->save($newTokenDoc);
     
                     // Send the token to the user for storage in a cookie
                     $this->setCookie(
-                        $ev->getResponse(),
-                        'login',
-                        sprintf('%s;%s', $identity->getId(), $newToken),
-                        (int)$expiry->format('U'),
-                        '/'
+                            $ev->getResponse(),
+                            'login',
+                            sprintf('%s;%s', $identity->getId(), $newToken),
+                            (int)$expiry->format('U'),
+                            '/'
                     );
     
                     $tokensService->commit();
                     return;
-                    
+    
                 } else {
                     // Unsuccessful authentication; attempt to remove cookie
                     $this->setCookie($ev->getResponse(), 'login', '', 0, '/');

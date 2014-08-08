@@ -16,10 +16,22 @@ abstract class AbstractHistoricDocument extends AbstractDocument
     protected $created;
     
     /**
+     * @var User
+     * @ODM\ReferenceOne(targetDocument="User")
+     */
+    protected $createdBy;
+    
+    /**
      * @var \DateTime
      * @ODM\Date
      */
     protected $updated;
+    
+    /**
+     * @var User
+     * @ODM\ReferenceOne(targetDocument="User")
+     */
+    protected $updatedBy;
     
     /**
      * @var \DateTime
@@ -49,6 +61,17 @@ abstract class AbstractHistoricDocument extends AbstractDocument
         return $this->created;
     }
     
+    public function setCreatedBy(User $user)
+    {
+        $this->createdBy = $user;
+        return $this;
+    }
+    
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+    
     public function setUpdated(\DateTime $date)
     {
         $this->updated = $date;
@@ -58,6 +81,17 @@ abstract class AbstractHistoricDocument extends AbstractDocument
     public function getUpdated()
     {
         return $this->updated;
+    }
+    
+    public function setUpdatedBy(User $user)
+    {
+        $this->updatedBy = $user;
+        return $this;
+    }
+    
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
     }
     
 }

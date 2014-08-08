@@ -9,7 +9,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 
-class Module implements ConfigProviderInterface, ServiceProviderInterface
+class Module implements ConfigProviderInterface, ServiceProviderInterface 
 {
     public function getConfig()
     {
@@ -102,7 +102,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
         $this->bootstrapSession($ev);
         $app = $ev->getParam('application');
         $eventManager = $app->getEventManager();
-        //$eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'doFoo'));
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'setLayout'));
     }
     
     public function bootstrapSession(MvcEvent $ev)
@@ -116,6 +116,25 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
         if (!isset($container->init)) {
             $session->regenerateId(true);
             $container->init = 1;
+        }
+    }
+    
+    /**
+     * Allow different layouts to be specified by route
+     * @param MvcEvent $ev
+     */
+    public function setLayout(MvcEvent $ev)
+    {
+        $config = $ev->getApplication()->getServiceManager()->get('config');
+        if (!isset($config['layout'])) {
+            return;
+        }
+        $layout = $config['layout'];
+    
+        $routeName = $ev->getRouteMatch()->getMatchedRouteName();
+        if (isset($layout[$routeName])) {
+            $viewModel = $ev->getViewModel();
+            $viewModel->setTemplate($layout[$routeName]);
         }
     }
     

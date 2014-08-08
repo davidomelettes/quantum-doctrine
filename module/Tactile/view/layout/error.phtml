@@ -1,0 +1,31 @@
+<?php echo $this->doctype(); ?>
+
+<!-- Default layout -->
+<html lang="en">
+	<?php echo $this->partial('html/head'); ?>
+	<body class="has-navbar-fixed-top">
+		<nav class="navbar navbar-fixed-top navbar-front navbar-logo" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="<?php echo $this->url('front'); ?>">
+						<div class="brand-logo">
+							<img width="40" height="40" class="img-responsive" src="/img/tactilecrm.svg" alt="Tactile CRM logo">
+						</div>
+						<?php echo $this->translate('Tactile CRM'); ?>
+					</a>
+				</div>
+				<div class="collapse navbar-collapse" id="tcrm-front-navbar">
+					<p class="navbar-text"><?php echo $this->translate('Questions? Call us on +44 (0) 207 183 6677 (M-F 9am-5pm)'); ?></p>
+				</div>
+			</div>
+		</nav>
+		
+		<div class="container">
+			<?php echo $this->partial('flash-messenger'); ?>
+			
+			<?php echo $this->content; ?>
+			
+		</div> <!-- /container -->
+		
+	</body>
+</html>

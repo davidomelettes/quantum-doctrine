@@ -16,4 +16,21 @@ class UsersService extends AbstractHistoricDocumentService
         return parent::save($user);
     }
     
+    public function signup(OmDoc\User $user)
+    {
+        $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+        $systemIdentity = $usersService->find('system');
+        if (!$systemIdentity instanceof OmDoc\User) {
+            throw new \Exception('Expected system User');
+        }
+    
+        $now = new \DateTime();
+        $user->setCreated($now);
+        $user->setCreatedBy($systemIdentity);
+        $user->setUpdated($now);
+        $user->setUpdatedBy($systemIdentity);
+    
+        return AbstractDocumentService::save($user);
+    }
+    
 }

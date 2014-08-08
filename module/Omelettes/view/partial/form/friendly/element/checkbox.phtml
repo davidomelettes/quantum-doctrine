@@ -1,7 +1,10 @@
 <?php $element = $this->element; ?>
-<label class="checkbox" for="<?php echo $element->getAttribute('id'); ?>">
-	<?php echo $this->formElement($element); ?> <?php echo $element->getLabel(); ?>
-</label>
-<?php if ($this->formElementErrors($element)): ?>
-<span class="help-inline"><?php echo $this->formElementErrors($element); ?></span>
-<?php endif; ?>
+<div class="checkbox">
+    <label for="<?php echo $element->getAttribute('id'); ?>">
+        <?php echo $this->formElement($element); ?>
+        <?php echo $element->getLabel(); ?>
+    </label>
+    <?php if ($this->formElementErrors($element)): ?>
+    <span class="help-inline"><?php echo $this->formElementErrors($element); ?></span>
+    <?php endif; ?>
+</div>

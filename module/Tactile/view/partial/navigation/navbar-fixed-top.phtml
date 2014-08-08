@@ -1,0 +1,49 @@
+<?php
+    $identity = $this->identity();
+?>
+<nav class="navbar navbar-fixed-top navbar-inverse navbar-logo" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#om-top-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<?php echo $this->url('dash'); ?>">
+                <div class="brand-logo">
+                    <img width="40" height="40" class="img-responsive" src="/img/tactilecrm.svg" alt="Tactile CRM logo">
+                </div>
+                <?php echo $this->translate('Tactile CRM'); ?>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="om-top-navbar">
+            <?php echo $this->navigation('nav-top')->menu()->setUlClass('nav navbar-nav'); ?>
+            <div class="navbar-right">
+                <?php if ($identity): ?>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <?php $session = new Zend\Session\Container('Omelettes'); ?>
+                            <span class="glyphicon glyphicon-user text-<?php echo $session->passwordAuthenticated ? 'success' : 'warning'; ?>"></span>
+                            <?php echo $this->escapeHtml($identity->getEmailAddress()); ?>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="<?php #echo $this->url('user', array('action' => 'preferences')); ?>"><span class="glyphicon glyphicon-cog"></span> <?php echo $this->translate('My Preferences'); ?></a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li>
+                                <a href="<?php echo $this->url('logout'); ?>"><span class="glyphicon glyphicon-log-out"></span> <?php echo $this->translate('Sign out'); ?></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php else: ?>
+                <a class="btn btn-default navbar-btn" href="<?php echo $this->url('login'); ?>"><?php echo $this->translate('Sign in'); ?></a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</nav>

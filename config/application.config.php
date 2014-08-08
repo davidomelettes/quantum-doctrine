@@ -9,6 +9,7 @@ return array(
         'OmelettesDoctrine',
         //'OmelettesStub',
         'Tactile',
+        'TactileSignup',
         'TactileAuth',
     ),
 
