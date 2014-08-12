@@ -51,7 +51,7 @@ return array(
         ),
         
         'driver' => array(
-            'application_documents' => array(
+            'omelettes_documents' => array(
                 'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => array(__DIR__ . '/../src/OmelettesDoctrine/Document'),
@@ -59,7 +59,7 @@ return array(
             
             'odm_default' => array(
                 'drivers' => array(
-                    'OmelettesDoctrine\Document' => 'application_documents',
+                    'OmelettesDoctrine\Document' => 'omelettes_documents',
                 ),
             ),
         ),
@@ -67,6 +67,12 @@ return array(
     
     'service_manager' => array(
         'aliases' => array(
+        ),
+    ),
+    
+    'view_helpers'	=> array(
+        'invokables'	=> array(
+            'aclAllows' => 'OmelettesDoctrine\View\Helper\AclAllows',
         ),
     ),
 );

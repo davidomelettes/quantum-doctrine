@@ -5,7 +5,7 @@ namespace OmelettesDoctrine\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document(collection="userPreferences", requireIndexes=true)
+ * @ODM\Document(collection="users.preferences", requireIndexes=true)
  * @ODM\InheritanceType("SINGLE_COLLECTION")
  * @ODM\DiscriminatorField("type")
  */

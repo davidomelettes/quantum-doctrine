@@ -7,7 +7,11 @@ return array(
             'user' => array(
                 'dash' => array(),
                 'contacts' => array(),
+                'user' => array(),
             ),
+        ),
+        'passworded' => array(
+            'user' => array(),
         ),
     ),
     
@@ -15,6 +19,23 @@ return array(
         'invokables' => array(
             'Tactile\Controller\Dash'     => 'Tactile\Controller\DashboardController',
             'Tactile\Controller\Contacts' => 'Tactile\Controller\ContactsController',
+            'Tactile\Controller\User'     => 'Tactile\Controller\UserController',
+        ),
+    ),
+    
+    'doctrine' => array(
+        'driver' => array(
+            'tactile_documents' => array(
+                'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(__DIR__ . '/../src/Tactile/Document'),
+            ),
+    
+            'odm_default' => array(
+                'drivers' => array(
+                    'Tactile\Document' => 'tactile_documents',
+                ),
+            ),
         ),
     ),
     
@@ -43,10 +64,21 @@ return array(
             'contacts' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/contacts',
+                    'route'    => '/contacts[/:action][/:id]',
                     'defaults' => array(
                         'controller' => 'Tactile\Controller\Contacts',
                         'action'     => 'index',
+                    ),
+                ),
+            ),
+            
+            'user' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/user[/:action]',
+                    'defaults' => array(
+                        'controller' => 'Tactile\Controller\User',
+                        'action'     => 'preferences',
                     ),
                 ),
             ),

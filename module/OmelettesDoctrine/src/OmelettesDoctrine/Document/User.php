@@ -10,14 +10,8 @@ use Zend\InputFilter;
 /**
  * @ODM\Document(collection="users", requireIndexes=true)
  */
-class User extends AbstractHistoricDocument
+class User extends AbstractAccountBoundHistoricDocument
 {
-    /**
-     * @var Account
-     * @ODM\ReferenceOne(targetDocument="Account")
-     */
-    protected $account;
-    
     /**
      * @var string
      * @ODM\String
@@ -69,17 +63,6 @@ class User extends AbstractHistoricDocument
         parent::init();
         $this->preferences = new ArrayCollection();
         return $this;
-    }
-    
-    public function setAccount(Account $account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-    
-    public function getAccount()
-    {
-        return $this->account;
     }
     
     public function setAclRole($role)

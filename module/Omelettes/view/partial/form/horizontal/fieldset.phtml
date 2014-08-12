@@ -1,0 +1,11 @@
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <?php foreach ($fieldset as $element): ?>
+    <?php echo $this->partial(
+        'partial/form/horizontal/group.phtml',
+        array(
+            'element' => $element,
+            'labelColWidth' => $this->labelColWidth,
+            'inputColWidth' => $this->inputColWidth,
+        )); ?>
+    <?php endforeach; ?>
+</fieldset>

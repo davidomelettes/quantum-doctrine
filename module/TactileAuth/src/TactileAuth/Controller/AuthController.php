@@ -70,7 +70,7 @@ class AuthController extends AbstractDoctrineController
                     if (isset($redirectTo['name'])) {
                         return $this->redirect()->toRoute($redirectTo['name'], $redirectTo['params']);
                     } else {
-                        return $this->redirect()->toRoute('front');
+                        return $this->redirect()->toRoute('dash');
                     }
                 } else {
                     $this->flashError('Invalid email address and/or password');

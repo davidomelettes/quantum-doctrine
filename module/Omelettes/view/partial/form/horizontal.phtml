@@ -1,0 +1,37 @@
+<?php
+
+use Zend\Form;
+
+$form = $this->form;
+$form->setAttributes(array(
+    'action' => $this->url(null, array(), array(), true),
+    'class'  => $form->getAttribute('name') . ' form-horizontal',
+));
+$form->prepare();
+
+$labelColWidth = 2;
+$inputColWidth = 10;
+
+?>
+
+<?php echo $this->form()->openTag($form); ?>
+<?php foreach ($form as $element): ?>
+<?php if ($element instanceof Form\Fieldset): ?>
+<?php echo $this->partial(
+    'partial/form/horizontal/fieldset.phtml',
+    array(
+        'fieldset' => $element,
+        'labelColWidth' => $labelColWidth,
+        'inputColWidth' => $inputColWidth,
+    )); ?>
+<?php else: ?>
+<?php echo $this->partial(
+    'partial/form/horizontal/group.phtml',
+    array(
+        'element' => $element,
+        'labelColWidth' => $labelColWidth,
+        'inputColWidth' => $inputColWidth,
+    )); ?>
+<?php endif; ?>
+<?php endforeach; ?>
+<?php echo $this->form()->closeTag($form); ?>

@@ -13,9 +13,9 @@
     ?>
 
     <!-- Styles and links -->
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" sizes="16x16 24x24 32x32 64x64" href="<?php echo $this->basePath() . '/favicon.ico' ?>">
     <?php
-        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-            ->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css')
+        echo $this->headLink()->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css')
             //->appendStylesheet('//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
             ->appendStylesheet($this->basePath() . '/css/tactilecrm.css');
     ?>

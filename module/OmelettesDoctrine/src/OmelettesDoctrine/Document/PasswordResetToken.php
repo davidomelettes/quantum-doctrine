@@ -6,7 +6,7 @@ use Omelettes\Uuid\Uuid;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document(collection="userPasswordResetTokens", requireIndexes=true)
+ * @ODM\Document(collection="users.passwordResetTokens", requireIndexes=true)
  */
 class PasswordResetToken extends AbstractDocument
 {

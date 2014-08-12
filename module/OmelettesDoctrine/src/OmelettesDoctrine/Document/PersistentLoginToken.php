@@ -6,7 +6,7 @@ use Omelettes\Uuid\Uuid;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document(collection="userPersistentLoginTokens", requireIndexes=true)
+ * @ODM\Document(collection="users.persistentLoginTokens", requireIndexes=true)
  */
 class PersistentLoginToken extends AbstractDocument
 {

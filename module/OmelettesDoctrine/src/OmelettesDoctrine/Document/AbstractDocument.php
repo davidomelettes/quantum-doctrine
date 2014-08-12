@@ -22,6 +22,11 @@ abstract class AbstractDocument implements InputFilter\InputFilterAwareInterface
      */
     protected $documentService;
     
+    /**
+     * @var InputFilter\InputFilterInterface
+     */
+    protected $inputFilter;
+    
     public function __construct(AbstractDocumentService $service)
     {
         $this->documentService = $service;

@@ -4,117 +4,74 @@
 return array(
     'acl' => array(
         'resources' => array(
-            'guest' => array(
-                'signup' => array(),
-                'login' => array(),
-                'logout' => array(),
-                'forgot-password' => array(),
-                'reset-password' => array(),
+            'admin' => array(
+                'admin' => array(),
+                'admin/account' => array(),
+                'admin/resources' => array(),
+                'admin/users' => array(),
             ),
-            'user' => array(
-                'front' => array(),
-                'verify-password' => array(),
-                'user' => array(),
-            ),
+        ),
+        'passworded' => array(
+            'admin' => array(),
+            'admin/account' => array(),
+            'admin/resources' => array(),
+            'admin/users' => array(),
         ),
     ),
     
     'controllers' => array(
         'invokables' => array(
-            'Tactile\Controller\Dash'   => 'Tactile\Controller\DashboardController',
+            'Admin\Controller\Account'   => 'TactileAdmin\Controller\AccountController',
+            'Admin\Controller\Resources' => 'TactileAdmin\Controller\ResourcesController',
+            'Admin\Controller\Users'     => 'TactileAdmin\Controller\UsersController',
         ),
     ),
     
     'router' => array(
         'routes' => array(
-            'front' => array(
-                'type'    => 'Literal',
+            'admin' => array(
+                'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/',
+                    'route'    => '/admin',
                     'defaults' => array(
-                        'controller' => 'Stub\Controller\Stub',
-                        'action'     => 'hello-world',
+                        'controller' => 'Admin\Controller\Account',
+                        'action'     => 'info',
                     ),
                 ),
-            ),
-            
-            'signup' => array(
-                'type'	  => 'Literal',
-                'options' => array(
-                    'route'    => '/signup',
-                    'defaults' => array(
-                        'controller' => 'Stub\Controller\Signup',
-                        'action'     => 'signup',
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'account' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/account[/:action]',
+                            'defaults' => array(
+                                'controller' => 'Admin\Controller\Account',
+                                'action'     => 'info',
+                            ),
+                        ),
                     ),
-                ),
-            ),
-            
-            'login' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'			=> '/login',
-                    'defaults'		=> array(
-                        'controller'	=> 'Stub\Controller\Auth',
-                        'action'		=> 'login',
+                    'users' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'       => '/users[/:action][/:key]',
+                            'constraints' => array(
+                                'key'        => Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
+                            ),
+                            'defaults'    => array(
+                                'controller' => 'Admin\Controller\Users',
+                                'action'     => 'index',
+                            ),
+                        ),
                     ),
-                ),
-            ),
-            
-            'logout' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'			=> '/logout',
-                    'defaults'		=> array(
-                        'controller' => 'Stub\Controller\Auth',
-                        'action'     => 'logout',
-                    ),
-                ),
-            ),
-            
-            'forgot-password' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/forgot-password',
-                    'defaults' => array(
-                        'controller' => 'Stub\Controller\Auth',
-                        'action'     => 'forgot-password',
-                    ),
-                ),
-            ),
-            
-            'reset-password' => array(
-                'type' => 'Segment',
-                'options' => array(
-                    'route'    => '/reset-password/:user/:secret',
-                    'defaults' => array(
-                        'controller' => 'Stub\Controller\Auth',
-                        'action'     => 'reset-password',
-                    ),
-                    'constraints'	=> array(
-                        'user'   => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
-                        'secret' => \Omelettes\Validator\Uuid::UUID_REGEX_PATTERN,
-                    ),
-                ),
-            ),
-            
-            'verify-password' => array(
-                'type' => 'Literal',
-                'options' => array(
-                    'route'    => '/verify-password',
-                    'defaults' => array(
-                        'controller' => 'Stub\Controller\Auth',
-                        'action'     => 'verify-password',
-                    ),
-                ),
-            ),
-            
-            'user' => array(
-                'type' => 'Segment',
-                'options' => array(
-                    'route'    => '/user/:action',
-                    'defaults' => array(
-                        'controller' => 'Stub\Controller\User',
-                        'action'     => 'preferences',
+                    'resources' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/resources[/:action][/:resource_name]',
+                            'defaults' => array(
+                                'controller' => 'Admin\Controller\Resources',
+                                'action'     => 'index',
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -122,14 +79,7 @@ return array(
     ),
     
     'view_manager' => array(
-        'doctype'					=> 'HTML5',
-        'display_not_found_reason'	=> true,
-        'display_exceptions'		=> true,
-        'not_found_template'		=> 'error/404',
-        'exception_template'		=> 'error/index',
         'template_map' => array(
-            'mail/text/password-reset'	=> __DIR__ . '/../view/mail/text/password-reset.phtml',
-            'mail/html/password-reset'	=> __DIR__ . '/../view/mail/html/password-reset.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -17,7 +17,7 @@ abstract class AbstractHistoricDocument extends AbstractDocument
     
     /**
      * @var User
-     * @ODM\ReferenceOne(targetDocument="User")
+     * @ODM\ReferenceOne(targetDocument="OmelettesDoctrine\Document\User")
      */
     protected $createdBy;
     
@@ -29,7 +29,7 @@ abstract class AbstractHistoricDocument extends AbstractDocument
     
     /**
      * @var User
-     * @ODM\ReferenceOne(targetDocument="User")
+     * @ODM\ReferenceOne(targetDocument="OmelettesDoctrine\Document\User")
      */
     protected $updatedBy;
     
@@ -39,11 +39,6 @@ abstract class AbstractHistoricDocument extends AbstractDocument
      * @ODM\Index
      */
     protected $deleted;
-    
-    /**
-     * @var InputFilter\InputFilterInterface
-     */
-    protected $inputFilter;
     
     public function getId()
     {

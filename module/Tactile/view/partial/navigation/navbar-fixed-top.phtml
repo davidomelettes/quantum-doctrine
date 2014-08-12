@@ -1,5 +1,9 @@
 <?php
-    $identity = $this->identity();
+
+use OmelettesDoctrine\Document as OmDoc;
+
+$identity = $this->identity();
+
 ?>
 <nav class="navbar navbar-fixed-top navbar-inverse navbar-logo" role="navigation">
     <div class="container-fluid">
@@ -20,7 +24,7 @@
         <div class="collapse navbar-collapse" id="om-top-navbar">
             <?php echo $this->navigation('nav-top')->menu()->setUlClass('nav navbar-nav'); ?>
             <div class="navbar-right">
-                <?php if ($identity): ?>
+                <?php if ($identity instanceof OmDoc\User): ?>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -30,8 +34,21 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+                            <?php if ($this->aclAllows('admin')): ?>
+                            <li role="presentation" class="dropdown-header"><?php echo $this->translate('Admin'); ?></li>
                             <li>
-                                <a href="<?php #echo $this->url('user', array('action' => 'preferences')); ?>"><span class="glyphicon glyphicon-cog"></span> <?php echo $this->translate('My Preferences'); ?></a>
+                                <a href="<?php echo $this->url('admin/account'); ?>"><span class="glyphicon glyphicon-info-sign"></span> <?php echo $this->translate('Account Services'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->url('admin/users'); ?>"><span class="glyphicon glyphicon-user"></span> <?php echo $this->translate('Users & Billing'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->url('admin/resources'); ?>"><span class="glyphicon glyphicon-edit"></span> <?php echo $this->translate('Resource Configuration'); ?></a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <?php endif; ?>
+                            <li>
+                                <a href="<?php echo $this->url('user', array('action' => 'preferences')); ?>"><span class="glyphicon glyphicon-cog"></span> <?php echo $this->translate('My Preferences'); ?></a>
                             </li>
                             <li role="presentation" class="divider"></li>
                             <li>

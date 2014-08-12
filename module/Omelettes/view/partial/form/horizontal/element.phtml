@@ -1,0 +1,19 @@
+<?php
+
+$element = $this->element;
+$elementType = $element->getAttribute('type');
+if (!in_array($elementType, array('submit', 'checkbox'))) {
+	$element->setAttribute('class', 'form-control');
+}
+if (!$elementType) {
+	throw new \Exception('Missing element type for: ' . get_class($element));
+}
+
+?>
+<?php echo $this->partial(
+    'partial/form/horizontal/element/' . $elementType . '.phtml',
+    array(
+        'element'		=> $element,
+        'labelColWidth' => $this->labelColWidth,
+        'inputColWidth' => $this->inputColWidth,
+    )); ?>

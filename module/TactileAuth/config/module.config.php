@@ -23,9 +23,9 @@ return array(
     ),
     
     'layout' => array(
-        'login' => 'layout/front',
-        'forgot-password' => 'layout/front',
-        'reset-password' => 'layout/front',
+        'login' => 'layout/login',
+        'forgot-password' => 'layout/login',
+        'reset-password' => 'layout/login',
     ),
     
     'router' => array(

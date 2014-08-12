@@ -30,6 +30,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
     {
         return array(
             'factories' => array(
+                'Tactile\Form\ContactForm' => function ($fm) {
+                    $sm = $fm->getServiceLocator();
+                    $form = new Form\ContactForm();
+                    $form->setDocumentService($sm->get('Tactile\Service\ContactsService'));
+                    return $form;
+                },
+                'Tactile\Form\UserPreferencesForm' => function ($fm) {
+                    $sm = $fm->getServiceLocator();
+                    $form = new Form\UserPreferencesForm();
+                    $form->setDocumentService($sm->get('OmelettesDoctrine\Service\UsersService'));
+                    return $form;
+                },
             ),
         );
     }
@@ -38,6 +50,20 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
     {
         return array(
             'factories' => array(
+                // Resources
+                'Tactile\Service\ResourcesService' => function ($sm) {
+                    $service = new Service\ResourcesService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
+                
+                // Contacts
+                'Tactile\Service\ContactsService' => function ($sm) {
+                    $service = new Service\ContactsService($sm->get('doctrine.documentmanager.odm_default'));
+                    //$service->setResource();
+                    return $service;
+                },
+                
+                // Navigation
                 'nav-top' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             ),
         );

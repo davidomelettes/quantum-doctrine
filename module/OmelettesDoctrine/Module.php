@@ -178,13 +178,28 @@ class Module implements Feature\AutoloaderProviderInterface,
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkAcl'));
     }
     
+    public function checkSessionFreshness(MvcEvent $ev)
+    {
+        // Some routes require a password-authenticated session
+        $app = $ev->getApplication();
+        $sm = $app->getServiceManager();
+        $config = $sm->get('config');
+        $currentRoute = $ev->getRouteMatch()->getMatchedRouteName();
+        
+        if (isset($config[''])) {
+            
+        }
+    }
+    
     public function checkAcl(MvcEvent $ev)
     {
         $app = $ev->getApplication();
         $sm = $app->getServiceManager();
+        $config = $sm->get('config');
         $acl = $sm->get('OmelettesDoctrine\Service\AclService');
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
         $flash = $sm->get('ControllerPluginManager')->get('flashMessenger');
+        $session = new Container('Omelettes');
     
         // What resource are we trying to access?
         $resource = $ev->getRouteMatch()->getMatchedRouteName();
@@ -212,7 +227,6 @@ class Module implements Feature\AutoloaderProviderInterface,
             switch ($role) {
                 case 'guest':
                     // User is not logged in
-                    $session = new Container('Omelettes');
                     $session->rememberedRoute = array(
                         'name'   => $resource,
                         'params' => $ev->getRouteMatch()->getParams(),
@@ -223,6 +237,18 @@ class Module implements Feature\AutoloaderProviderInterface,
                     // User is logged in, probably tried to access an admin-only resource/privilege
                     $flash->addErrorMessage('You do not have permission to access that page');
                     return $this->redirectToRoute($ev, 'front');
+            }
+        }
+        
+        // Does this route require the session to be password-authenticated?
+        if (!$session->passwordAuthenticated) {
+            if (isset($config['acl']['passworded'][$resource])) {
+                // This route requires password-authentication
+                $session->rememberedRoute = array(
+                    'name'   => $resource,
+                    'params' => $ev->getRouteMatch()->getParams(),
+                );
+                return $this->redirectToRoute($ev, 'verify-password');
             }
         }
     }
