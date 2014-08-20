@@ -8,7 +8,7 @@ use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Query;
 use DoctrineMongoODMModule\Paginator\Adapter\DoctrinePaginator;
-use Zend\Paginator\Paginator;
+use OmelettesDoctrine\Paginator\Paginator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -50,7 +50,8 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      */
     final protected function createQueryBuilder()
     {
-        return $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
+        $qb = $this->documentManager->createQueryBuilder(get_class($this->createDocument()));
+        return $qb;
     }
     
     /**
@@ -61,8 +62,15 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
     {
         $qb = $this->createQueryBuilder();
         $qb->find();
+        $this->defaultSort($qb);
         return $qb;
     }
+    
+    /**
+     * Apply a sort to the default query
+     * @return Query\Builder
+     */
+    abstract protected function defaultSort(Query\Builder $qb);
     
     /**
      * Generates a new Paginator instance for the given Cursor
@@ -70,7 +78,9 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      */
     protected function getPaginator(Cursor $cursor)
     {
-        return new Paginator(new DoctrinePaginator($cursor));
+        $paginator = new Paginator(new DoctrinePaginator($cursor));
+        $paginator->setMockDocument($this->createDocument());
+        return $paginator;
     }
     
     public function find($id)

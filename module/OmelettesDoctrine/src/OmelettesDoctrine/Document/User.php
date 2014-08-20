@@ -159,6 +159,9 @@ class User extends AbstractAccountBoundHistoricDocument
                         'options'               => array(
                             'field'            => 'emailAddress',
                             'document_service' => $this->documentService,
+                            'messages' => array(
+                                \OmelettesDoctrine\Validator\Document\DoesNotExist::ERROR_DOCUMENT_EXISTS => 'A user with that email address already exists',
+                            ),
                         ),
                     ),
                 ),

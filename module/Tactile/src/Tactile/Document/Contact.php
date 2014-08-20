@@ -2,21 +2,24 @@
 
 namespace Tactile\Document;
 
+use Omelettes\Tabulatable\TabulatableItemInterface;
 use OmelettesDoctrine\Document as OmDoc;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
+use Zend\I18n\Translator\Loader\Gettext;
 
 /**
  * @ODM\Document(collection="contacts", requireIndexes=true)
  * @ODM\InheritanceType("SINGLE_COLLECTION")
  * @ODM\DiscriminatorField("type")
  */
-class Contact extends Quantum
+class Contact extends Quantum implements TabulatableItemInterface
 {
     /**
      * @var string
      * @ODM\String
+     * @ODM\Index
      */
     protected $fullName;
     
@@ -77,6 +80,18 @@ class Contact extends Quantum
         }
         
         return $this->inputFilter;
+    }
+    
+    public function getTableRowPartial()
+    {
+        return 'tabulate/contact';
+    }
+    
+    public function getTableHeadings()
+    {
+        return array(
+            'fullName' => 'Contact Name',
+        );
     }
     
 }

@@ -57,4 +57,27 @@ abstract class AbstractDocument implements InputFilter\InputFilterAwareInterface
         return $this;
     }
     
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function setData(array $data)
+    {
+        foreach ($data as $k => $v) {
+            $method = 'set' . $k;
+            if (!method_exists($this, $method)) {
+                throw new \Exception('Invalid Document property: ' . $k);
+            }
+            $this->$method($v);
+        }
+        return $this;
+    }
+    
 }

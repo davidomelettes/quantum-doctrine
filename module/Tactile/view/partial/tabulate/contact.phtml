@@ -1,0 +1,6 @@
+<?php $item = $this->item; ?>
+<tr>
+    <td>
+        <a href="<?php echo $this->url(null, array('action' => 'view', 'id' => $item->getId())); ?>"><?php echo $this->escapeHtml($item->getFullName()); ?></a>
+    </td>
+</tr>

@@ -30,12 +30,21 @@ return array(
                         ),
                     ),
                 ),
+                'db' => array(
+                    'options' => array(
+                        'route' => 'db <action>',
+                        'defaults' => array(
+                            'controller' => 'Console\Controller\Db',
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
     'controllers' => array(
         'invokables' => array(
             'Console\Controller\Assets' => 'OmelettesDoctrine\Controller\ConsoleAssetsController',
+            'Console\Controller\Db' => 'OmelettesDoctrine\Controller\ConsoleDbController',
         ),
     ),
     'doctrine' => array(

@@ -108,6 +108,12 @@ class Module implements Feature\AutoloaderProviderInterface,
                     $service = new Service\Auth\PersistentLoginTokensService($sm->get('doctrine.documentmanager.odm_default'));
                     return $service;
                 },
+                
+                // System Service
+                'OmelettesDoctrine\Service\SystemService' => function ($sm) {
+                    $service = new Service\SystemService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
             ),
         );
     }
@@ -193,6 +199,12 @@ class Module implements Feature\AutoloaderProviderInterface,
     
     public function checkAcl(MvcEvent $ev)
     {
+        $request = $ev->getRequest();
+        if ($request instanceof ConsoleRequest) {
+            // Don't bother checking for console requests
+            return;
+        }
+        
         $app = $ev->getApplication();
         $sm = $app->getServiceManager();
         $config = $sm->get('config');
@@ -200,7 +212,7 @@ class Module implements Feature\AutoloaderProviderInterface,
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
         $flash = $sm->get('ControllerPluginManager')->get('flashMessenger');
         $session = new Container('Omelettes');
-    
+        
         // What resource are we trying to access?
         $resource = $ev->getRouteMatch()->getMatchedRouteName();
         if (!$acl->hasResource($resource)) {
@@ -263,25 +275,32 @@ class Module implements Feature\AutoloaderProviderInterface,
         $app = $ev->getApplication();
         $sm = $app->getServiceManager();
         $auth = $sm->get('Zend\Authentication\AuthenticationService');
-    
+        
+        // Check we're not using the console
+        $request = $ev->getRequest();
+        if ($request instanceof ConsoleRequest) {
+            // We're using the console
+            $routeName = $ev->getRouteMatch()->getMatchedRouteName();
+            if (in_array($routeName, array('doctrine_cli', 'db'))) {
+                // We're using Doctrine or DB management commands, an auth identity is not needed 
+                return;
+            }
+            $usersService = $sm->get('OmelettesDoctrine\Service\UsersService');
+            $systemIdentity = $usersService->find('console');
+            if (!$systemIdentity) {
+                throw new \Exception('Expected system identity on route: ' . $routeName);
+            }
+            // Auth as system user
+            $auth->getStorage()->write($systemIdentity);
+            return;
+        }
+        
         // Is the user logged in?
         if ($auth->hasIdentity()) {
             // User is logged in, session is fresh
             return;
     
         } else {
-            $request = $ev->getRequest();
-            if ($request instanceof ConsoleRequest) {
-                // We're using the console
-                $usersService = $sm->get('OmelettesDoctrine\Service\UsersService');
-                $systemIdentity = $usersService->find('console');
-                if (!$systemIdentity) {
-                    throw new \Exception('Expected system identity');
-                }
-                $auth->getStorage()->write($systemIdentity);
-                return;
-            }
-    
             // HTTP request might provide cookie data
             $cookie = $request->getCookie();
             if ($cookie && $cookie->offsetExists('login')) {

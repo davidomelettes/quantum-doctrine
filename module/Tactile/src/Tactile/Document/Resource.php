@@ -6,9 +6,11 @@ use OmelettesDoctrine\Document as OmDoc;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
+use Doctrine\ODM\MongoDB\Mapping\Annotations\Boolean;
 
 /**
  * @ODM\Document(collection="resources", requireIndexes=true)
+ * @ODM\UniqueIndex(keys={"account.id"="asc", "slug"="asc"})
  */
 class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
 {
@@ -29,6 +31,12 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
      * @ODM\String
      */
     protected $plural;
+    
+    /**
+     * @var Boolean
+     * @ODM\Boolean
+     */
+    protected $protected;
     
     public function setSlug($slug)
     {
@@ -61,6 +69,17 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
     public function getPlural()
     {
         return $this->plural;
+    }
+    
+    public function setProtected($protected)
+    {
+        $this->protected = (boolean) $protected;
+        return $this;
+    }
+    
+    public function getProtected()
+    {
+        return $this->protected;
     }
     
     public function getInputFilter()
