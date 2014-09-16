@@ -1,0 +1,36 @@
+<?php
+
+$fieldset = $this->element;
+$dateInput = $fieldset->get('date');
+$dateInput->setAttribute('class', 'form-control date');
+$timeInput = $fieldset->get('time');
+$timeInput->setAttribute('class', 'form-control time');
+$hasErrors = (boolean)($dateInput->getMessages() || $timeInput->getMessages());
+
+?>
+
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <div class="form-group form-group-when<?php echo $hasErrors ? " has-error" : ''; ?>">
+        <label class="col-sm-<?php echo $this->labelColWidth; ?> control-label" for="<?php echo $dateInput->getAttribute('id'); ?>">
+            <?php echo $dateInput->getLabel(); ?>
+        </label>
+        <div class="col-sm-<?php echo $this->inputColWidth; ?>">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        <?php echo $this->formText($dateInput); ?>
+                    </div>
+                    <?php echo $this->formElementErrors()->render($dateInput, array('class' => 'help-block list-unstyled')); ?>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        <?php echo $this->formText($timeInput); ?>
+                    </div>
+                    <?php echo $this->formElementErrors()->render($timeInput, array('class' => 'help-block list-unstyled')); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>

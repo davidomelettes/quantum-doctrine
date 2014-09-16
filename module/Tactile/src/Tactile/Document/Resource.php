@@ -17,6 +17,7 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
     /**
      * @var string
      * @ODM\String
+     * @ODM\Index
      */
     protected $slug;
     

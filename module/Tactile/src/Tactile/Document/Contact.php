@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
 use Zend\I18n\Translator\Loader\Gettext;
+use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
 
 /**
  * @ODM\Document(collection="contacts", requireIndexes=true)
@@ -22,6 +23,12 @@ class Contact extends Quantum implements TabulatableItemInterface
      * @ODM\Index
      */
     protected $fullName;
+
+    /**
+     * @var OmDoc\When
+     * @ODM\EmbedOne(targetDocument="OmelettesDoctrine\Document\When")
+     */
+    protected $lastContacted;
     
     /**
      * @var ArrayCollection
@@ -53,6 +60,17 @@ class Contact extends Quantum implements TabulatableItemInterface
         return $this->fullName;
     }
     
+    public function setLastContacted(OmDoc\When $time)
+    {
+        $this->lastContacted = $time;
+        return $this;
+    }
+    
+    public function getLastContacted()
+    {
+        return $this->lastContacted;
+    }
+    
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
@@ -76,6 +94,10 @@ class Contact extends Quantum implements TabulatableItemInterface
                 ),
             ));
             
+            $whenFieldset = new WhenFieldset('lastContact', 'Last Contacted', true);
+            $whenFilter = $whenFieldset->getInputFilter();
+            $filter->add($whenFilter, 'lastContacted');
+            
             $this->inputFilter = $filter;
         }
         
@@ -90,7 +112,9 @@ class Contact extends Quantum implements TabulatableItemInterface
     public function getTableHeadings()
     {
         return array(
-            'fullName' => 'Contact Name',
+            'fullName'       => 'Contact Name',
+            'created'        => 'Last Contacted',
+            'lastContacted'  => 'Created',
         );
     }
     

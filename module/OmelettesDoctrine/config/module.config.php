@@ -81,7 +81,17 @@ return array(
     
     'view_helpers'	=> array(
         'invokables'	=> array(
-            'aclAllows' => 'OmelettesDoctrine\View\Helper\AclAllows',
+            'aclAllows'  => 'OmelettesDoctrine\View\Helper\AclAllows',
+            'prettyUser' => 'OmelettesDoctrine\View\Helper\PrettyUser',
+        ),
+    ),
+    
+    'view_manager' => array(
+        'template_map' => array(
+            'form/fieldset/when' => __DIR__ . '/../view/partial/form/horizontal/fieldset/when.phtml',
+        ),
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
         ),
     ),
 );

@@ -7,13 +7,10 @@ use Zend\InputFilter;
 
 class UserPreferencesForm extends AbstractDocumentForm
 {
-    public function __construct($name = 'preferences', $options = array())
-    {
-        parent::__construct($name, $options);
-    }
-    
     public function init()
     {
+        $this->setName('preferences');
+        
         $this->add(array(
             'name' => 'password',
             'type' => 'Zend\Form\Element\Password',

@@ -1,0 +1,10 @@
+<?php $element = $this->element; ?>
+<div class="col-sm-offset-<?php echo $this->labelColWidth; ?> col-sm-<?php echo $this->inputColWidth; ?>">
+    <div class="checkbox">
+        <label>
+            <?php echo $this->formInput($element); ?>
+            <?php echo $element->getLabel(); ?>
+        </label>
+    </div>
+    <?php echo $this->formElementErrors()->render($element, array('class' => 'help-block list-unstyled')); ?>
+</div>

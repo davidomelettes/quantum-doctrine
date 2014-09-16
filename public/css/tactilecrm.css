@@ -6163,6 +6163,22 @@ button.close {
     display: none !important;
   }
 }
+.ui-timepicker {
+  display: none;
+  max-height: 150px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.ui-timepicker div {
+  width: 60px;
+  padding: 4px;
+  font-size: 0.8em;
+  cursor: default;
+}
+.ui-timepicker div.selected,
+.ui-timepicker div:hover {
+  background-color: #E4EBFB;
+}
 form .form-group-hidden,
 form .form-group-submit {
   margin: 0;
@@ -6171,8 +6187,12 @@ form .form-control-static {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.panel h2.panel-title {
+.panel .panel-heading h2.panel-title {
   font-size: 30px;
+}
+.panel .panel-heading .pagination {
+  margin: 0;
+  margin-left: 1em;
 }
 .navbar-front {
   background: #e7e7e7 url('../img/bg.jpg') no-repeat;

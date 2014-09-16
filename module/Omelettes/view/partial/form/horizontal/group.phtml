@@ -7,7 +7,7 @@ if (!$elementType) {
 }
 
 ?>
-<div class="form-group form-group-<?php echo $elementType; ?><?php if ($this->formElementErrors($element)) echo " has-error"; ?><?php if ($element->getOption('group_class')) echo ' ' . $element->getOption('group_class'); ?>">
+<div class="form-group form-group-<?php echo $elementType; ?><?php if ($element->getMessages()) echo " has-error"; ?><?php if ($element->getOption('feedback_icon')) echo ' has-feedback'; ?><?php if ($element->getOption('group_class')) echo ' ' . $element->getOption('group_class'); ?>">
     <?php echo $this->partial(
         'partial/form/horizontal/element.phtml',
         array(

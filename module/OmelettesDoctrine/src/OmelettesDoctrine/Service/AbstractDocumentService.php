@@ -70,7 +70,10 @@ abstract class AbstractDocumentService implements ServiceLocatorAwareInterface
      * Apply a sort to the default query
      * @return Query\Builder
      */
-    abstract protected function defaultSort(Query\Builder $qb);
+    protected function defaultSort(Query\Builder $qb)
+    {
+        return $qb;
+    }
     
     /**
      * Generates a new Paginator instance for the given Cursor

@@ -1,6 +1,24 @@
 // Get me some bootstrap
 @import "bootstrap/bootstrap.less";
 
+// Time.js
+.ui-timepicker {
+    display: none;
+    max-height: 150px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    div {
+        width: 60px;
+        padding: 4px;
+        font-size: 0.8em;
+        cursor: default;
+        &.selected,
+        &:hover {
+            background-color: #E4EBFB;
+        }
+    }
+}
+
 form {
     .form-group-hidden,
     .form-group-submit { margin: 0; }

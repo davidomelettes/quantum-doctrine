@@ -1,5 +1,6 @@
 <?php
 
+use Omelettes\Form\ViewPartialInterface;
 use Zend\Form;
 
 $form = $this->form;
@@ -16,22 +17,23 @@ $inputColWidth = 10;
 
 <?php echo $this->form()->openTag($form); ?>
 <?php foreach ($form as $element): ?>
-<?php if ($element instanceof Form\Fieldset): ?>
+<?php
+
+if ($element instanceof ViewPartialInterface) {
+    $partial = $element->getViewPartial();
+} elseif ($element instanceof Form\Fieldset) {
+    $partial = 'partial/form/horizontal/fieldset.phtml';
+} else {
+    $partial = 'partial/form/horizontal/group.phtml';
+}
+
+?>
 <?php echo $this->partial(
-    'partial/form/horizontal/fieldset.phtml',
-    array(
-        'fieldset' => $element,
-        'labelColWidth' => $labelColWidth,
-        'inputColWidth' => $inputColWidth,
-    )); ?>
-<?php else: ?>
-<?php echo $this->partial(
-    'partial/form/horizontal/group.phtml',
+    $partial,
     array(
         'element' => $element,
         'labelColWidth' => $labelColWidth,
         'inputColWidth' => $inputColWidth,
     )); ?>
-<?php endif; ?>
 <?php endforeach; ?>
 <?php echo $this->form()->closeTag($form); ?>

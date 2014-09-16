@@ -1,9 +1,9 @@
 <?php $element = $this->element; ?>
 <label class="col-sm-<?php echo $this->labelColWidth; ?> control-label" for="<?php echo $element->getAttribute('id'); ?>">
-	<?php echo $element->getLabel(); ?>
+    <?php echo $element->getLabel(); ?>
 </label>
 <div class="col-sm-<?php echo $this->inputColWidth; ?>">
-    <?php echo $this->formInput($element); ?>
+    <?php echo $this->formTime($element); ?>
     <?php echo $this->formElementErrors()->render($element, array('class' => 'help-block list-unstyled')); ?>
     <?php if ($element->getOption('feedback_icon')): ?>
     <span class="glyphicon glyphicon-<?php echo $element->getOption('feedback_icon');?> form-control-feedback"></span>

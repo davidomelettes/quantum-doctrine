@@ -42,6 +42,8 @@ class ContactsController extends AbstractDoctrineController
                 $contactsService->commit();
                 $this->flashSuccess('Contact created successfully');
                 return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+            } else {
+                $this->flashError('There was a problem saving the Contact');
             }
         }
         
@@ -66,7 +68,7 @@ class ContactsController extends AbstractDoctrineController
         $contact = $this->loadRequestedContact();
         if (!$contact) {
             $this->flashError('Unable to locate requested contact');
-            return $this->redirect()->toRoute('contacts', array('action' => 'index'));
+            return $this->redirect()->toRoute('contacts');
         }
         
         return $this->returnViewModel(array(
@@ -80,7 +82,7 @@ class ContactsController extends AbstractDoctrineController
         $contact = $this->loadRequestedContact();
         if (!$contact) {
             $this->flashError('Unable to locate requested contact');
-            return $this->redirect()->toRoute('contacts', array('action' => 'index'));
+            return $this->redirect()->toRoute('contacts');
         }
         
         $form = $this->getManagedForm('Tactile\Form\ContactForm');

@@ -9,7 +9,10 @@
                 <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
             </div>
             <div class="panel-body">
-                
+                <dl>
+                    <dt>Created</dt>
+                    <dd><?php echo $this->prettyTime($item->getCreated()); ?> by <?php echo $this->prettyUser($item->getCreatedBy()); ?></dd>
+                </dl>
             </div>
         </div>
     </div>

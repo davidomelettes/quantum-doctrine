@@ -20,6 +20,7 @@ return array(
             'Tactile\Controller\Dash'     => 'Tactile\Controller\DashboardController',
             'Tactile\Controller\Contacts' => 'Tactile\Controller\ContactsController',
             'Tactile\Controller\User'     => 'Tactile\Controller\UserController',
+            'Tactile\Controller\Users'    => 'Tactile\Controller\UsersController',
         ),
     ),
     
@@ -79,6 +80,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'Tactile\Controller\User',
                         'action'     => 'preferences',
+                    ),
+                ),
+            ),
+            
+            'users' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/users[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'Tactile\Controller\Users',
+                        'action'     => 'index',
                     ),
                 ),
             ),
