@@ -1,14 +1,14 @@
 <?php
 
-namespace OmelettesDoctrine\Form;
+namespace OmelettesDoctrine\Form\Fieldset;
 
-use Omelettes\Form\AbstractForm;
 use OmelettesDoctrine\Service\AbstractDocumentService;
+use OmelettesDoctrine\Stdlib\Hydrator\UberHydrator;
+use Zend\Form\Fieldset;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use OmelettesDoctrine\Stdlib\Hydrator\UberHydrator;
 
-abstract class AbstractDocumentForm extends AbstractForm implements ServiceLocatorAwareInterface
+class AbstractDocumentFieldset extends Fieldset implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     
@@ -43,5 +43,4 @@ abstract class AbstractDocumentForm extends AbstractForm implements ServiceLocat
     {
         return $this->getServiceLocator()->getServiceLocator();
     }
-    
 }

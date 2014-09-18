@@ -5,7 +5,7 @@ namespace OmelettesDoctrine\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document
+ * @ODM\EmbeddedDocument
  */
 class UserPreferenceString extends UserPreference
 {

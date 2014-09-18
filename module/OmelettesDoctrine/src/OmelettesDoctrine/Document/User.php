@@ -44,8 +44,8 @@ class User extends AbstractAccountBoundHistoricDocument
     protected $salt;
     
     /**
-     * @var ArrayCollection
-     * @ODM\ReferenceMany(
+     * @var array
+     * @ODM\EmbedMany(
      *     targetDocument="UserPreference",
      *     discriminatorField="type",
      *     discriminatorMap={
@@ -56,14 +56,7 @@ class User extends AbstractAccountBoundHistoricDocument
      *     }
      * )
      */
-    protected $preferences;
-    
-    protected function init()
-    {
-        parent::init();
-        $this->preferences = new ArrayCollection();
-        return $this;
-    }
+    protected $preferences = array();
     
     public function setAclRole($role)
     {

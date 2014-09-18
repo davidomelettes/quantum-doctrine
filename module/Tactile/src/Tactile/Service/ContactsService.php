@@ -15,7 +15,7 @@ class ContactsService extends QuantaService
     
     public function createDocument()
     {
-        return new Doc\Contact($this);
+        return new Doc\Contact();
     }
     
 }

@@ -9,47 +9,53 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-class WhenFieldset extends Fieldset implements InputFilterAwareInterface, ViewPartialInterface
+class WhenFieldset extends AbstractDocumentFieldset implements InputFilterAwareInterface, ViewPartialInterface
 {
-    /**
-     * @var boolean
-     */
-    protected $required = false;
-
     /**
      * @var InputFilter
      */
     protected $inputFilter;
 
-    public function __construct($name, $label, $required = false)
+    public function __construct($name = null, array $options = array())
     {
         parent::__construct($name, array());
+        $this->setAllowedObjectBindingClass('OmelettesDoctrine\Document\When');
         $this->setAttribute('class', 'when');
-        $this->required = (boolean) $required;
-
+        
         $this->add(array(
             'name'		=> 'date',
             'type'		=> 'Date',
-            'required'	=> $this->required,
             'options'	=> array(
-                'label'		    => $label,
+                'label'		    => 'When',
             ),
             'attributes'=> array(
-                //'id'			=> $this->getName() .'-date',
+                'autocomplete' => 'off',
             ),
         ));
-
+        
         $this->add(array(
             'name'		=> 'time',
             'type'		=> 'Time',
-            'required'  => false,
             'options'	=> array(
             ),
             'attributes'=> array(
-                //'id'			=> $this->getName() .'-time',
+                'autocomplete' => 'off',
             ),
         ));
-
+    }
+    
+    public function setLabel($label)
+    {
+        $this->get('date')->setLabel($label);
+        return $this;
+    }
+    
+    public function setRequired($required)
+    {
+        $required = (boolean) $required;
+        $this->get('date')->setAttribute('required', $required);
+        $this->getInputFilter()->get('date')->setRequired($required);
+        return $this;
     }
     
     public function getViewPartial()
@@ -65,7 +71,7 @@ class WhenFieldset extends Fieldset implements InputFilterAwareInterface, ViewPa
             $format = 'Y-m-d';
             $inputFilter->add(array(
                 'name'			=> 'date',
-                'required'      => $this->required,
+                'required'      => false,
                 'filters'		=> array(
                     array('name' => 'StringTrim'),
                     array(

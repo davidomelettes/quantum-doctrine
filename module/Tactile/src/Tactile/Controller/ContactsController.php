@@ -31,12 +31,14 @@ class ContactsController extends AbstractDoctrineController
     {
         $contactsService = $this->getContactsService();
         $form = $this->getManagedForm('Tactile\Form\ContactForm');
-        $form->bind($contactsService->createDocument());
+        $contact = $contactsService->createDocument();
+        $form->bind($contact);
         
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
+                var_dump($request->getPost());
                 $contact = $form->getData();
                 $contactsService->save($contact);
                 $contactsService->commit();

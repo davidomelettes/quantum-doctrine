@@ -23,24 +23,13 @@ class ContactForm extends AbstractDocumentForm
             ),
         ));
         
-        $whenFieldset = new Fieldset\WhenFieldset('lastContacted', 'Last Contacted', true);
+        $whenFieldset = $this->getServiceLocator()->get('OmelettesDoctrine\Form\Fieldset\WhenFieldset');
+        $whenFieldset->setName('lastContacted')
+            ->setLabel('Last Contacted')
+            ->setRequired(true);
         $this->add($whenFieldset);
-        //$dateFieldset = new Fieldset\DateTimeFieldset('lastContacted', 'Last Contacted');
-        //$this->add($dateFieldset);
-        /*
-        $this->add(array(
-            'name' => 'lastContacted',
-            'type' => 'Omelettes\Form\Element\DateTimeCompatible',
-            'options' => array(
-                'label'       => 'Last Contacted',
-            ),
-            'attributes' => array(
-                'id'          => $this->getName() . '-lastContacted',
-                'required'    => true,
-            ),
-        ));
-        */
         
         $this->addSubmitFieldset('Save Contact');
     }
+    
 }

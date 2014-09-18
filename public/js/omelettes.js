@@ -111,19 +111,12 @@ $(function () {
 					$time.parent().hide();
 				}
 				var $clock = $fs.find('span.glyphicon-time').parent();
-				var $cb = $fs.find('input[type=checkbox]');
 				$clock.click(function(){
 					$toggle.toggle();
 					$time.parent().toggle();
-					$cb.prop('checked', !$cb.prop('checked'));
 					$time.filter(':visible').focus();
 					$time.not(':visible').val('');
 				});
-				if ($cb.is(':checked')) {
-					$time.show();
-					$toggle.hide();
-				}
-				$cb.parents('.form-group').hide();
 				if (!Modernizr.datetime) {
 					// User agent does not natively support date/time fields
 					$date.datepicker();

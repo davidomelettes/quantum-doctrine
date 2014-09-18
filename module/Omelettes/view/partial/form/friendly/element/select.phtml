@@ -1,0 +1,6 @@
+<?php $element = $this->element; ?>
+<label class="control-label" for="<?php echo $element->getAttribute('id'); ?>">
+	<?php echo $element->getLabel(); ?>
+</label>
+<?php echo $this->formSelect($element); ?>
+<?php echo $this->formElementErrors()->render($element, array('class' => 'help-block list-unstyled')); ?>

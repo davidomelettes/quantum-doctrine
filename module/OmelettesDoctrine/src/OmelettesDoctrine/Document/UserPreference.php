@@ -5,15 +5,14 @@ namespace OmelettesDoctrine\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document(collection="users.preferences", requireIndexes=true)
- * @ODM\InheritanceType("SINGLE_COLLECTION")
- * @ODM\DiscriminatorField("type")
+ * @ODM\EmbeddedDocument
  */
 class UserPreference extends AbstractDocument
 {
     /**
      * @var string
      * @ODM\String
+     * @ODM\Index
      */
     protected $name;
     

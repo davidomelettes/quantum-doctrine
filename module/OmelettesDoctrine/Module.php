@@ -52,6 +52,18 @@ class Module implements Feature\AutoloaderProviderInterface,
         );
     }
     
+    public function getFormElementConfig()
+    {
+        return array(
+            'factories' => array(
+                'OmelettesDoctrine\Form\Fieldset\WhenFieldset' => function ($fm) {
+                    $fieldset = new Form\Fieldset\WhenFieldset();
+                    return $fieldset;
+                },
+            ),
+        );
+    }
+    
     public function getServiceConfig()
     {
         return array(
@@ -106,6 +118,12 @@ class Module implements Feature\AutoloaderProviderInterface,
                 },
                 'OmelettesDoctrine\Service\Auth\PersistentLoginTokensService' => function ($sm) {
                     $service = new Service\Auth\PersistentLoginTokensService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
+                
+                // Locale
+                'OmelettesDoctrine\Service\LocalesService' => function ($sm) {
+                    $service = new Service\LocalesService();
                     return $service;
                 },
                 

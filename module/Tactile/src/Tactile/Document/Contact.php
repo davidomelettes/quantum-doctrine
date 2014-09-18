@@ -2,13 +2,12 @@
 
 namespace Tactile\Document;
 
-use Omelettes\Tabulatable\TabulatableItemInterface;
-use OmelettesDoctrine\Document as OmDoc;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Zend\InputFilter;
-use Zend\I18n\Translator\Loader\Gettext;
+use Omelettes\Tabulatable\TabulatableItemInterface;
+use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
+use Zend\InputFilter;
 
 /**
  * @ODM\Document(collection="contacts", requireIndexes=true)
@@ -17,6 +16,8 @@ use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
  */
 class Contact extends Quantum implements TabulatableItemInterface
 {
+    protected $hydrator;
+    
     /**
      * @var string
      * @ODM\String
@@ -94,9 +95,15 @@ class Contact extends Quantum implements TabulatableItemInterface
                 ),
             ));
             
+            $whenFieldset = new WhenFieldset();
+            $whenFieldset->setRequired(true);
+            $whenFilter = $whenFieldset->getInputFilter();
+            $filter->add($whenFilter, 'lastContacted');
+            /*
             $whenFieldset = new WhenFieldset('lastContact', 'Last Contacted', true);
             $whenFilter = $whenFieldset->getInputFilter();
             $filter->add($whenFilter, 'lastContacted');
+            */
             
             $this->inputFilter = $filter;
         }

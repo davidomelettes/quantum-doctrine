@@ -10,28 +10,45 @@ class UserPreferencesForm extends AbstractDocumentForm
     public function init()
     {
         $this->setName('preferences');
+        $localesService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\LocalesService');
+        
+        $tzOptions = $localesService->getTimeZones();
+        $this->add(array(
+            'name'       => 'tz',
+            'type'       => 'Select',
+            'options'    => array(
+                'label'         => 'Time Zone',
+                'value_options' => $tzOptions,
+            ),
+            'attributes' => array(
+                'id'           => $this->getName() . '-tz',
+                'required'     => true,
+            ),
+        ));
         
         $this->add(array(
-            'name' => 'password',
-            'type' => 'Zend\Form\Element\Password',
-            'options' => array(
+            'name'       => 'password',
+            'type'       => 'Password',
+            'options'    => array(
                 'label' => 'New password',
             ),
             'attributes' => array(
-                'id'          => $this->getName() . '-password',
-                'required'    => true,
+                'id'           => $this->getName() . '-password',
+                'required'     => true,
+                'autocomplete' => 'off',
             ),
         ));
         
         $this->add(array(
             'name' => 'passwordConfirm',
-            'type' => 'Zend\Form\Element\Password',
+            'type' => 'Password',
             'options' => array(
                 'label' => 'Confirm your new Password',
             ),
             'attributes' => array(
-                'id'          => $this->getName() . '-passwordConfirm',
-                'required'    => true,
+                'id'           => $this->getName() . '-passwordConfirm',
+                'required'     => true,
+                'autocomplete' => 'off',
             ),
         ));
         

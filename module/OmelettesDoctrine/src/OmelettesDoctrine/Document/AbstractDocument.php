@@ -18,20 +18,9 @@ abstract class AbstractDocument implements InputFilter\InputFilterAwareInterface
     protected $id;
     
     /**
-     * @var AbstractDocumentService
-     */
-    protected $documentService;
-    
-    /**
      * @var InputFilter\InputFilterInterface
      */
     protected $inputFilter;
-    
-    public function __construct(AbstractDocumentService $service)
-    {
-        $this->documentService = $service;
-        $this->init();
-    }
     
     public function setInputFilter(InputFilter\InputFilterInterface $inputFilter)
     {
@@ -46,15 +35,6 @@ abstract class AbstractDocument implements InputFilter\InputFilterAwareInterface
             $this->inputFilter = $filter;
         }
         return $this->inputFilter;
-    }
-    
-    /**
-     * Utility method for initialising collections
-     * @return \OmelettesDoctrine\Document\AbstractDocument
-     */
-    protected function init()
-    {
-        return $this;
     }
     
     public function setId($id)
