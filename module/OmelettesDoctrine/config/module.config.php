@@ -12,47 +12,13 @@ return array(
             'super' => array('admin'),
             'system' => array('super'),
         ),
-        'resources' => array(
-            'system' => array(
-                'build' => array(),
-            ),
-        ),
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'build' => array(
-                    'options' => array(
-                        'route' => 'build <assets>',
-                        'defaults' => array(
-                            'controller' => 'Console\Controller\Assets',
-                            'action' => 'build',
-                        ),
-                    ),
-                ),
-                'db' => array(
-                    'options' => array(
-                        'route' => 'db <action>',
-                        'defaults' => array(
-                            'controller' => 'Console\Controller\Db',
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
-            'Console\Controller\Assets' => 'OmelettesDoctrine\Controller\ConsoleAssetsController',
-            'Console\Controller\Db' => 'OmelettesDoctrine\Controller\ConsoleDbController',
-        ),
     ),
     'doctrine' => array(
         'authentication' => array(
             'odm_default' => array(
                 'identityClass'      => 'OmelettesDoctrine\Document\User',
-                'identityProperty'   => 'emailAddress',
-                'credentialProperty' => 'passwordHash',
+                'identityProperty'   => 'email',
+                'credentialProperty' => 'pwHash',
                 'credentialCallable' => function (OmDoc\User $user, $plaintext) {
                     return $user->hashPassword($plaintext);
                 },

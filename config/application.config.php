@@ -7,6 +7,7 @@ return array(
         'DoctrineMongoODMModule',
         'Omelettes',
         'OmelettesDoctrine',
+        'OmelettesDoctrineDeveloper',
         //'OmelettesStub',
         'Tactile',
         'TactileSignup',

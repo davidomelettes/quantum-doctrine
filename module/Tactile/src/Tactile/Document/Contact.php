@@ -95,15 +95,9 @@ class Contact extends Quantum implements TabulatableItemInterface
                 ),
             ));
             
-            $whenFieldset = new WhenFieldset();
-            $whenFieldset->setRequired(true);
-            $whenFilter = $whenFieldset->getInputFilter();
-            $filter->add($whenFilter, 'lastContacted');
-            /*
-            $whenFieldset = new WhenFieldset('lastContact', 'Last Contacted', true);
-            $whenFilter = $whenFieldset->getInputFilter();
-            $filter->add($whenFilter, 'lastContacted');
-            */
+            $when = new OmDoc\When();
+            $when->setRequired(true);
+            $filter->add($when->getInputFilter(), 'lastContacted');
             
             $this->inputFilter = $filter;
         }

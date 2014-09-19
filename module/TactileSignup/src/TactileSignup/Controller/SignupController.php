@@ -5,13 +5,30 @@ namespace TactileSignup\Controller;
 use TactileSignup\Form;
 use OmelettesDoctrine\Controller\AbstractDoctrineController;
 use OmelettesDoctrine\Document as OmDoc;
+use OmelettesDoctrine\Service as OmService;
 
 class SignupController extends AbstractDoctrineController
 {
+    /**
+     * @return OmService\AccountsService
+     */
+    public function getAccountsService()
+    {
+        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\AccountsService');
+    }
+    
+    /**
+     * @return OmService\UsersService
+     */
+    public function getUsersService()
+    {
+        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+    }
+    
     public function signupAction()
     {
         $form = $this->getManagedForm('TactileSignup\Form\SignupForm');
-        $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+        $usersService = $this->getUsersService();
         $user = $usersService->createDocument();
         $form->bind($user);
         
@@ -20,7 +37,7 @@ class SignupController extends AbstractDoctrineController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 // Create a new account
-                $accountsService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\AccountsService');
+                $accountsService = $this->getAccountsService();
                 $account = $accountsService->createDocument();
                 $accountsService->signup($account);
                 
@@ -39,6 +56,8 @@ class SignupController extends AbstractDoctrineController
                 $usersService->commit();
                 $this->flashSuccess('Signup successful');
                 return $this->redirect()->toRoute('dash');
+            } else {
+                $this->flashError('There was a problem with the data you entered');
             }
         }
         
@@ -51,6 +70,10 @@ class SignupController extends AbstractDoctrineController
     public function createResources()
     {
         $config = $this->getServiceLocator()->get('config');
+        if (!isset($config['signup'])) {
+            var_dump($config);
+            throw new \Exception('Expected signup config');
+        }
         $resources = $config['signup']['resources'];
         $resourcesService = $this->getServiceLocator()->get('Tactile\Service\ResourcesService');
         foreach ($resources as $resource) {

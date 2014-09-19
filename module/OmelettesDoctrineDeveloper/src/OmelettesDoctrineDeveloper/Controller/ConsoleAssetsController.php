@@ -1,6 +1,6 @@
 <?php
 
-namespace OmelettesDoctrine\Controller;
+namespace OmelettesDoctrineDeveloper\Controller;
 
 use Omelettes\Controller\AbstractController;
 //use Omelettes\Logger;

@@ -3,8 +3,11 @@
 namespace TactileSignup\Form;
 
 use Omelettes\Form\Fieldset;
+use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Form\AbstractDocumentForm;
+use OmelettesDoctrine\Validator\Document\DoesNotExist;
 use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilter;
 
 class SignupForm extends AbstractDocumentForm
 {
@@ -26,7 +29,7 @@ class SignupForm extends AbstractDocumentForm
         ));
         
         $this->add(array(
-            'name' => 'emailAddress',
+            'name' => 'email',
             'type' => 'Zend\Form\Element\Email',
             'options' => array(
                 'label' => 'Email Address',
@@ -53,6 +56,27 @@ class SignupForm extends AbstractDocumentForm
         
         $this->add(new Fieldset\CsrfFieldset());
         $this->addSubmitFieldset('Sign up for free', 'btn btn-lg btn-warning btn-block');
+    }
+    
+    public function getInputFilter()
+    {
+        if (!$this->filter) {
+            $usersService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+            $user = $usersService->createDocument();
+            $filter = $user->getInputFilter();
+            $chain = $filter->get('email')->getValidatorChain();
+            $doesNotExistValidator = new DoesNotExist(array(
+                'field'            => 'email',
+                'document_service' => $usersService,
+                'messages'         => array(
+                    DoesNotExist::ERROR_DOCUMENT_EXISTS => 'A user with that email address already exists',
+                ),
+            ));
+            $chain->addValidator($doesNotExistValidator);
+            
+            $this->filter = $filter;
+        }
+        return $this->filter;
     }
     
 }

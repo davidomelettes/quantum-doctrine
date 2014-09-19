@@ -272,14 +272,14 @@ class AuthController extends AbstractDoctrineController
         
         $form = $this->getManagedForm('OmelettesStub\Form\VerifyPasswordForm');
         $form->setData(array(
-            'emailAddress' => $auth->getIdentity()->getEmailAddress(),
+            'emailAddress' => $auth->getIdentity()->getEmail(),
         ));
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $data = $form->getData();
-                $result = $this->authenticateUser($auth->getIdentity()->getEmailAddress(), $data['password']);
+                $result = $this->authenticateUser($auth->getIdentity()->getEmail(), $data['password']);
                 if ($result->isValid()) {
                     $this->passwordAuthenticateSession(true);
                     $redirectTo = $this->getRememberedRoute();

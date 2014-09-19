@@ -29,19 +29,21 @@ class User extends AbstractAccountBoundHistoricDocument
      * @ODM\String
      * @ODM\UniqueIndex
      */
-    protected $emailAddress;
+    protected $email;
     
     /**
      * @var string
      * @ODM\String
      */
-    protected $passwordHash;
+    protected $pwHash;
     
     /**
      * @var string
      * @ODM\String
      */
     protected $salt;
+    
+    protected $tz;
     
     /**
      * @var array
@@ -80,15 +82,15 @@ class User extends AbstractAccountBoundHistoricDocument
         return $this->fullName;
     }
     
-    public function setEmailAddress($email)
+    public function setEmail($email)
     {
-        $this->emailAddress = $email;
+        $this->email = $email;
         return $this;
     }
     
-    public function getEmailAddress()
+    public function getEmail()
     {
-        return $this->emailAddress;
+        return $this->email;
     }
     
     public function hashPassword($plaintext)
@@ -103,13 +105,13 @@ class User extends AbstractAccountBoundHistoricDocument
     {
         $uuid = new Uuid();
         $this->salt = $uuid->v4();
-        $this->passwordHash = $this->hashPassword($plaintext);
+        $this->pwHash = $this->hashPassword($plaintext);
         return $this;
     }
     
-    public function getPasswordHash()
+    public function getPwHash()
     {
-        return $this->passwordHash;
+        return $this->pwHash;
     }
     
     public function getPreferences()
@@ -123,7 +125,7 @@ class User extends AbstractAccountBoundHistoricDocument
             $filter = parent::getInputFilter();
             
             $filter->add(array(
-                'name'			=> 'emailAddress',
+                'name'			=> 'email',
                 'required'		=> 'true',
                 'filters'		=> array(
                     array('name' => 'StringTrim'),
@@ -147,16 +149,17 @@ class User extends AbstractAccountBoundHistoricDocument
                             ),
                         ),
                     ),
+                    /*
                     array(
                         'name'                  => 'OmelettesDoctrine\Validator\Document\DoesNotExist',
                         'options'               => array(
                             'field'            => 'emailAddress',
-                            'document_service' => $this->documentService,
                             'messages' => array(
                                 \OmelettesDoctrine\Validator\Document\DoesNotExist::ERROR_DOCUMENT_EXISTS => 'A user with that email address already exists',
                             ),
                         ),
                     ),
+                    */
                 ),
             ));
             

@@ -1,5 +1,6 @@
 <?php
 
+// TactileSignup resources config
 return array(
     'signup' => array(
         'resources' => array(

@@ -1,6 +1,6 @@
 <?php
 
-// Tactile module config
+// TactileSignup module config
 return array(
     'acl' => array(
         'resources' => array(

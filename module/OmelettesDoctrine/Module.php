@@ -18,6 +18,7 @@ class Module implements Feature\AutoloaderProviderInterface,
                         Feature\ConfigProviderInterface,
                         Feature\ConsoleBannerProviderInterface,
                         Feature\ConsoleUsageProviderInterface,
+                        Feature\FormElementProviderInterface,
                         Feature\ServiceProviderInterface
 {
     public function getAutoloaderConfig()
@@ -48,7 +49,6 @@ class Module implements Feature\AutoloaderProviderInterface,
     public function getConsoleUsage(Console $console)
     {
         return array(
-            'build <assets>'					=> '<assets> must be one of: css',
         );
     }
     
@@ -346,7 +346,7 @@ class Module implements Feature\AutoloaderProviderInterface,
                 ));
                 $auth->setAdapter($tokenAuthAdapter);
                 $tokenAuthAdapter->setIdentity($userId)
-                ->setCredential($token);
+                    ->setCredential($token);
                 $authResult = $tokenAuthAdapter->authenticate();
                 if ($authResult->isValid()) {
                     // Successful authentication via persistent login cookie
@@ -366,17 +366,17 @@ class Module implements Feature\AutoloaderProviderInterface,
                     $newTokenDoc = $tokensService->createDocument();
                     $expiry = new \DateTime(OmDoc\PersistentLoginToken::DEFAULT_TOKEN_EXPIRY);
                     $newTokenDoc->setUser($identity)
-                    ->setToken($newToken)
-                    ->setExpiry($expiry);
+                        ->setToken($newToken)
+                        ->setExpiry($expiry);
                     $tokensService->save($newTokenDoc);
     
                     // Send the token to the user for storage in a cookie
                     $this->setCookie(
-                            $ev->getResponse(),
-                            'login',
-                            sprintf('%s;%s', $identity->getId(), $newToken),
-                            (int)$expiry->format('U'),
-                            '/'
+                        $ev->getResponse(),
+                        'login',
+                        sprintf('%s;%s', $identity->getId(), $newToken),
+                        (int)$expiry->format('U'),
+                        '/'
                     );
     
                     $tokensService->commit();
