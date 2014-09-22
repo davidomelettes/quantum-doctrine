@@ -38,7 +38,6 @@ class ContactsController extends AbstractDoctrineController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                var_dump($request->getPost());
                 $contact = $form->getData();
                 $contactsService->save($contact);
                 $contactsService->commit();

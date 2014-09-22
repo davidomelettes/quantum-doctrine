@@ -2,6 +2,7 @@
 
 namespace Tactile\Form;
 
+use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Form\AbstractDocumentForm;
 use Zend\InputFilter;
 
@@ -10,44 +11,30 @@ class UserPreferencesForm extends AbstractDocumentForm
     public function init()
     {
         $this->setName('preferences');
-        $localesService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\LocalesService');
         
-        $tzOptions = $localesService->getTimeZones();
-        $this->add(array(
-            'name'       => 'tz',
-            'type'       => 'Select',
-            'options'    => array(
-                'label'         => 'Time Zone',
-                'value_options' => $tzOptions,
-            ),
-            'attributes' => array(
-                'id'           => $this->getName() . '-tz',
-                'required'     => true,
-            ),
-        ));
+        $preferencesFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\PreferencesFieldset');
+        $this->add($preferencesFieldset);
         
         $this->add(array(
-            'name'       => 'password',
+            'name'       => 'newPassword',
             'type'       => 'Password',
             'options'    => array(
-                'label' => 'New password',
+                'label' => 'Change your password',
             ),
             'attributes' => array(
                 'id'           => $this->getName() . '-password',
-                'required'     => true,
                 'autocomplete' => 'off',
             ),
         ));
         
         $this->add(array(
-            'name' => 'passwordConfirm',
+            'name' => 'newPasswordConfirm',
             'type' => 'Password',
             'options' => array(
                 'label' => 'Confirm your new Password',
             ),
             'attributes' => array(
                 'id'           => $this->getName() . '-passwordConfirm',
-                'required'     => true,
                 'autocomplete' => 'off',
             ),
         ));
@@ -58,10 +45,14 @@ class UserPreferencesForm extends AbstractDocumentForm
     public function getInputFilter()
     {
         if (!isset($this->filter)) {
-            $filter = parent::getInputFilter();
+            $filter = new InputFilter\InputFilter();
+            
+            $prefs = new OmDoc\UserPreferences();
+            $filter->add($prefs->getInputFilter(), 'prefs');
+            
             $filter->add(array(
-                'name'       => 'password',
-                'required'   => 'true',
+                'name'       => 'newPassword',
+                'required'   => false,
                 'filters'    => array(
                     array('name' => 'StringTrim'),
                 ),
@@ -77,16 +68,20 @@ class UserPreferencesForm extends AbstractDocumentForm
                 ),
             ));
             $filter->add(array(
-                'name'       => 'passwordConfirm',
-                'required'   => 'true',
+                'name'       => 'newPasswordConfirm',
                 'filters'    => array(
-                    array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'      => 'Identical',
+                        'name'      => 'Zend\Validator\NotEmpty',
                         'options'   => array(
-                            'token' => 'password',
+                            'type'  => \Zend\Validator\NotEmpty::NULL,
+                        ),
+                    ),
+                    array(
+                        'name'      => 'Zend\Validator\Identical',
+                        'options'   => array(
+                            'token' => 'newPassword',
                         ),
                     ),
                 ),

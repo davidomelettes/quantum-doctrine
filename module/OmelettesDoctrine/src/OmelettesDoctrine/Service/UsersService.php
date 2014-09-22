@@ -28,6 +28,9 @@ class UsersService extends AbstractHistoricDocumentService
         $user->setCreatedBy($systemIdentity);
         $user->setUpdated($now);
         $user->setUpdatedBy($systemIdentity);
+        
+        $prefs = new OmDoc\UserPreferences();
+        $user->setPrefs($prefs);
     
         return AbstractDocumentService::save($user);
     }

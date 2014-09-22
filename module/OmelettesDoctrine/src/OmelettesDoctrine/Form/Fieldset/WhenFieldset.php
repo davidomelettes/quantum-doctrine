@@ -16,9 +16,8 @@ class WhenFieldset extends AbstractDocumentFieldset implements ViewPartialInterf
      */
     protected $inputFilter;
 
-    public function __construct($name = null, array $options = array())
+    public function init()
     {
-        parent::__construct($name, array());
         $this->setAllowedObjectBindingClass('OmelettesDoctrine\Document\When');
         $this->setAttribute('class', 'when');
         

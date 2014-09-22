@@ -18,7 +18,7 @@ class UberHydrator extends DoctrineHydrator
     public function hydrate(array $data, $object)
     {
         $this->prepare($object);
-        
+
         $metadata = $this->metadata;
         foreach ($data as $field => $value) {
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));

@@ -43,22 +43,11 @@ class User extends AbstractAccountBoundHistoricDocument
      */
     protected $salt;
     
-    protected $tz;
-    
     /**
-     * @var array
-     * @ODM\EmbedMany(
-     *     targetDocument="UserPreference",
-     *     discriminatorField="type",
-     *     discriminatorMap={
-     *         "boolean"="UserPreferenceBoolean",
-     *         "string"="UserPreferenceString",
-     *         "int"="UserPreferenceInteger",
-     *         "date"="UserPreferenceDate"
-     *     }
-     * )
+     * @var UserPreferences
+     * @ODM\EmbedOne(targetDocument="OmelettesDoctrine\Document\UserPreferences")
      */
-    protected $preferences = array();
+    protected $prefs;
     
     public function setAclRole($role)
     {
@@ -109,14 +98,27 @@ class User extends AbstractAccountBoundHistoricDocument
         return $this;
     }
     
+    public function setNewPassword($plaintext)
+    {
+        if ('' !== $plaintext) {
+            return $this->setPassword($plaintext);
+        }
+    }
+    
     public function getPwHash()
     {
         return $this->pwHash;
     }
     
-    public function getPreferences()
+    public function setPrefs(UserPreferences $prefs)
     {
-        return $this->preferences;
+        $this->prefs = $prefs;
+        return $this;
+    }
+    
+    public function getPrefs()
+    {
+        return $this->prefs;
     }
     
     public function getInputFilter()
@@ -149,17 +151,6 @@ class User extends AbstractAccountBoundHistoricDocument
                             ),
                         ),
                     ),
-                    /*
-                    array(
-                        'name'                  => 'OmelettesDoctrine\Validator\Document\DoesNotExist',
-                        'options'               => array(
-                            'field'            => 'emailAddress',
-                            'messages' => array(
-                                \OmelettesDoctrine\Validator\Document\DoesNotExist::ERROR_DOCUMENT_EXISTS => 'A user with that email address already exists',
-                            ),
-                        ),
-                    ),
-                    */
                 ),
             ));
             

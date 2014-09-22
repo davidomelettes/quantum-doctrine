@@ -44,8 +44,14 @@ class AuthController extends AbstractDoctrineController
     {
         $auth = $this->getAuthenticationService();
         if ($auth->hasIdentity()) {
-            $this->flashSuccess('Welcome back');
-            return $this->redirect()->toRoute('dash');
+            $id = $auth->getIdentity();
+            if ($id) {
+                $this->flashSuccess('Welcome back');
+                return $this->redirect()->toRoute('dash');
+            }
+            // Identity storage contains 'null'
+            // Can happen when logged in but identity is deleted
+            $auth->clearIdentity();
         }
         
         $form = $this->getManagedForm('TactileAuth\Form\LoginForm');
