@@ -25,7 +25,7 @@ abstract class AbstractDocumentForm extends AbstractForm implements ServiceLocat
     
     public function getHydrator()
     {
-        return new UberHydrator($this->getApplicationServiceLocator()->get('doctrine.documentmanager.odm_default'));
+        return $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Stdlib\Hydrator\UberHydrator');
     }
     
     /**

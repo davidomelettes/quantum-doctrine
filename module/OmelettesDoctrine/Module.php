@@ -121,6 +121,12 @@ class Module implements Feature\AutoloaderProviderInterface,
                     return $service;
                 },
                 
+                // Hydration
+                'OmelettesDoctrine\Stdlib\Hydrator\UberHydrator' => function ($sm) {
+                    $hydrator = new Stdlib\Hydrator\UberHydrator($sm->get('doctrine.documentmanager.odm_default'));
+                    return $hydrator;
+                },
+                
                 // Locale
                 'OmelettesDoctrine\Service\LocalesService' => function ($sm) {
                     $service = new Service\LocalesService();
@@ -200,18 +206,23 @@ class Module implements Feature\AutoloaderProviderInterface,
         $eventManager = $app->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkAuth'));
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkAcl'));
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'setDefaultTimezone'));
     }
     
-    public function checkSessionFreshness(MvcEvent $ev)
+    /**
+     * Ensures all DateTime instances are created using the user's local timezone
+     * @param MvcEvent $ev
+     */
+    public function setDefaultTimezone(MvcEvent $ev)
     {
-        // Some routes require a password-authenticated session
         $app = $ev->getApplication();
         $sm = $app->getServiceManager();
-        $config = $sm->get('config');
-        $currentRoute = $ev->getRouteMatch()->getMatchedRouteName();
-        
-        if (isset($config[''])) {
-            
+        $auth = $sm->get('Zend\Authentication\AuthenticationService');
+        if ($auth->hasIdentity()) {
+            $id = $auth->getIdentity();
+            if ($id) {
+                date_default_timezone_set($id->getPrefs()->getTz());
+            }
         }
     }
     

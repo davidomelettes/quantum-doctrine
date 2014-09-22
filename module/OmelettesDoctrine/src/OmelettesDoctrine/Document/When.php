@@ -58,7 +58,10 @@ class When implements InputFilter\InputFilterAwareInterface
     
     public function getTime()
     {
-        return $this->time;
+        if (empty($this->time)) {
+            return null;
+        }
+        return $this->date->format('H:i');
     }
     
     public function setInputFilter(InputFilter\InputFilterInterface $inputFilter)
