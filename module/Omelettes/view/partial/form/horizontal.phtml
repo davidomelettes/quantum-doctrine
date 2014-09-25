@@ -21,6 +21,8 @@ $inputColWidth = 10;
 
 if ($element instanceof ViewPartialInterface) {
     $partial = $element->getViewPartial();
+} elseif ($element instanceof Form\Element\Collection) {
+    $partial = 'partial/form/horizontal/collection.phtml';
 } elseif ($element instanceof Form\Fieldset) {
     $partial = 'partial/form/horizontal/fieldset.phtml';
 } else {

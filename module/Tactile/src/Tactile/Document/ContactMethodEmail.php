@@ -5,7 +5,7 @@ namespace Tactile\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document
+ * @ODM\EmbeddedDocument
  */
 class ContactMethodEmail extends ContactMethod
 {

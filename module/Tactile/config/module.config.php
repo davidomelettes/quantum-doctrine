@@ -104,9 +104,10 @@ return array(
         'not_found_template'		=> 'error/404',
         'exception_template'		=> 'error/index',
         'template_map' => array(
-            'html/head'                   => __DIR__ . '/../view/partial/html/head.phtml',
-            'navigation/navbar-fixed-top' => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
-            'tabulate/contact'            => __DIR__ . '/../view/partial/tabulate/contact.phtml',
+            'form/fieldset/contact-method' => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
+            'html/head'                    => __DIR__ . '/../view/partial/html/head.phtml',
+            'navigation/navbar-fixed-top'  => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
+            'tabulate/contact'             => __DIR__ . '/../view/partial/tabulate/contact.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -21,8 +21,12 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
     
     public function hydrate(array $data, $object)
     {
+        if (!is_object($object)) {
+            var_dump($data);
+            throw new \Exception('Expected an object');
+        }
+        
         $this->prepare($object);
-
         $metadata = $this->metadata;
         foreach ($data as $field => $value) {
             $value  = $this->handleTypeConversions($value, $metadata->getTypeOfField($field));
@@ -40,7 +44,7 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
                     $value = $this->toEmbedOne($target, $this->hydrateValue($field, $value, $data));
                     
                     if (null === $value
-                    && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
+                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
                     ) {
                         continue;
                     }
@@ -64,6 +68,15 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
                 } elseif ($metadata->isCollectionValuedEmbed($field)) {
                     // EmbedMany
                     $this->toEmbedMany($object, $field, $target, $value);
+                    /*
+                    $collection = $this->toEmbedMany($object, $field, $target, $value);
+                    if (null === $value
+                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
+                    ) {
+                        continue;
+                    }
+                    $object->$setter($collection);
+                    */
                 } elseif ($metadata->isCollectionValuedReference($field)) {
                     // ReferenceMany
                     $this->toMany($object, $field, $target, $value);
@@ -96,47 +109,25 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
     
     protected function toEmbedMany($object, $collectionName, $target, $values)
     {
-        throw new \Exception('lol not ready!');
-    }
-    
-    /**
-     * Handle various type conversions that should be supported natively by Doctrine (like DateTime)
-     *
-     * @param  mixed  $value
-     * @param  string $typeOfField
-     * @return DateTime
-     */
-    protected function handleTypeConversions($value, $typeOfField)
-    {
-        switch ($typeOfField) {
-            case 'datetimetz':
-            case 'datetime':
-            case 'time':
-            case 'date':
-                if ('' === $value) {
-                    return null;
+        //var_dump($values);
+        //var_dump($target);
+        if (is_array($values)) {
+            $collection = array();
+            foreach ($values as $value) {
+                /*
+                if (!$value instanceof $target) {
+                    throw new \Exception('Expected a ' . $target);
                 }
-                $auth = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
-                $tz = $auth->hasIdentity() ? $auth->getIdentity()->getPrefs()->getTz() : 'Europe/London';
-    
-                $dateTime = new \DateTime();
-                try {
-                    $dateTime->setTimezone(new \DateTimeZone($tz));
-                } catch (\Exception $e) {
-                    // Invalid timezone specified
-                }
-                if (is_int($value)) {
-                    $dateTime->setTimestamp($value);
-                    $value = $dateTime;
-                } elseif (is_string($value)) {
-                    $value = $dateTime->modify($value);
-                }
-    
-                break;
-            default:
+                */
+                $collection[] = $value;
+            }
+            $collectionStrategy = $this->getStrategy($collectionName);
+            $collectionStrategy->setObject($object);
+            
+            $this->hydrateValue($collectionName, $collection, $values);
+        } else {
+            throw new \Exception('what');
         }
-    
-        return $value;
     }
     
 }

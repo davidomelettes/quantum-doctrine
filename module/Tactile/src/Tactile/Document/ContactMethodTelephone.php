@@ -5,9 +5,9 @@ namespace Tactile\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ODM\Document
+ * @ODM\EmbeddedDocument
  */
-class ContactMethodPhone extends ContactMethod
+class ContactMethodTelephone extends ContactMethod
 {
     
 }

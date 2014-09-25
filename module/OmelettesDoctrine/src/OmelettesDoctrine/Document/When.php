@@ -33,9 +33,9 @@ class When implements InputFilter\InputFilterAwareInterface
      */
     protected $inputFilter;
     
-    public function setDate(\DateTime $date)
+    public function setDate( $date)
     {
-        if (null !== $this->time) {
+        if ($date instanceof \DateTime) {
             $date->modify('' == $this->time ? '00:00' : $this->time);
         }
         $this->date = $date;
@@ -51,6 +51,9 @@ class When implements InputFilter\InputFilterAwareInterface
     {
         if ($this->date instanceof \DateTime) {
             $this->date->modify('' == $time ? '00:00' : $time);
+        }
+        if ('' === $time) {
+            $time = null;
         }
         $this->time = $time;
         return $this;

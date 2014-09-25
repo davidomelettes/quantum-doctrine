@@ -221,7 +221,11 @@ class Module implements Feature\AutoloaderProviderInterface,
         if ($auth->hasIdentity()) {
             $id = $auth->getIdentity();
             if ($id) {
-                date_default_timezone_set($id->getPrefs()->getTz());
+                $prefs = $id->getPrefs();
+                // System users have no preferences
+                if ($prefs) {
+                    date_default_timezone_set($prefs->getTz());
+                }
             }
         }
     }

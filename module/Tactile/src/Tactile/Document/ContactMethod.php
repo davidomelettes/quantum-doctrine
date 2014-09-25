@@ -3,42 +3,77 @@
 namespace Tactile\Document;
 
 use OmelettesDoctrine\Document as OmDoc;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
 
 /**
- * @ODM\Document(collection="contacts.methods", requireIndexes=true)
- * @ODM\InheritanceType("SINGLE_COLLECTION")
- * @ODM\DiscriminatorField("type")
+ * @ODM\EmbeddedDocument
  */
-class ContactMethod extends OmDoc\AbstractAccountBoundHistoricDocument
+class ContactMethod implements InputFilter\InputFilterAwareInterface
 {
     /**
-     * @var Contact
-     * @ODM\ReferenceOne(targetDocument="Contact")
+     * @var string
+     * @ODM\String
+     * @ODM\Index
      */
-    protected $contact;
+    protected $type;
     
-    public function setContact(Contact $contact)
+    /**
+     * @var string
+     * @ODM\String
+     * @ODM\Index
+     */
+    protected $detail;
+    
+    /**
+     * @var InputFilter\InputFilter
+     */
+    protected $inputFilter;
+    
+    public function setDetail($detail)
     {
-        $this->contact = $contact;
+        $this->detail = $detail;
         return $this;
     }
     
-    public function getContact()
+    public function getDetail()
     {
-        return $this->contact;
+        return $this->detail;
+    }
+    
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+    
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    public function getTypes()
+    {
+        return array(
+            'e' => 'Email',
+            //'f' => 'Fax',
+            //'m' => 'Mobile',
+            't' => 'Telephone',
+        );
+    }
+    
+    public function setInputFilter(InputFilter\InputFilterInterface $inputFilter)
+    {
+        throw new \Exception('Interface method not used');
     }
     
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
-            $filter = parent::getInputFilter();
+            $inputFilter = new InputFilter\InputFilter();
             
-            $this->inputFilter = $filter;
+            $this->inputFilter = $inputFilter;
         }
-        
         return $this->inputFilter;
     }
     

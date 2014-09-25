@@ -1,8 +1,26 @@
-<?php $fieldset = $this->element; ?>
+<?php
+
+use Omelettes\Form\ViewPartialInterface;
+use Zend\Form;
+
+$fieldset = $this->element;
+
+?>
 <fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
     <?php foreach ($fieldset as $element): ?>
+    <?php
+
+    if ($element instanceof ViewPartialInterface) {
+        $partial = $element->getViewPartial();
+    } elseif ($element instanceof Form\Fieldset) {
+        $partial = 'partial/form/horizontal/fieldset.phtml';
+    } else {
+        $partial = 'partial/form/horizontal/group.phtml';
+    }
+    
+    ?>
     <?php echo $this->partial(
-        'partial/form/horizontal/group.phtml',
+        $partial,
         array(
             'element' => $element,
             'labelColWidth' => $this->labelColWidth,

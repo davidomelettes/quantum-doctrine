@@ -6168,6 +6168,7 @@ button.close {
   max-height: 150px;
   overflow-x: hidden;
   overflow-y: auto;
+  z-index: 1000;
 }
 .ui-timepicker div {
   width: 60px;
@@ -6186,6 +6187,9 @@ form .form-group-submit {
 form .form-control-static {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+form .input-group-addon {
+  cursor: pointer;
 }
 .panel .panel-heading h2.panel-title {
   font-size: 30px;

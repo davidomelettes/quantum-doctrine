@@ -1,0 +1,44 @@
+<?php
+
+use Omelettes\Form\ViewPartialInterface;
+use Zend\Form;
+
+$collection = $this->element;
+$templateElement = $collection->getTemplateElement();
+if ($templateElement instanceof ViewPartialInterface) {
+    $partial = $templateElement->getViewPartial();
+} elseif ($element instanceof Form\Fieldset) {
+    $partial = 'partial/form/horizontal/fieldset.phtml';
+} else {
+    $partial = 'partial/form/horizontal/group.phtml';
+}
+
+?>
+<fieldset class="collection <?php echo $collection->getAttribute('class'); ?>">
+    <div class="row">
+        <label class="col-sm-<?php echo $this->labelColWidth?> control-label"><?php echo $collection->getLabel(); ?></label>
+        <div class="col-sm-<?php echo $this->inputColWidth?>">
+            <?php foreach ($collection->getIterator() as $element): ?>
+            <?php echo $this->partial(
+                $partial,
+                array(
+                    'element'       => $element,
+                    'labelColWidth' => 0,
+                    'inputColWidth' => 12,
+                )); ?>
+            <?php endforeach; ?>
+            <?php $escapedMarkup = $this->partial(
+                $partial,
+                array(
+                    'element'       => $templateElement,
+                    'labelColWidth' => 0,
+                    'inputColWidth' => 12,
+                )); ?>
+            <div class="form-group">
+                <div class="col-sm-<?php echo $this->inputColWidth; ?>">
+                    <a class="template btn btn-default" data-index="<?php echo count($collection->getIterator()); ?>" data-template="<?php echo $this->escapeHtmlAttr($escapedMarkup); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('Add ' . $templateElement->getLabel()); ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>

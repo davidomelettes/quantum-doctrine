@@ -24,6 +24,12 @@ class Contact extends Quantum implements TabulatableItemInterface
      * @ODM\Index
      */
     protected $fullName;
+    
+    /**
+     * @var string
+     * @ODM\String
+     */
+    protected $description;
 
     /**
      * @var OmDoc\When
@@ -32,21 +38,16 @@ class Contact extends Quantum implements TabulatableItemInterface
     protected $lastContacted;
     
     /**
-     * @var ArrayCollection
-     * @ODM\ReferenceMany(
-     *     targetDocument="ContactMethod",
-     *     discriminatorField="type",
-     *     discriminatorMap={
-     *         "e"="ContactMethodEmail",
-     *         "p"="ContactMethodPhone",
-     *     }
+     * @var array
+     * @ODM\EmbedMany(
+     *     strategy="setArray",
+     *     targetDocument="ContactMethod"
      * )
      */
-    protected $contactMethods;
+    protected $contactMethods = array();
     
-    public function init()
+    public function __construct()
     {
-        parent::init();
         $this->contactMethods = new ArrayCollection();
     }
     
@@ -61,6 +62,17 @@ class Contact extends Quantum implements TabulatableItemInterface
         return $this->fullName;
     }
     
+    public function setDescription($desc)
+    {
+        $this->description = $desc;
+        return $this;
+    }
+    
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    
     public function setLastContacted(OmDoc\When $time)
     {
         $this->lastContacted = $time;
@@ -72,6 +84,40 @@ class Contact extends Quantum implements TabulatableItemInterface
         return $this->lastContacted;
     }
     
+    public function setContactMethods($methods)
+    {
+        $this->contactMethods = $methods;
+        return $this;
+    }
+    
+    public function getContactMethods()
+    {
+        return $this->contactMethods;
+    }
+    
+    public function addContactMethods($toAdd)
+    {
+        foreach ($toAdd as $method) {
+            $this->contactMethods[] = $method;
+        }
+        return $this;
+    }
+    
+    public function removeContactMethods($toRemove)
+    {
+        //var_dump($this->contactMethods);
+        foreach ($toRemove as $method) {
+            $this->contactMethods->removeElement($method);
+            /*
+            if (false !== $index = array_search($method, $this->contactMethods)) {
+                // Remove it
+                unset($this->contactMethods[$index]);
+            }
+            */
+        }
+        return $this;
+    }
+    
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
@@ -79,7 +125,25 @@ class Contact extends Quantum implements TabulatableItemInterface
             
             $filter->add(array(
                 'name'			=> 'fullName',
-                'required'		=> 'true',
+                'required'		=> true,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
+            ));
+            
+            $filter->add(array(
+                'name'			=> 'description',
+                'required'		=> false,
                 'filters'		=> array(
                     array('name' => 'StringTrim'),
                 ),
@@ -96,7 +160,6 @@ class Contact extends Quantum implements TabulatableItemInterface
             ));
             
             $when = new OmDoc\When();
-            $when->setRequired(true);
             $filter->add($when->getInputFilter(), 'lastContacted');
             
             $this->inputFilter = $filter;
