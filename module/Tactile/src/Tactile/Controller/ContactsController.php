@@ -91,7 +91,12 @@ class ContactsController extends AbstractDoctrineController
         
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $data = $request->getPost();
+            if (!isset($data->contactMethods)) {
+                $data->contactMethods = array();
+                //$contact->removeContactMethods($contact->getContactMethods());
+            }
+            $form->setData($data);
             if ($form->isValid()) {
                 $contactsService = $this->getContactsService();
                 $contact = $form->getData();

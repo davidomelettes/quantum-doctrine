@@ -22,7 +22,6 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
     public function hydrate(array $data, $object)
     {
         if (!is_object($object)) {
-            var_dump($data);
             throw new \Exception('Expected an object');
         }
         
@@ -68,15 +67,6 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
                 } elseif ($metadata->isCollectionValuedEmbed($field)) {
                     // EmbedMany
                     $this->toEmbedMany($object, $field, $target, $value);
-                    /*
-                    $collection = $this->toEmbedMany($object, $field, $target, $value);
-                    if (null === $value
-                        && !current($metadata->getReflectionClass()->getMethod($setter)->getParameters())->allowsNull()
-                    ) {
-                        continue;
-                    }
-                    $object->$setter($collection);
-                    */
                 } elseif ($metadata->isCollectionValuedReference($field)) {
                     // ReferenceMany
                     $this->toMany($object, $field, $target, $value);
@@ -114,11 +104,6 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
         if (is_array($values)) {
             $collection = array();
             foreach ($values as $value) {
-                /*
-                if (!$value instanceof $target) {
-                    throw new \Exception('Expected a ' . $target);
-                }
-                */
                 $collection[] = $value;
             }
             $collectionStrategy = $this->getStrategy($collectionName);

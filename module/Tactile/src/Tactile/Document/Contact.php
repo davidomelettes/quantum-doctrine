@@ -105,15 +105,9 @@ class Contact extends Quantum implements TabulatableItemInterface
     
     public function removeContactMethods($toRemove)
     {
-        //var_dump($this->contactMethods);
         foreach ($toRemove as $method) {
+            // ??? Really ???
             $this->contactMethods->removeElement($method);
-            /*
-            if (false !== $index = array_search($method, $this->contactMethods)) {
-                // Remove it
-                unset($this->contactMethods[$index]);
-            }
-            */
         }
         return $this;
     }

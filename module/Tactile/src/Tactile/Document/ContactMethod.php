@@ -56,8 +56,8 @@ class ContactMethod implements InputFilter\InputFilterAwareInterface
     {
         return array(
             'e' => 'Email',
-            //'f' => 'Fax',
-            //'m' => 'Mobile',
+            'f' => 'Fax',
+            'm' => 'Mobile',
             't' => 'Telephone',
         );
     }
@@ -71,6 +71,16 @@ class ContactMethod implements InputFilter\InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter\InputFilter();
+            
+            $inputFilter->add(array(
+                'name'     => 'type',
+                'required' => false,
+            ));
+            
+            $inputFilter->add(array(
+                'name'     => 'detail',
+                'required' => false,
+            ));
             
             $this->inputFilter = $inputFilter;
         }

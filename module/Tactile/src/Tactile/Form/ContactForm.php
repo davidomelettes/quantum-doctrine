@@ -45,7 +45,7 @@ class ContactForm extends AbstractDocumentForm
             'name'    => 'contactMethods',
             'options' => array(
                 'label'                  => 'Contact Methods',
-                'count'                  => 2,
+                'count'                  => 0,
                 'allow_add'              => true,
                 'allow_remove'           => true,
                 'create_new_objects'     => true,
