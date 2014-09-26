@@ -57,6 +57,24 @@ class ContactForm extends AbstractDocumentForm
             ),
         ));
         
+        $addressFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactAddressFieldset');
+        $this->add(array(
+            'type'    => 'Zend\Form\Element\Collection',
+            'name'    => 'addresses',
+            'options' => array(
+                'label'                  => 'Addresses',
+                'count'                  => 0,
+                'allow_add'              => true,
+                'allow_remove'           => true,
+                'create_new_objects'     => true,
+                'should_create_template' => true,
+                'target_element'         => $addressFieldset,
+            ),
+            'attributes' => array(
+                'class'      => 'addresses',
+            ),
+        ));
+        
         $this->addSubmitFieldset('Save Contact');
     }
     

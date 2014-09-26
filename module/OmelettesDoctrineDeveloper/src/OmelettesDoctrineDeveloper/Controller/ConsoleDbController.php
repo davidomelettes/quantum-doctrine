@@ -17,7 +17,7 @@ class ConsoleDbController extends AbstractController
      */
     protected function getSystemService()
     {
-        return $this->getServiceLocator()->get('OmelettesDoctrine\Service\SystemService');
+        return $this->getServiceLocator()->get('OmelettesDoctrineDeveloper\Service\SystemService');
     }
     
     /**

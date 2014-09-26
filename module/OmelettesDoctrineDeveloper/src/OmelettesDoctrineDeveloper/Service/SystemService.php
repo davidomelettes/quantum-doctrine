@@ -5,7 +5,7 @@ namespace OmelettesDoctrine\Service;
 use Doctrine\MongoDB\Connection;
 use OmelettesDoctrine\Document as OmDoc;
 
-class SystemService extends AbstractDocumentService
+class OmelettesDoctrineDeveloper extends AbstractDocumentService
 {
     public function createDocument()
     {
@@ -74,6 +74,11 @@ class SystemService extends AbstractDocumentService
         $this->documentManager->persist($console);
         
         return $this;
+    }
+    
+    public function insertLocaleData()
+    {
+        
     }
     
 }

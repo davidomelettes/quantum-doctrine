@@ -132,12 +132,6 @@ class Module implements Feature\AutoloaderProviderInterface,
                     $service = new Service\LocalesService();
                     return $service;
                 },
-                
-                // System Service
-                'OmelettesDoctrine\Service\SystemService' => function ($sm) {
-                    $service = new Service\SystemService($sm->get('doctrine.documentmanager.odm_default'));
-                    return $service;
-                },
             ),
         );
     }

@@ -1,0 +1,55 @@
+<?php
+
+$fieldset = $this->element;
+$street1Input = $fieldset->get('street1');
+$street1Input->setAttribute('class', 'form-control');
+$leftColInputs = array('street2', 'city');
+$rightColInputs = array('county', 'postalCode', 'country');
+$otherInputs = array('street2', 'street3', 'city', 'county', 'postalCode', 'country');
+$hasErrors = false;
+$left = false;
+
+?>
+
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <div class="row">
+        <div class="col-md-6 left">
+            <div class="form-group">
+                <label class="control-label col-md-4"><?php echo $street1Input->getLabel(); ?></label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <?php echo $this->formText($street1Input); ?>
+                        <span class="input-group-addon remove">
+                            <span class="glyphicon glyphicon-remove text-danger"></span>
+                        </span>
+                    </div>
+                    <?php echo $this->formElementErrors()->render($street1Input, array('class' => 'help-block list-unstyled')); ?>
+                </div>
+            </div>
+            <?php foreach ($leftColInputs as $inputName): ?>
+            <?php $element = $fieldset->get($inputName); ?>
+            <?php echo $this->partial(
+                'form/horizontal/group',
+                array(
+                    'element' => $element,
+                    'labelColWidth' => 4,
+                    'inputColWidth' => 8,
+                )); ?>
+            <?php endforeach; ?>
+        </div>
+        
+        <div class="col-md-6 right">
+            <?php foreach ($rightColInputs as $inputName): ?>
+            <?php $element = $fieldset->get($inputName); ?>
+            <?php echo $this->partial(
+                'form/horizontal/group',
+                array(
+                    'element' => $element,
+                    'labelColWidth' => 4,
+                    'inputColWidth' => 8,
+                )); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    
+</fieldset>

@@ -104,6 +104,7 @@ return array(
         'not_found_template'		=> 'error/404',
         'exception_template'		=> 'error/index',
         'template_map' => array(
+            'form/fieldset/address'        => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
             'form/fieldset/contact-method' => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
             'html/head'                    => __DIR__ . '/../view/partial/html/head.phtml',
             'navigation/navbar-fixed-top'  => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',

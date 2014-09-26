@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 abstract class AbstractForm extends Form
 {
-    public function addSubmitFieldset($buttonText = 'Save', $buttonClass = 'btn btn-default btn-success')
+    public function addSubmitFieldset($buttonText = 'Save', $buttonClass = 'btn btn-lg btn-success')
     {
         $submit = new Fieldset\SubmitFieldset();
         $submit->get('submit')->setAttributes(array(

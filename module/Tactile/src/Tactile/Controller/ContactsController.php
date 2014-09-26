@@ -94,7 +94,9 @@ class ContactsController extends AbstractDoctrineController
             $data = $request->getPost();
             if (!isset($data->contactMethods)) {
                 $data->contactMethods = array();
-                //$contact->removeContactMethods($contact->getContactMethods());
+            }
+            if (!isset($data->addresses)) {
+                $data->addresses = array();
             }
             $form->setData($data);
             if ($form->isValid()) {
@@ -108,7 +110,7 @@ class ContactsController extends AbstractDoctrineController
         }
         
         return $this->returnViewModel(array(
-            'title' => $contact->getFullName(),
+            'title' => sprintf("Editing '%s'", $contact->getFullName()),
             'form'  => $form,
             'item'  => $contact,
         ));

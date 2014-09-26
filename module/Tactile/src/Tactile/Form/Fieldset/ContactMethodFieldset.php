@@ -13,15 +13,15 @@ class ContactMethodFieldset extends AbstractDocumentFieldset implements ViewPart
         $this->setName('contactMethods');
         $this->setAttribute('class', 'contactMethod');
         $this->setAllowedObjectBindingClass('Tactile\Document\ContactMethod');
+        $this->setLabel('Contact Method');
         $this->setObject(new Document\ContactMethod());
         
-        $method = new Document\ContactMethod();
         $this->add(array(
             'name'       => 'type',
             'type'       => 'Select',
             'options'    => array(
                 'label'         => 'Type',
-                'value_options' => $method->getTypes(),
+                'value_options' => $this->getObject()->getTypes(),
             ),
             'attributes' => array(
             ),

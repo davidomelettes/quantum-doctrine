@@ -38,6 +38,11 @@ class Module implements Feature\AutoloaderProviderInterface,
     {
         return array(
             'factories' => array(
+                // System Service
+                'OmelettesDoctrineDeveloper\Service\SystemService' => function ($sm) {
+                    $service = new Service\SystemService($sm->get('doctrine.documentmanager.odm_default'));
+                    return $service;
+                },
             ),
         );
     }

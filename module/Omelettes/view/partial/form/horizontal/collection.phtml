@@ -8,9 +8,9 @@ $templateElement = $collection->getTemplateElement();
 if ($templateElement instanceof ViewPartialInterface) {
     $partial = $templateElement->getViewPartial();
 } elseif ($element instanceof Form\Fieldset) {
-    $partial = 'partial/form/horizontal/fieldset.phtml';
+    $partial = 'form/horizontal/fieldset';
 } else {
-    $partial = 'partial/form/horizontal/group.phtml';
+    $partial = 'form/horizontal/group';
 }
 
 ?>
@@ -23,16 +23,16 @@ if ($templateElement instanceof ViewPartialInterface) {
                 $partial,
                 array(
                     'element'       => $element,
-                    'labelColWidth' => 0,
-                    'inputColWidth' => 12,
+                    'labelColWidth' => $this->labelColWidth,
+                    'inputColWidth' => $this->inputColWidth,
                 )); ?>
             <?php endforeach; ?>
             <?php $escapedMarkup = $this->partial(
                 $partial,
                 array(
                     'element'       => $templateElement,
-                    'labelColWidth' => 0,
-                    'inputColWidth' => 12,
+                    'labelColWidth' => $this->labelColWidth,
+                    'inputColWidth' => $this->inputColWidth,
                 )); ?>
             <div class="form-group">
                 <div class="col-sm-<?php echo $this->inputColWidth; ?>">

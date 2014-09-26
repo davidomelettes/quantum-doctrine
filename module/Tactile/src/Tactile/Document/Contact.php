@@ -38,16 +38,26 @@ class Contact extends Quantum implements TabulatableItemInterface
     protected $lastContacted;
     
     /**
-     * @var array
+     * @var ArrayCollection
+     * @ODM\EmbedMany(
+     *     strategy="setArray",
+     *     targetDocument="ContactAddress"
+     * )
+     */
+    protected $addresses;
+    
+    /**
+     * @var ArrayCollection
      * @ODM\EmbedMany(
      *     strategy="setArray",
      *     targetDocument="ContactMethod"
      * )
      */
-    protected $contactMethods = array();
+    protected $contactMethods;
     
     public function __construct()
     {
+        $this->addresses = new ArrayCollection();
         $this->contactMethods = new ArrayCollection();
     }
     
@@ -84,6 +94,34 @@ class Contact extends Quantum implements TabulatableItemInterface
         return $this->lastContacted;
     }
     
+    public function setAddresses($methods)
+    {
+        $this->addresses = $methods;
+        return $this;
+    }
+    
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+    
+    public function addAddresses($toAdd)
+    {
+        foreach ($toAdd as $add) {
+            $this->addresses[] = $add;
+        }
+        return $this;
+    }
+    
+    public function removeAddresses($toRemove)
+    {
+        foreach ($toRemove as $remove) {
+            // ??? Really ???
+            $this->addresses->removeElement($remove);
+        }
+        return $this;
+    }
+    
     public function setContactMethods($methods)
     {
         $this->contactMethods = $methods;
@@ -97,17 +135,17 @@ class Contact extends Quantum implements TabulatableItemInterface
     
     public function addContactMethods($toAdd)
     {
-        foreach ($toAdd as $method) {
-            $this->contactMethods[] = $method;
+        foreach ($toAdd as $add) {
+            $this->contactMethods[] = $add;
         }
         return $this;
     }
     
     public function removeContactMethods($toRemove)
     {
-        foreach ($toRemove as $method) {
+        foreach ($toRemove as $remove) {
             // ??? Really ???
-            $this->contactMethods->removeElement($method);
+            $this->contactMethods->removeElement($remove);
         }
         return $this;
     }

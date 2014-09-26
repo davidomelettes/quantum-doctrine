@@ -13,9 +13,9 @@ $fieldset = $this->element;
     if ($element instanceof ViewPartialInterface) {
         $partial = $element->getViewPartial();
     } elseif ($element instanceof Form\Fieldset) {
-        $partial = 'partial/form/horizontal/fieldset.phtml';
+        $partial = 'form/horizontal/fieldset';
     } else {
-        $partial = 'partial/form/horizontal/group.phtml';
+        $partial = 'form/horizontal/group';
     }
     
     ?>
