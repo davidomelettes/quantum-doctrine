@@ -41,4 +41,7 @@ return array(
             'Console\Controller\Db'     => 'OmelettesDoctrineDeveloper\Controller\ConsoleDbController',
         ),
     ),
+    'data-fixture' => array(
+        'location' => __DIR__ . '/../fixtures'
+    ),
 );

@@ -6238,3 +6238,11 @@ body {
 .navbar-inverse .navbar-brand {
   color: #fff;
 }
+form .collection.addresses fieldset {
+  border-top: 1px solid #eee;
+  padding-top: 1em;
+}
+form .collection.addresses fieldset:first-child {
+  border-top: none;
+  padding-top: 0;
+}

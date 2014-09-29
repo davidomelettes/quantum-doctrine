@@ -76,11 +76,17 @@ class ContactAddressFieldset extends AbstractDocumentFieldset implements ViewPar
             ),
         ));
         
+        $localesService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\LocalesService');
+        $countryOptions = array('' => '-- Select Country --');
+        foreach ($localesService->getCountries() as $country) {
+            $countryOptions[$country->getCode()] = $country->getName();
+        }
         $this->add(array(
             'name'       => 'country',
             'type'       => 'Select',
             'options'    => array(
                 'label'         => 'Country',
+                'options'       => $countryOptions,
             ),
             'attributes' => array(
             ),

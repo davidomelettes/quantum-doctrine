@@ -11,6 +11,7 @@
         "zendframework/zendframework": "2.*",
         "zendframework/zend-developer-tools": "dev-master",
         "doctrine/doctrine-mongo-odm-module": "dev-master",
+        "doctrine/data-fixtures": "dev-master",
         "bjyoungblood/bjy-profiler": "dev-master",
         "twbs/bootstrap": "3.2.*",
         "oyejorge/less.php": "~1.5"

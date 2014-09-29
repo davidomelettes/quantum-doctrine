@@ -1,23 +1,59 @@
 <?php
 
-namespace OmelettesDoctrine\Service;
+namespace OmelettesDoctrineDeveloper\Service;
 
+use Doctrine\Common\DataFixtures;
 use Doctrine\MongoDB\Connection;
 use OmelettesDoctrine\Document as OmDoc;
+use OmelettesDoctrine\Service as OmService;
+use OmelettesDoctrineDeveloperFixtures as Fixtures;
 
-class OmelettesDoctrineDeveloper extends AbstractDocumentService
+class SystemService extends OmService\AbstractDocumentService
 {
+    /**
+     * @var DataFixtures\Purger\PurgerInterface
+     */
+    protected $purger;
+    
+    /**
+     * @var DataFixtures\Executor\AbstractExecutor
+     */
+    protected $executor;
+    
     public function createDocument()
     {
         throw new \Exception('Method not used');
     }
     
+    public function getFixturePurger()
+    {
+        if (!$this->purger) {
+            $purger = new DataFixtures\Purger\MongoDBPurger();
+            $this->purger = $purger;
+        }
+        return $this->purger;
+    }
+    
+    public function getFixtureExecutor()
+    {
+        if (!$this->executor) {
+            $executor = new DataFixtures\Executor\MongoDBExecutor($this->getDocumentManager(), $this->getFixturePurger());
+            $this->executor = $executor;
+        }
+        return $this->executor;
+    }
+    
+    public function getDocumentManager()
+    {
+        return $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
+    }
+    
     /**
      * @var Connection
      */
-    protected function getDatabaseConnection()
+    public function getDatabaseConnection()
     {
-        $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
+        $dm = $this->getDocumentManager();
         return $dm->getConnection();
     }
     
@@ -47,38 +83,29 @@ class OmelettesDoctrineDeveloper extends AbstractDocumentService
         return $mongo->dropDatabase($this->getDefaultDatabaseName());
     }
     
+    public function loadAndExecuteFixture(DataFixtures\FixtureInterface $fixture, $append = false)
+    {
+        $loader = new DataFixtures\Loader();
+        $loader->addFixture($fixture);
+        
+        $executor = $this->getFixtureExecutor();
+        $executor->execute($loader->getFixtures(), $append);
+        
+        return $this;
+    }
+    
     public function insertSystemUsers()
     {
-        $now = new \DateTime();
-        $usersService = $this->getServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
-        $system = $usersService->createDocument();
-        $system->setData(array(
-            'id'       => 'system',
-            'fullName' => 'The Robot',
-            'email'    => 'system',
-            'aclRole'  => 'system',
-            'created'  => $now,
-            'updated'  => $now,
-        ));
-        $this->documentManager->persist($system);
-        
-        $console = $usersService->createDocument();
-        $console->setData(array(
-            'id'       => 'console',
-            'fullName' => 'Superuser Console',
-            'email'    => 'console',
-            'aclRole'  => 'system',
-            'created'  => $now,
-            'updated'  => $now,
-        ));
-        $this->documentManager->persist($console);
+        $this->loadAndExecuteFixture(new Fixtures\LoadSystemUsers(), true);
         
         return $this;
     }
     
     public function insertLocaleData()
     {
+        $this->loadAndExecuteFixture(new Fixtures\LoadLocaleData(), true);
         
+        return $this;
     }
     
 }

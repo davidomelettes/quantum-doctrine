@@ -2,6 +2,7 @@
 
 namespace OmelettesDoctrineDeveloper;
 
+use OmelettesDoctrineDeveloper\Service;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\ModuleManager\Feature;
 
@@ -15,7 +16,8 @@ class Module implements Feature\AutoloaderProviderInterface,
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                    __NAMESPACE__                        => __DIR__ . '/src/' . __NAMESPACE__,
+                    'OmelettesDoctrineDeveloperFixtures' => __DIR__ . '/fixtures',
                 ),
             ),
         );

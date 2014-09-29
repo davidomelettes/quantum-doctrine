@@ -2,10 +2,12 @@
 
 namespace TactileSignup\Controller;
 
-use TactileSignup\Form;
+use Doctrine\Common\DataFixtures;
 use OmelettesDoctrine\Controller\AbstractDoctrineController;
 use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Service as OmService;
+use TactileSignup\Form;
+use TactileSignupFixtures as Fixtures;
 
 class SignupController extends AbstractDoctrineController
 {
@@ -69,21 +71,12 @@ class SignupController extends AbstractDoctrineController
     
     public function createResources()
     {
-        $config = $this->getServiceLocator()->get('config');
-        if (!isset($config['signup'])) {
-            var_dump($config);
-            throw new \Exception('Expected signup config');
-        }
-        $resources = $config['signup']['resources'];
         $resourcesService = $this->getServiceLocator()->get('Tactile\Service\ResourcesService');
-        foreach ($resources as $resource) {
-            $document = $resourcesService->createDocument();
-            $document->setSlug($resource['slug']);
-            $document->setSingular($resource['singular']);
-            $document->setPlural($resource['plural']);
-            $document->setProtected(true);
-            $resourcesService->save($document);
-        }
+        $loader = new DataFixtures\Loader();
+        $loader->addFixture(new Fixtures\SignupResources($resourcesService));
+        $purger = new DataFixtures\Purger\MongoDBPurger();
+        $executor = new DataFixtures\Executor\MongoDBExecutor($this->getDefaultDocumentManager(), $purger);
+        $executor->execute($loader->getFixtures(), true);
     }
     
 }

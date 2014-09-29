@@ -12,10 +12,7 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Autoloa
 {
     public function getConfig()
     {
-        return array_merge(
-                include __DIR__ . '/config/module.config.php',
-                include __DIR__ . '/config/resources.config.php'
-        );
+        return include __DIR__ . '/config/module.config.php';
     }
     
     public function getAutoloaderConfig()
@@ -23,7 +20,8 @@ class Module extends OmelettesModule implements ConfigProviderInterface, Autoloa
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                    __NAMESPACE__           => __DIR__ . '/src/' . __NAMESPACE__,
+                    'TactileSignupFixtures' => __DIR__ . '/fixtures',
                 ),
             ),
         );

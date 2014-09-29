@@ -36,7 +36,7 @@ class ConsoleDbController extends AbstractController
         
         $console->write("Initialising the database...\n");
         $systemService->insertSystemUsers();
-        $systemService->commit();
+        $systemService->insertLocaleData();
         $console->write("Database Initialised.\n");
     }
     
