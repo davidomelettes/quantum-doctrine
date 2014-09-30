@@ -89,4 +89,15 @@ abstract class AbstractHistoricDocument extends AbstractDocument
         return $this->updatedBy;
     }
     
+    public function setDeleted(\DateTime $date)
+    {
+        $this->deleted = $date;
+        return $this;
+    }
+    
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+    
 }

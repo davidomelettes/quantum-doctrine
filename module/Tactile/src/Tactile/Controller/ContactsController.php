@@ -68,7 +68,7 @@ class ContactsController extends AbstractDoctrineController
     {
         $contact = $this->loadRequestedContact();
         if (!$contact) {
-            $this->flashError('Unable to locate requested contact');
+            $this->flashError('Unable to locate requested Contact');
             return $this->redirect()->toRoute('contacts');
         }
         
@@ -82,7 +82,7 @@ class ContactsController extends AbstractDoctrineController
     {
         $contact = $this->loadRequestedContact();
         if (!$contact) {
-            $this->flashError('Unable to locate requested contact');
+            $this->flashError('Unable to locate requested Contact');
             return $this->redirect()->toRoute('contacts');
         }
         
@@ -111,6 +111,42 @@ class ContactsController extends AbstractDoctrineController
         
         return $this->returnViewModel(array(
             'title' => sprintf("Editing '%s'", $contact->getFullName()),
+            'form'  => $form,
+            'item'  => $contact,
+        ));
+    }
+    
+    public function deleteAction()
+    {
+        $contact = $this->loadRequestedContact();
+        if (!$contact) {
+            $this->flashError('Unable to locate requested Contact');
+            return $this->redirect()->toRoute('contacts');
+        }
+        
+        $form = $this->getManagedForm('Tactile\Form\DeleteConfirmationForm');
+        $form->get('cancel')->setOptions(array(
+            'route_name' => 'contacts',
+            'route_params' => array(
+                'action' => 'view',
+                'id' => $contact->getId(),
+            ),
+        ));
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $service = $this->getContactsService();
+                $service->delete($contact);
+                $service->commit();
+                $this->flashSuccess('Contact deleted');
+                return $this->redirect()->toRoute('contacts');
+            }
+        }
+        
+        return $this->returnViewModel(array(
+            'title' => sprintf("Delete %s?", $contact->getFullName()),
             'form'  => $form,
             'item'  => $contact,
         ));

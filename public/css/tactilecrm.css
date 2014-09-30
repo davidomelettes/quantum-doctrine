@@ -6181,7 +6181,7 @@ button.close {
   background-color: #E4EBFB;
 }
 form .form-group-hidden,
-form .form-group-submit {
+form fieldset.submit .form-group-submit {
   margin: 0;
 }
 form .form-control-static {

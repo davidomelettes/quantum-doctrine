@@ -2,7 +2,7 @@
 
 $element = $this->element;
 $elementType = $element->getAttribute('type');
-if (!in_array($elementType, array('submit', 'checkbox'))) {
+if (in_array($elementType, array('text', 'textarea', 'select', 'password'))) {
 	$element->setAttribute('class', 'form-control');
 }
 if (!$elementType) {

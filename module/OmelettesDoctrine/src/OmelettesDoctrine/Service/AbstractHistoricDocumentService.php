@@ -49,7 +49,7 @@ abstract class AbstractHistoricDocumentService extends AbstractDocumentService
     {
         $now = new \DateTime();
         $document->setDeleted($now);
-        $this->documentManager->persist($document);
+        //$this->documentManager->persist($document);
         return $this;
     }
     

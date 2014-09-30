@@ -5,6 +5,7 @@
             <div class="panel-heading">
                 <div class="crud pull-right">
                     <a class="btn btn-default" href="<?php echo $this->url(null, array('action' => 'edit', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-pencil"></span> <?php echo $this->translate('Edit'); ?></a>
+                    <a class="btn btn-default" href="<?php echo $this->url(null, array('action' => 'delete', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-remove"></span> <?php echo $this->translate('Delete'); ?></a>
                 </div>
                 <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
             </div>

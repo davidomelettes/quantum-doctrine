@@ -11,8 +11,7 @@ abstract class AbstractForm extends Form
         $submit = new Fieldset\SubmitFieldset();
         $submit->get('submit')->setAttributes(array(
             'class' => $buttonClass,
-            'value' => $buttonText,
-        ));
+        ))->setLabel($buttonText);
         $this->add($submit);
         
         return $this;
