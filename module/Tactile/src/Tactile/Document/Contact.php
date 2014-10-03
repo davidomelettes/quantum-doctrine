@@ -11,13 +11,9 @@ use Zend\InputFilter;
 
 /**
  * @ODM\Document(collection="contacts", requireIndexes=true)
- * @ODM\InheritanceType("SINGLE_COLLECTION")
- * @ODM\DiscriminatorField("type")
  */
 class Contact extends Quantum implements TabulatableItemInterface
 {
-    protected $hydrator;
-    
     /**
      * @var string
      * @ODM\String
@@ -57,6 +53,7 @@ class Contact extends Quantum implements TabulatableItemInterface
     
     public function __construct()
     {
+        parent::__construct();
         $this->addresses = new ArrayCollection();
         $this->contactMethods = new ArrayCollection();
     }
@@ -136,7 +133,7 @@ class Contact extends Quantum implements TabulatableItemInterface
     public function addContactMethods($toAdd)
     {
         foreach ($toAdd as $add) {
-            $this->contactMethods[] = $add;
+            $this->contactMethods->add($add);
         }
         return $this;
     }
@@ -144,7 +141,6 @@ class Contact extends Quantum implements TabulatableItemInterface
     public function removeContactMethods($toRemove)
     {
         foreach ($toRemove as $remove) {
-            // ??? Really ???
             $this->contactMethods->removeElement($remove);
         }
         return $this;

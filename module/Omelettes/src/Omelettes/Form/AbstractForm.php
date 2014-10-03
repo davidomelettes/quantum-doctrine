@@ -2,9 +2,11 @@
 
 namespace Omelettes\Form;
 
-use Zend\Form\Form;
+use Zend\Form\Form as ZendForm;
+use Zend\Form\FormInterface;
+use Zend\Form\Exception;
 
-abstract class AbstractForm extends Form
+abstract class AbstractForm extends ZendForm
 {
     public function addSubmitFieldset($buttonText = 'Save', $buttonClass = 'btn btn-lg btn-success')
     {

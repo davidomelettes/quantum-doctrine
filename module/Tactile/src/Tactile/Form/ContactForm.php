@@ -30,7 +30,7 @@ class ContactForm extends AbstractDocumentForm
                 'label'   => "Description",
             ),
             'attributes' => array(
-                'id'      => $this->getName() . '-description',
+                'id'       => $this->getName() . '-description',
             ),
         ));
         
@@ -59,7 +59,7 @@ class ContactForm extends AbstractDocumentForm
         
         $addressFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactAddressFieldset');
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Omelettes\Form\Element\RemovableCollection',
             'name'    => 'addresses',
             'options' => array(
                 'label'                  => 'Addresses',
@@ -72,6 +72,24 @@ class ContactForm extends AbstractDocumentForm
             ),
             'attributes' => array(
                 'class'      => 'addresses',
+            ),
+        ));
+        
+        $usersService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
+        $userOptions = array();
+        foreach ($usersService->fetchAllAccountUsers() as $user) {
+            $userOptions[$user->getId()] = $user->getFullName();
+        }
+        $this->add(array(
+            'type'    => 'Zend\Form\Element\Select',
+            'name'    => 'assignedTo',
+            'options' => array(
+                'label'   => 'Assigned To',
+                'options' => $userOptions,
+            ),
+            'attributes' => array(
+                'id'       => $this->getName() . '-assignedTo',
+                'required' => true,
             ),
         ));
         

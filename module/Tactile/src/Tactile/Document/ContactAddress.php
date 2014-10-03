@@ -2,14 +2,15 @@
 
 namespace Tactile\Document;
 
-use OmelettesDoctrine\Document as OmDoc;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Omelettes\Listable\ListableItemInterface;
+use OmelettesDoctrine\Document as OmDoc;
 use Zend\InputFilter;
 
 /**
  * @ODM\EmbeddedDocument
  */
-class ContactAddress implements InputFilter\InputFilterAwareInterface
+class ContactAddress implements InputFilter\InputFilterAwareInterface, ListableItemInterface
 {
     /**
      * @var string
@@ -148,31 +149,109 @@ class ContactAddress implements InputFilter\InputFilterAwareInterface
             $inputFilter->add(array(
                 'name'     => 'street1',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
                 'name'     => 'street2',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
                 'name'     => 'street3',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
                 'name'     => 'city',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
                 'name'     => 'county',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
                 'name'     => 'postalCode',
                 'required' => false,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
             ));
             
             $inputFilter->add(array(
@@ -183,6 +262,27 @@ class ContactAddress implements InputFilter\InputFilterAwareInterface
             $this->inputFilter = $inputFilter;
         }
         return $this->inputFilter;
+    }
+    
+    public function getListItemPartial()
+    {
+        return 'listable/address';
+    }
+    
+    public function toPrintableString($breakReturns = false)
+    {
+        $output = array();
+        
+        foreach (array('street1', 'street2', 'city', 'county', 'postalCode') as $fieldName) {
+            $getter = 'get' . $fieldName;
+            $value = $this->$getter();
+            if ('' !== $value && null !== $value) {
+                $output[] = $value;
+            }
+        }
+        
+        $glue = $breakReturns ? ',<br>\n' : ",\n";
+        return implode($glue, $output);
     }
     
 }

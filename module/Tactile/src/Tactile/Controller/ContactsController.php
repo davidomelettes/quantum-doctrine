@@ -2,7 +2,7 @@
 
 namespace Tactile\Controller;
 
-use Tactile\Document as Doc;
+use Tactile\Document;
 use Tactile\Service;
 use OmelettesDoctrine\Controller\AbstractDoctrineController;
 
@@ -14,6 +14,11 @@ class ContactsController extends AbstractDoctrineController
     public function getContactsService()
     {
         return $this->getServiceLocator()->get('Tactile\Service\ContactsService');
+    }
+    
+    public function getNotesService()
+    {
+        return $this->getServiceLocator()->get('Tactile\Service\NotesService');
     }
     
     public function indexAction()
@@ -55,7 +60,7 @@ class ContactsController extends AbstractDoctrineController
     }
     
     /**
-     * @return Doc\Contact|boolean
+     * @return Document\Contact|boolean
      */
     public function loadRequestedContact()
     {
@@ -72,9 +77,27 @@ class ContactsController extends AbstractDoctrineController
             return $this->redirect()->toRoute('contacts');
         }
         
+        $noteForm = $this->getManagedForm('Tactile\Form\NoteForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $note = new Document\Note();
+            $noteForm->bind($note);
+            $noteForm->setData($request->getPost());
+            if ($noteForm->isValid()) {
+                $notesService = $this->getNotesService();
+                $notesService->save($note);
+                $contact->getNotes()->add($note);
+                $notesService->commit();
+                $this->flashSuccess('Note addded');
+            } else {
+                $this->flashError('There was a problem adding your Note');
+            }
+        }
+        
         return $this->returnViewModel(array(
-            'title' => $contact->getFullName(),
-            'item'  => $contact,
+            'title'    => $contact->getFullName(),
+            'item'     => $contact,
+            'noteForm' => $noteForm,
         ));
     }
     
@@ -92,13 +115,24 @@ class ContactsController extends AbstractDoctrineController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-            if (!isset($data->contactMethods)) {
-                $data->contactMethods = array();
-            }
-            if (!isset($data->addresses)) {
-                $data->addresses = array();
+            $collectionNames = array('contactMethods', 'addresses');
+            $emptyCollections = array();
+            foreach ($collectionNames as $collectionName) {
+                if (!isset($data->$collectionName)) {
+                    // Collection element expects an empty array if collection is empty
+                    $emptyCollections[] = $collectionName;
+                    $data->$collectionName = array();
+                }
             }
             $form->setData($data);
+            foreach ($emptyCollections as $collectionName) {
+                // Remove validation from the form for each empty collection 
+                $formFilter = $form->getInputFilter();
+                $collectionFilter = $formFilter->get($collectionName);
+                foreach ($collectionFilter->getInputs() as $i => $collectionFieldsetFilter) {
+                    $collectionFilter->remove($i);
+                }
+            }
             if ($form->isValid()) {
                 $contactsService = $this->getContactsService();
                 $contact = $form->getData();
@@ -106,6 +140,8 @@ class ContactsController extends AbstractDoctrineController
                 $contactsService->commit();
                 $this->flashSuccess('Contact updated successfully');
                 return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+            } else {
+                $this->flashError('There was a problem updating the Contact');
             }
         }
         
@@ -150,6 +186,33 @@ class ContactsController extends AbstractDoctrineController
             'form'  => $form,
             'item'  => $contact,
         ));
+    }
+    
+    public function addNoteAction()
+    {
+        $contact = $this->loadRequestedContact();
+        if (!$contact) {
+            $this->flashError('Unable to locate requested Contact');
+            return $this->redirect()->toRoute('contacts');
+        }
+        
+        $noteForm = $this->getManagedForm('Tactile\Form\NoteForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $note = new Document\Note();
+            $noteForm->bind($note);
+            $noteForm->setData($request->getPost());
+            if ($noteForm->isValid()) {
+                $notesService = $this->getNotesService();
+                $notesService->save($note);
+                $contact->getNotes()->add($note);
+                $notesService->commit();
+                $this->flashSuccess('Note addded');
+            } else {
+                $this->flashError('There was a problem adding your Note');
+            }
+        }
+        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
     }
     
 }
