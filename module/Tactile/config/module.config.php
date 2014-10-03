@@ -106,7 +106,11 @@ return array(
         'template_map' => array(
             'form/fieldset/address'        => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
             'form/fieldset/contact-method' => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
+            'form/note'                    => __DIR__ . '/../view/partial/form/note.phtml',
             'html/head'                    => __DIR__ . '/../view/partial/html/head.phtml',
+            'listable/address'             => __DIR__ . '/../view/partial/listable/address.phtml',
+            'listable/contact-method'      => __DIR__ . '/../view/partial/listable/contact-method.phtml',
+            'listable/note'                => __DIR__ . '/../view/partial/listable/note.phtml',
             'navigation/navbar-fixed-top'  => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
             'tabulate/contact'             => __DIR__ . '/../view/partial/tabulate/contact.phtml',
         ),

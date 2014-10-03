@@ -49,6 +49,7 @@ return array(
         'invokables'	=> array(
             'aclAllows'  => 'OmelettesDoctrine\View\Helper\AclAllows',
             'prettyUser' => 'OmelettesDoctrine\View\Helper\PrettyUser',
+            'prettyWhen' => 'OmelettesDoctrine\View\Helper\PrettyWhen',
         ),
     ),
     

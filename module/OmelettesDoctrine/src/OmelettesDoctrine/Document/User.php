@@ -15,6 +15,7 @@ class User extends AbstractAccountBoundHistoricDocument
     /**
      * @var string
      * @ODM\String
+     * @ODM\Index
      */
     protected $aclRole = 'guest';
     

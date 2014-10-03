@@ -1,7 +1,7 @@
 <fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
     <?php foreach ($fieldset as $element): ?>
     <?php echo $this->partial(
-        'partial/form/friendly/group.phtml',
+        'form/friendly/group',
         array(
             'element' => $element,
         )); ?>

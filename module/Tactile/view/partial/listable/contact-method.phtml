@@ -1,0 +1,19 @@
+<?php $item = $this->item; ?>
+<li>
+<?php switch ($item->getType()): ?>
+<?php case 'e': ?>
+    <span class="glyphicon glyphicon-envelope"></span> <a href=""><?php echo $this->escapeHtml($item->getDetail()); ?></a>
+<?php break; ?>
+<?php case 'f': ?>
+    <span class="glyphicon glyphicon-print"></span> <?php echo $this->escapeHtml($item->getDetail()); ?>
+<?php break; ?>
+<?php case 'm': ?>
+    <span class="glyphicon glyphicon-earphone"></span> <?php echo $this->escapeHtml($item->getDetail()); ?>
+<?php break; ?>
+<?php case 't': ?>
+    <span class="glyphicon glyphicon-phone-alt"></span> <?php echo $this->escapeHtml($item->getDetail()); ?>
+<?php break; ?>
+<?php default: ?>
+    <?php echo $this->escapeHtml($item->getDetail()); ?>
+<?php endswitch; ?>
+</li>

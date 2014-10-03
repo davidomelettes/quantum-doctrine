@@ -48,6 +48,10 @@ class PrettyTime extends AbstractHelper
                     // Yesterday
                     $string = sprintf('Yesterday at %s', date('H:i', $then));
                     break;
+                case $diff < 2592000:
+                    // Last 30 days
+                    $string = sprintf('%s, at %s', date('d F', $then), date('H:i', $then));
+                    break;
                 case date('Y', $now) === date('Y', $then):
                     // This year
                     $string = date('d F', $then);

@@ -4,10 +4,10 @@ use Omelettes\Form\ViewPartialInterface;
 use Zend\Form;
 
 $form = $this->form;
-$form->setAttributes(array(
-    'action' => $this->url(null, array(), array(), true),
-    'class'  => $form->getAttribute('name') . ' form-horizontal',
-));
+if (!$form->getAttribute('action')) {
+    $form->setAttribute('action', $this->url(null, array(), array(), true));
+}
+$form->setAttribute('class', ($form->getAttribute('class') ? ' ' : '') . 'form-horizontal');
 $form->prepare();
 
 $labelColWidth = 2;
@@ -22,11 +22,11 @@ $inputColWidth = 10;
 if ($element instanceof ViewPartialInterface) {
     $partial = $element->getViewPartial();
 } elseif ($element instanceof Form\Element\Collection) {
-    $partial = 'partial/form/horizontal/collection.phtml';
+    $partial = 'form/horizontal/collection';
 } elseif ($element instanceof Form\Fieldset) {
-    $partial = 'partial/form/horizontal/fieldset.phtml';
+    $partial = 'form/horizontal/fieldset';
 } else {
-    $partial = 'partial/form/horizontal/group.phtml';
+    $partial = 'form/horizontal/group';
 }
 
 ?>

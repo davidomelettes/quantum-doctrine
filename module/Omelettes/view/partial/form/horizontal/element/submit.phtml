@@ -1,4 +1,4 @@
 <?php $element = $this->element; ?>
 <div class="col-sm-offset-<?php echo $this->labelColWidth; ?> col-sm-<?php echo $this->inputColWidth; ?>">
-    <button type="submit" class="<?php echo $element->getAttribute('class'); ?>"><?php echo $this->escapeHtml($element->getValue()); ?></button>
+    <button type="submit" class="<?php echo $element->getAttribute('class'); ?>"><?php echo $this->escapeHtml($element->getLabel()); ?></button>
 </div>

@@ -20,9 +20,20 @@
     }
 }
 
+.panel {
+    .panel-heading {
+        h2.panel-title { font-size: @font-size-h2; line-height: @font-size-h2 + 3; }
+        h3.panel-title { line-height: @font-size-h2 + 3; }
+        .pagination { margin: 0; margin-left: 1em; }
+    }
+    .panel-body {
+        > :last-child { margin-bottom: 0; }
+    }
+}
+
 form {
     .form-group-hidden,
-    fieldset.submit .form-group-submit { margin: 0; }
+    fieldset.submit .form-group-submit { margin-bottom: 0; }
     .form-control-static {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -30,9 +41,6 @@ form {
     .input-group-addon { cursor: pointer; }
 }
 
-.panel {
-    .panel-heading {
-        h2.panel-title { font-size: @font-size-h2; }
-        .pagination { margin: 0; margin-left: 1em; }
-    }
+.table {
+    margin-bottom: 0;
 }

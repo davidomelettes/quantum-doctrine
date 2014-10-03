@@ -1,0 +1,9 @@
+<?php $note = $this->item; ?>
+<li class="note media">
+    <div class="media-body">
+        <?php echo $this->prettyUser($note->getCreatedBy()); ?>
+        <?php echo $this->escapeHtml($note->getBody()); ?>
+        <br>
+        <span class="text-muted"><?php echo $this->prettyTime($note->getCreated()); ?></span>
+    </div>
+</li>

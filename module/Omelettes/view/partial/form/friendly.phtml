@@ -3,10 +3,10 @@
 use Zend\Form;
 
 $form = $this->form;
-$form->setAttributes(array(
-    'action' => $this->url(null, array(), array(), true),
-    'class'  => $form->getAttribute('name') . ' form-friendly',
-));
+if (!$form->getAttribute('action')) {
+    $form->setAttribute('action', $this->url(null, array(), array(), true));
+}
+$form->setAttribute('class', ($form->getAttribute('class') ? ' ' : '') . 'form-friendly');
 $form->prepare();
 
 ?>
@@ -15,13 +15,13 @@ $form->prepare();
 <?php foreach ($form as $element): ?>
 <?php if ($element instanceof Form\Fieldset): ?>
 <?php echo $this->partial(
-    'partial/form/friendly/fieldset.phtml',
+    'form/friendly/fieldset',
     array(
         'fieldset' => $element,
     )); ?>
 <?php else: ?>
 <?php echo $this->partial(
-    'partial/form/friendly/group.phtml',
+    'form/friendly/group',
     array(
         'element' => $element,
     )); ?>

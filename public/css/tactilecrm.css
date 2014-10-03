@@ -6180,9 +6180,23 @@ button.close {
 .ui-timepicker div:hover {
   background-color: #E4EBFB;
 }
+.panel .panel-heading h2.panel-title {
+  font-size: 30px;
+  line-height: 33px;
+}
+.panel .panel-heading h3.panel-title {
+  line-height: 33px;
+}
+.panel .panel-heading .pagination {
+  margin: 0;
+  margin-left: 1em;
+}
+.panel .panel-body > :last-child {
+  margin-bottom: 0;
+}
 form .form-group-hidden,
 form fieldset.submit .form-group-submit {
-  margin: 0;
+  margin-bottom: 0;
 }
 form .form-control-static {
   padding-top: 10px;
@@ -6191,12 +6205,8 @@ form .form-control-static {
 form .input-group-addon {
   cursor: pointer;
 }
-.panel .panel-heading h2.panel-title {
-  font-size: 30px;
-}
-.panel .panel-heading .pagination {
-  margin: 0;
-  margin-left: 1em;
+.table {
+  margin-bottom: 0;
 }
 .navbar-front {
   background: #e7e7e7 url('../img/bg.jpg') no-repeat;
@@ -6245,4 +6255,8 @@ form .collection.addresses fieldset {
 form .collection.addresses fieldset:first-child {
   border-top: none;
   padding-top: 0;
+}
+dl.authorship dd,
+dl.authorship dt {
+  display: inline-block;
 }

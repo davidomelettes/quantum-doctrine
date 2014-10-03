@@ -1,0 +1,27 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+
+$bodyElement = $form->get('body');
+$bodyElement->setAttribute('class', 'form-control');
+$submitFieldset = $form->get('submit');
+
+?>
+
+<?php echo $this->form()->openTag($form); ?>
+<div class="row">
+    <div class="col-md-10">
+        <div class="form-group">
+            <?php echo $this->formTextarea($bodyElement); ?>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <?php echo $this->partial(
+            'form/friendly/fieldset',
+            array(
+                'fieldset' => $submitFieldset,
+            )); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag($form); ?>

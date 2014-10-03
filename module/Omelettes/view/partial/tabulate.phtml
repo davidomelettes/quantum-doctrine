@@ -4,6 +4,7 @@ use Omelettes\Tabulatable;
 
 $mock = $this->mock;
 $data = $this->data;
+$colspan = count($mock->getTableHeadings());
 
 ?>
 <form action="<?php echo $this->url(null, array('action' => 'process')); ?>">
@@ -19,15 +20,15 @@ $data = $this->data;
                 <?php endif; ?>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <th>
-                </th>
-                <th colspan="<?php echo count($mock->getTableHeadings()); ?>">
-                </th>
-            </tr>
-        </tfoot>
         <tbody>
+            <?php if (count($data) < 1): ?>
+            <tr>
+                <td></td>
+                <td colspan="<?php echo $colspan; ?>">
+                    <em><?php echo $this->translate('No results'); ?></em>
+                </td>
+            </tr>
+            <?php endif; ?>
             <?php foreach ($data as $datum): ?>
             <?php if ($datum instanceof Tabulatable\TabulatableItemInterface): ?>
             <tr>

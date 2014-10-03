@@ -35,4 +35,19 @@ class UsersService extends AbstractHistoricDocumentService
         return AbstractDocumentService::save($user);
     }
     
+    public function fetchAllAccountUsers()
+    {
+        $auth = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
+        $identity = $auth->getIdentity();
+        if (!$identity) {
+            throw new \Exception('Expected an auth identity');
+        }
+        
+        $qb = $this->createDefaultFindQuery();
+        $qb->field('account.id')->equals($identity->getAccount()->getId())
+           ->field('aclRole')->notEqual('system');
+        $cursor = $qb->getQuery()->execute();
+        return $this->getPaginator($cursor);
+    }
+    
 }
