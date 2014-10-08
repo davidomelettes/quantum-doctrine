@@ -2,45 +2,21 @@
 
 namespace Tactile\Form\Fieldset;
 
-use Omelettes\Form\ViewPartialInterface;
 use OmelettesDoctrine\Form\Fieldset\AbstractDocumentFieldset;
-use Tactile\Document;
+use Tactile\Stdlib\Hydrator\ContactMethodHydrator;
 
-class ContactMethodFieldset extends AbstractDocumentFieldset implements ViewPartialInterface
+class ContactMethodFieldset extends AbstractDocumentFieldset
 {
     public function init()
     {
         $this->setName('contactMethods');
         $this->setAttribute('class', 'contactMethod');
-        $this->setAllowedObjectBindingClass('Tactile\Document\ContactMethod');
         $this->setLabel('Contact Method');
-        $this->setObject(new Document\ContactMethod());
-        
-        $this->add(array(
-            'name'       => 'type',
-            'type'       => 'Select',
-            'options'    => array(
-                'label'         => 'Type',
-                'value_options' => $this->getObject()->getTypes(),
-            ),
-            'attributes' => array(
-            ),
-        ));
-        
-        $this->add(array(
-            'name'       => 'detail',
-            'type'       => 'Text',
-            'options'    => array(
-                'label'         => 'Detail',
-            ),
-            'attributes' => array(
-            ),
-        ));
     }
     
-    public function getViewPartial()
+    public function getHydrator()
     {
-        return 'form/fieldset/contact-method';
+        return $this->getApplicationServiceLocator()->get('Tactile\Stdlib\Hydrator\ContactMethodHydrator');
     }
     
 }

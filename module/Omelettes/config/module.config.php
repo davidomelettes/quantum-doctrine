@@ -12,6 +12,7 @@ return array(
             'form/friendly/group'        => __DIR__ . '/../view/partial/form/friendly/group.phtml',
             'form/horizontal'            => __DIR__ . '/../view/partial/form/horizontal.phtml',
             'form/horizontal/collection' => __DIR__ . '/../view/partial/form/horizontal/collection.phtml',
+            'form/horizontal/multitype-collection' => __DIR__ . '/../view/partial/form/horizontal/multitype-collection.phtml',
             'form/horizontal/element'    => __DIR__ . '/../view/partial/form/horizontal/element.phtml',
             'form/horizontal/fieldset'   => __DIR__ . '/../view/partial/form/horizontal/fieldset.phtml',
             'form/horizontal/group'      => __DIR__ . '/../view/partial/form/horizontal/group.phtml',

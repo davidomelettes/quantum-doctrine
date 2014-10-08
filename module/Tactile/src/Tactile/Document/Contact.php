@@ -46,7 +46,13 @@ class Contact extends Quantum implements TabulatableItemInterface
      * @var ArrayCollection
      * @ODM\EmbedMany(
      *     strategy="setArray",
-     *     targetDocument="ContactMethod"
+     *     discriminatorField="type",
+     *     discriminatorMap={
+     *         "e"="Tactile\Document\ContactMethodEmail",
+     *         "f"="Tactile\Document\ContactMethodFax",
+     *         "m"="Tactile\Document\ContactMethodMobile",
+     *         "t"="Tactile\Document\ContactMethodTelephone"
+     *     }
      * )
      */
     protected $contactMethods;

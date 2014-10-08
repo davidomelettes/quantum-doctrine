@@ -27,7 +27,7 @@ if ($templateElement instanceof ViewPartialInterface) {
                     'inputColWidth' => $this->inputColWidth,
                 )); ?>
             <?php endforeach; ?>
-            <?php $escapedMarkup = $this->partial(
+            <?php $templateMarkup = $this->partial(
                 $partial,
                 array(
                     'element'       => $templateElement,
@@ -36,7 +36,7 @@ if ($templateElement instanceof ViewPartialInterface) {
                 )); ?>
             <div class="form-group">
                 <div class="col-sm-<?php echo $this->inputColWidth; ?>">
-                    <a class="template btn btn-default" data-index="<?php echo count($collection->getIterator()); ?>" data-template="<?php echo $this->escapeHtmlAttr($escapedMarkup); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('Add ' . $templateElement->getLabel()); ?></a>
+                    <a class="template btn btn-default" data-index="<?php echo count($collection->getIterator()); ?>" data-template="<?php echo $this->escapeHtmlAttr($templateMarkup); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('Add ' . $templateElement->getLabel()); ?></a>
                 </div>
             </div>
         </div>

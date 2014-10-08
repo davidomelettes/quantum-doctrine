@@ -6,20 +6,12 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Omelettes\Listable\ListableItemInterface;
 use OmelettesDoctrine\Document as OmDoc;
 use Zend\InputFilter;
-use Zend\Validator;
 
 /**
- * @ODM\EmbeddedDocument
+ * @ODM\MappedSuperclass
  */
 class ContactMethod implements InputFilter\InputFilterAwareInterface, ListableItemInterface
 {
-    /**
-     * @var string
-     * @ODM\String
-     * @ODM\Index
-     */
-    protected $type;
-    
     /**
      * @var string
      * @ODM\String
@@ -41,17 +33,6 @@ class ContactMethod implements InputFilter\InputFilterAwareInterface, ListableIt
     public function getDetail()
     {
         return $this->detail;
-    }
-    
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-    
-    public function getType()
-    {
-        return $this->type;
     }
     
     public function getTypes()
@@ -77,40 +58,6 @@ class ContactMethod implements InputFilter\InputFilterAwareInterface, ListableIt
             $inputFilter->add(array(
                 'name'     => 'type',
                 'required' => true,
-            ));
-            
-            $detailValidationClosure = function ($value, $context) {
-                switch ($context['type']) {
-                    case 'e':
-                        $validator = new Validator\EmailAddress();
-                        return $validator->isValid($value);
-                    default:
-                        return true;
-                }
-            };
-            
-            $inputFilter->add(array(
-                'name'     => 'detail',
-                'required' => true,
-                'filters'		=> array(
-                    array('name' => 'StringTrim'),
-                ),
-                'validators'	=> array(
-                    array(
-                        'name'		=> 'StringLength',
-                        'options'	=> array(
-                            'encoding'	=> 'UTF-8',
-                            'min'		=> 1,
-                            'max'		=> 255,
-                        ),
-                    ),
-                    array(
-                        'name'      => 'Callback',
-                        'options'   => array(
-                            'callback' => $detailValidationClosure,
-                        ),
-                    ),
-                ),
             ));
             
             $this->inputFilter = $inputFilter;

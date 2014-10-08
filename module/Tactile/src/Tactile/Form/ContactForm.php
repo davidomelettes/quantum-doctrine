@@ -40,8 +40,12 @@ class ContactForm extends AbstractDocumentForm
         $this->add($whenFieldset);
         
         $contactMethodFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodFieldset');
+        $emailFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodEmailFieldset');
+        $faxFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodFaxFieldset');
+        $mobileFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodMobileFieldset');
+        $telephoneFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodTelephoneFieldset');
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Omelettes\Form\Element\MultiTypeCollection',
             'name'    => 'contactMethods',
             'options' => array(
                 'label'                  => 'Contact Methods',
@@ -51,6 +55,19 @@ class ContactForm extends AbstractDocumentForm
                 'create_new_objects'     => true,
                 'should_create_template' => true,
                 'target_element'         => $contactMethodFieldset,
+                'target_map'             => array(
+                    'e' => $emailFieldset,
+                    'f' => $faxFieldset,
+                    'm' => $mobileFieldset,
+                    't' => $telephoneFieldset,
+                ),
+                'default_type'           => 'e',
+                'type_labels'            => array(
+                    'e' => 'Email Address',
+                    'f' => 'Fax Number',
+                    'm' => 'Mobile Number',
+                    't' => 'Telephone Number',
+                ),
             ),
             'attributes' => array(
                 'class'      => 'contactMethods',

@@ -56,6 +56,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
     {
         return array(
             'factories' => array(
+                // Hydration
+                'Tactile\Stdlib\Hydrator\ContactMethodHydrator' => function ($sm) {
+                    $hydrator = new Stdlib\Hydrator\ContactMethodHydrator($sm->get('doctrine.documentmanager.odm_default'));
+                    return $hydrator;
+                },
+                
                 // Resources
                 'Tactile\Service\ResourcesService' => function ($sm) {
                     $service = new Service\ResourcesService($sm->get('doctrine.documentmanager.odm_default'));

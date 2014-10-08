@@ -18,9 +18,9 @@ class RemovableCollection extends Collection
     {
         if (!is_array($data) && !$data instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
-                    '%s expects an array or Traversable set of data; received "%s"',
-                    __METHOD__,
-                    (is_object($data) ? get_class($data) : gettype($data))
+                '%s expects an array or Traversable set of data; received "%s"',
+                __METHOD__,
+                (is_object($data) ? get_class($data) : gettype($data))
             ));
         }
     
@@ -31,24 +31,22 @@ class RemovableCollection extends Collection
     
         if (!$this->allowRemove && count($data) < $this->count) {
             throw new Exception\DomainException(sprintf(
-                    'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
-                    . 'to true, or re-submit the form.',
-                    get_class($this)
+                'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
+                . 'to true, or re-submit the form.',
+                get_class($this)
             ));
         }
     
         // Check to see if elements have been replaced or removed
         foreach ($this->byName as $name => $elementOrFieldset) {
             if (isset($data[$name])) {
-                var_dump('not removing: ' . $name);
                 continue;
             }
-            var_dump('removing: ' . $name);
     
             if (!$this->allowRemove) {
                 throw new Exception\DomainException(sprintf(
-                        'Elements have been removed from the collection (%s) but the allow_remove option is not true.',
-                        get_class($this)
+                    'Elements have been removed from the collection (%s) but the allow_remove option is not true.',
+                    get_class($this)
                 ));
             }
     

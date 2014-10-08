@@ -99,8 +99,6 @@ class UberHydrator extends DoctrineHydrator implements ServiceLocatorAwareInterf
     
     protected function toEmbedMany($object, $collectionName, $target, $values)
     {
-        //var_dump($values);
-        //var_dump($target);
         if (is_array($values)) {
             $collection = array();
             foreach ($values as $value) {

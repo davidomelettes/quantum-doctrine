@@ -1,7 +1,7 @@
 <?php
 
-use Omelettes\Form\ViewPartialInterface;
-use Zend\Form;
+use Omelettes\Form as OmForm;
+use Zend\Form as ZendForm;
 
 $form = $this->form;
 if (!$form->getAttribute('action')) {
@@ -19,11 +19,13 @@ $inputColWidth = 10;
 <?php foreach ($form as $element): ?>
 <?php
 
-if ($element instanceof ViewPartialInterface) {
+if ($element instanceof OmForm\ViewPartialInterface) {
     $partial = $element->getViewPartial();
-} elseif ($element instanceof Form\Element\Collection) {
+} elseif ($element instanceof OmForm\Element\MultiTypeCollection) {
+    $partial = 'form/horizontal/multitype-collection';
+} elseif ($element instanceof ZendForm\Element\Collection) {
     $partial = 'form/horizontal/collection';
-} elseif ($element instanceof Form\Fieldset) {
+} elseif ($element instanceof ZendForm\Fieldset) {
     $partial = 'form/horizontal/fieldset';
 } else {
     $partial = 'form/horizontal/group';

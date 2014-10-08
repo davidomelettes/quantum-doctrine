@@ -5,8 +5,10 @@ return array(
     'acl' => array(
         'resources' => array(
             'user' => array(
+                'activities' => array(),
                 'dash' => array(),
                 'contacts' => array(),
+                'opportunities' => array(),
                 'user' => array(),
             ),
         ),
@@ -17,10 +19,12 @@ return array(
     
     'controllers' => array(
         'invokables' => array(
-            'Tactile\Controller\Dash'     => 'Tactile\Controller\DashboardController',
-            'Tactile\Controller\Contacts' => 'Tactile\Controller\ContactsController',
-            'Tactile\Controller\User'     => 'Tactile\Controller\UserController',
-            'Tactile\Controller\Users'    => 'Tactile\Controller\UsersController',
+            'Tactile\Controller\Activities'    => 'Tactile\Controller\ActivitiesController',
+            'Tactile\Controller\Dash'          => 'Tactile\Controller\DashboardController',
+            'Tactile\Controller\Contacts'      => 'Tactile\Controller\ContactsController',
+            'Tactile\Controller\Opportunities' => 'Tactile\Controller\OpportunitiesController',
+            'Tactile\Controller\User'          => 'Tactile\Controller\UserController',
+            'Tactile\Controller\Users'         => 'Tactile\Controller\UsersController',
         ),
     ),
     
@@ -46,6 +50,14 @@ return array(
                 'label' => 'Contacts',
                 'route' => 'contacts',
             ),
+            array(
+                'label' => 'Opportunities',
+                'route' => 'opportunities',
+            ),
+            array(
+                'label' => 'Activities',
+                'route' => 'activities',
+            ),
         ),
     ),
     
@@ -62,12 +74,34 @@ return array(
                 ),
             ),
 
+            'activities' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/activities[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'Tactile\Controller\Activities',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            
             'contacts' => array(
                 'type'    => 'Segment',
                 'options' => array(
                     'route'    => '/contacts[/:action][/:id]',
                     'defaults' => array(
                         'controller' => 'Tactile\Controller\Contacts',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            
+            'opportunities' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/opportunities[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'Tactile\Controller\Opportunities',
                         'action'     => 'index',
                     ),
                 ),

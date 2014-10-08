@@ -11,11 +11,11 @@ $hasErrors = (boolean)($typeInput->getMessages() || $detailInput->getMessages())
 
 <fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
     <div class="form-group form-group-when<?php echo $hasErrors ? " has-error" : ''; ?>">
-        <div class="col-md-4">
-            <?php echo $this->formSelect($typeInput); ?>
-            <?php echo $this->formElementErrors()->render($typeInput, array('class' => 'help-block list-unstyled')); ?>
-        </div>
-        <div class="col-md-8">
+        <?php echo $this->formHidden($typeInput); ?>
+        <label class="control-label col-md-3">
+            <?php echo $this->escapeHtml($detailInput->getLabel()); ?>
+        </label>
+        <div class="col-md-9">
             <div class="input-group">
                 <?php echo $this->formText($detailInput); ?>
                 <span class="input-group-addon remove">
