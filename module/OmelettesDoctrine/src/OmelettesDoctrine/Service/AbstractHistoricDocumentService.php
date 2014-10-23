@@ -13,19 +13,6 @@ abstract class AbstractHistoricDocumentService extends AbstractDocumentService
         return $qb;
     }
     
-    protected function getIdentity()
-    {
-        $authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
-        if (!$authService->hasIdentity()) {
-            throw new \Exception('Missing authentication identity');
-        }
-        $identity = $authService->getIdentity();
-        if (!$identity instanceof OmDoc\User) {
-            throw new \Exception('Expected a User');
-        }
-        return $identity;
-    }
-    
     public function save(OmDoc\AbstractHistoricDocument $document)
     {
         $identity = $this->getIdentity();

@@ -1,19 +1,32 @@
 <?php $item = $this->item; ?>
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="crud pull-right">
-                    <a class="btn btn-default" href="<?php echo $this->url(null, array('action' => 'edit', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-pencil"></span> <?php echo $this->translate('Edit'); ?></a>
-                    <a class="btn btn-default" href="<?php echo $this->url(null, array('action' => 'delete', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-trash"></span> <?php echo $this->translate('Delete'); ?></a>
+                    <a class="btn btn-default" href="<?php echo $this->url('contacts/id', array('action' => 'edit', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-pencil"></span> <?php echo $this->translate('Edit'); ?></a>
+                    <a class="btn btn-default" href="<?php echo $this->url('contacts/id', array('action' => 'delete', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-trash"></span> <?php echo $this->translate('Delete'); ?></a>
                 </div>
                 <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
+            </div>
+            <div class="panel-heading">
+                <div class="tags">
+                    <div class="pull-right">
+                        <?php $this->tagForm->setAttribute('action', $this->url(null, array('action' => 'set-tags'), true)); ?>
+                        <?php echo $this->partial('form/inline', array('form' => $this->tagForm)); ?>
+                    </div>
+                    <ul class="tags list-inline" style="margin: 0;">
+                        <?php foreach ($item->getTags() as $tag): ?>
+                        <li><a class="btn btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag))); ?>"><?php echo $this->escapeHtml($tag); ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
             <div class="panel-body">
                 <dl class="dl-horizontal">
                     <dt><?php echo $this->translate('Description'); ?></dt>
                     <dd>
-                        <?php echo nl2br($this->escapeHtml($item->getDescription())); ?>
+                        <?php echo $this->prettyText($item->getDescription()); ?>
                     </dd>
                     <dt><?php echo $this->translate('Last Contacted'); ?></dt>
                     <dd>
@@ -46,31 +59,17 @@
             <div class="panel-body">
                 <?php $this->noteForm->setAttribute('action', $this->url(null, array('action' => 'add-note'), true)); ?>
                 <?php echo $this->partial('form/note', array('form' => $this->noteForm)); ?>
-                <ul class="media-list">
-                    <?php if (count($item->getNotes()) < 1): ?>
-                    <li class="media">No notes</li>
-                    <?php endif; ?>
-                    <?php foreach ($item->getNotes() as $note): ?>
-                    <?php echo $this->partial($note->getListItemPartial(), array('item' => $note)); ?>
-                    <?php endforeach; ?>
-                </ul>
+                <?php echo $this->listify($this->notes); ?>
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Contact Methods</h3>
             </div>
             <div class="panel-body">
-                <ul class="list-unstyled">
-                    <?php if (count($item->getContactMethods()) < 1): ?>
-                    <li>No contact methods</li>
-                    <?php endif; ?>
-                    <?php foreach ($item->getContactMethods() as $contactMethod): ?>
-                    <?php echo $this->partial($contactMethod->getListItemPartial(), array('item' => $contactMethod)); ?>
-                    <?php endforeach; ?>
-                </ul>
+                <?php echo $this->listify($item->getContactMethods()); ?>
             </div>
         </div>
         <div class="panel panel-default">
@@ -78,14 +77,7 @@
                 <h3 class="panel-title">Addresses</h3>
             </div>
             <div class="panel-body">
-                <ul class="list-unstyled">
-                    <?php if (count($item->getAddresses()) < 1): ?>
-                    <li>No addresses</li>
-                    <?php endif; ?>
-                    <?php foreach ($item->getAddresses() as $address): ?>
-                    <?php echo $this->partial($address->getListItemPartial(), array('item' => $address)); ?>
-                    <?php endforeach; ?>
-                </ul>
+                <?php echo $this->listify($item->getAddresses()); ?>
             </div>
         </div>
         <div class="panel panel-default">

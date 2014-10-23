@@ -8,76 +8,31 @@ use Omelettes\Listify\ListifyItemInterface;
 use OmelettesDoctrine\Document as OmDoc;
 
 /**
- * @ODM\Document(
- *     collection="notes",
- *     requireIndexes=true
- * )
+ * @ODM\Document(collection="tags", requireIndexes=true)
  */
-class Note extends OmDoc\AbstractAccountBoundHistoricDocument implements ListifyItemInterface
+class Tag extends OmDoc\AbstractAccountBoundDocument implements ListifyItemInterface
 {
-    const FORMAT_RAW = 'raw';
-    
     /**
      * @var string
      * @ODM\String
-     */
-    protected $body;
-    
-    /**
-     * @var string
-     * @ODM\String
-     */
-    protected $format = self::FORMAT_RAW;
-    
-    /**
-     * @var ArrayCollection
-     * @ODM\ReferenceMany(
-     *     strategy="addToSet",
-     *     discriminatorField="type",
-     *     discriminatorMap={
-     *         "c"="Tactile\Document\Contact"
-     *     }
-     * )
      * @ODM\Index
      */
-    protected $attachedTo;
+    protected $tag;
     
     public function __construct()
     {
         $this->attachedTo = new ArrayCollection();
     }
     
-    public function setBody($body)
+    public function setTag($tag)
     {
-        $this->body = $body;
+        $this->tag = $tag;
         return $this;
     }
     
-    public function getBody()
+    public function getTag()
     {
-        return $this->body;
-    }
-    
-    public function setFormat($format)
-    {
-        $this->format = $format;
-        return $this;
-    }
-    
-    public function getFormat()
-    {
-        return $this->format;
-    }
-    
-    public function setAttachedTo($items)
-    {
-        $this->attachedTo = $items;
-        return $this;
-    }
-    
-    public function getAttachedTo()
-    {
-        return $this->attachedTo;
+        return $this->tag;
     }
     
     public function getInputFilter()
@@ -86,7 +41,7 @@ class Note extends OmDoc\AbstractAccountBoundHistoricDocument implements Listify
             $filter = parent::getInputFilter();
             
             $filter->add(array(
-                'name'			=> 'body',
+                'name'			=> 'tag',
                 'required'		=> true,
                 'filters'		=> array(
                     array('name' => 'StringTrim'),
@@ -111,7 +66,7 @@ class Note extends OmDoc\AbstractAccountBoundHistoricDocument implements Listify
     
     public function getListifyItemPartial()
     {
-        return 'listify/note';
+        return 'listify/tag';
     }
     
 }

@@ -1,0 +1,30 @@
+<?php
+
+use Omelettes\Form\ViewPartialInterface;
+use Zend\Form;
+
+$fieldset = $this->element;
+
+?>
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <?php foreach ($fieldset as $element): ?>
+    <?php
+
+    if ($element instanceof ViewPartialInterface) {
+        $partial = $element->getViewPartial();
+    } elseif ($element instanceof Form\Fieldset) {
+        $partial = 'form/inline/fieldset';
+    } else {
+        $partial = 'form/inline/group';
+    }
+    
+    ?>
+    <?php echo $this->partial(
+        $partial,
+        array(
+            'element' => $element,
+            'labelColWidth' => $this->labelColWidth,
+            'inputColWidth' => $this->inputColWidth,
+        )); ?>
+    <?php endforeach; ?>
+</fieldset>

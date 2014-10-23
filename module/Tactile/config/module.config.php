@@ -8,6 +8,9 @@ return array(
                 'activities' => array(),
                 'dash' => array(),
                 'contacts' => array(),
+                'contacts/id' => array(),
+                'contacts/noid' => array(),
+                'notes' => array(),
                 'opportunities' => array(),
                 'user' => array(),
             ),
@@ -22,6 +25,7 @@ return array(
             'Tactile\Controller\Activities'    => 'Tactile\Controller\ActivitiesController',
             'Tactile\Controller\Dash'          => 'Tactile\Controller\DashboardController',
             'Tactile\Controller\Contacts'      => 'Tactile\Controller\ContactsController',
+            'Tactile\Controller\Notes'         => 'Tactile\Controller\NotesController',
             'Tactile\Controller\Opportunities' => 'Tactile\Controller\OpportunitiesController',
             'Tactile\Controller\User'          => 'Tactile\Controller\UserController',
             'Tactile\Controller\Users'         => 'Tactile\Controller\UsersController',
@@ -88,9 +92,50 @@ return array(
             'contacts' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/contacts[/:action][/:id]',
+                    'route'    => '/contacts',
                     'defaults' => array(
                         'controller' => 'Tactile\Controller\Contacts',
+                        'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'id' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'       => '/:id[/:action]',
+                            'constraints' => array(
+                                'id'     => '[a-f0-9]{32}',
+                                'action' => '[a-z][a-z0-9_-]+',
+                            ),
+                            'defaults'    => array(
+                                'controller' => 'Tactile\Controller\Contacts',
+                                'action'     => 'view',
+                            ),
+                        ),
+                    ),
+                    'noid' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'       => '/:action[/:extra]',
+                            'constraints' => array(
+                                'action' => '[a-z][a-z0-9_-]+',
+                            ),
+                            'defaults'    => array(
+                                'controller' => 'Tactile\Controller\Contacts',
+                                'action'     => 'view',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            
+            'notes' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/notes[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'Tactile\Controller\Notes',
                         'action'     => 'index',
                     ),
                 ),
@@ -142,9 +187,10 @@ return array(
             'form/fieldset/contact-method' => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
             'form/note'                    => __DIR__ . '/../view/partial/form/note.phtml',
             'html/head'                    => __DIR__ . '/../view/partial/html/head.phtml',
-            'listable/address'             => __DIR__ . '/../view/partial/listable/address.phtml',
-            'listable/contact-method'      => __DIR__ . '/../view/partial/listable/contact-method.phtml',
-            'listable/note'                => __DIR__ . '/../view/partial/listable/note.phtml',
+            'listify/address'              => __DIR__ . '/../view/partial/listify/address.phtml',
+            'listify/contact-method'       => __DIR__ . '/../view/partial/listify/contact-method.phtml',
+            'listify/note'                 => __DIR__ . '/../view/partial/listify/note.phtml',
+            'listify/tag'                  => __DIR__ . '/../view/partial/listify/tag.phtml',
             'navigation/navbar-fixed-top'  => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
             'tabulate/contact'             => __DIR__ . '/../view/partial/tabulate/contact.phtml',
         ),

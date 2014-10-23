@@ -42,6 +42,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
                     $form->setDocumentService($sm->get('Tactile\Service\NotesService'));
                     return $form;
                 },
+                'Tactile\Form\TagForm' => function ($fm) {
+                    $sm = $fm->getServiceLocator();
+                    $form = new Form\TagForm();
+                    $form->setDocumentService($sm->get('Tactile\Service\TagsService'));
+                    return $form;
+                },
                 'Tactile\Form\UserPreferencesForm' => function ($fm) {
                     $sm = $fm->getServiceLocator();
                     $form = new Form\UserPreferencesForm();
@@ -71,13 +77,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
                 // Contacts
                 'Tactile\Service\ContactsService' => function ($sm) {
                     $service = new Service\ContactsService($sm->get('doctrine.documentmanager.odm_default'));
-                    //$service->setResource();
+                    $contactsResource = $sm->get('Tactile\Service\ResourcesService')->findBy('slug', 'contacts');
+                    $service->setResource($contactsResource);
                     return $service;
                 },
                 
-                // Notes
+                // Notes & Tags
                 'Tactile\Service\NotesService' => function ($sm) {
                     $service = new Service\NotesService($sm->get('doctrine.documentmanager.odm_default'));
+                    //$service->setResource();
+                    return $service;
+                },
+                'Tactile\Service\TagsService' => function ($sm) {
+                    $service = new Service\TagsService($sm->get('doctrine.documentmanager.odm_default'));
                     //$service->setResource();
                     return $service;
                 },

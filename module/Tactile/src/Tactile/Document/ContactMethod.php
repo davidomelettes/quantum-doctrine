@@ -3,14 +3,14 @@
 namespace Tactile\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Omelettes\Listable\ListableItemInterface;
+use Omelettes\Listify\ListifyItemInterface;
 use OmelettesDoctrine\Document as OmDoc;
 use Zend\InputFilter;
 
 /**
  * @ODM\MappedSuperclass
  */
-class ContactMethod implements InputFilter\InputFilterAwareInterface, ListableItemInterface
+class ContactMethod implements InputFilter\InputFilterAwareInterface, ListifyItemInterface
 {
     /**
      * @var string
@@ -65,9 +65,9 @@ class ContactMethod implements InputFilter\InputFilterAwareInterface, ListableIt
         return $this->inputFilter;
     }
     
-    public function getListItemPartial()
+    public function getListifyItemPartial()
     {
-        return 'listable/contact-method';
+        return 'listify/contact-method';
     }
     
 }

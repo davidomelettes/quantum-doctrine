@@ -1,20 +1,21 @@
 <?php
 
-use Omelettes\Tabulatable;
+use Omelettes\Tabulate;
 
+$options = $this->options;
 $mock = $this->mock;
 $data = $this->data;
-$colspan = count($mock->getTableHeadings());
+$colspan = count($mock->getTabulateHeadings());
 
 ?>
-<form action="<?php echo $this->url(null, array('action' => 'process')); ?>">
+<form action="<?php echo $this->url($options['base_route'], array('action' => 'process')); ?>">
     <table class="table">
         <thead>
             <tr>
-                <?php if ($mock instanceof Tabulatable\TabulatableItemInterface): ?>
+                <?php if ($mock instanceof Tabulate\TabulateItemInterface): ?>
                     <th>
                     </th>
-                    <?php foreach ($mock->getTableHeadings() as $property => $heading): ?>
+                    <?php foreach ($mock->getTabulateHeadings() as $property => $heading): ?>
                     <th><?php echo $this->escapeHtml($heading); ?></th>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -30,12 +31,12 @@ $colspan = count($mock->getTableHeadings());
             </tr>
             <?php endif; ?>
             <?php foreach ($data as $datum): ?>
-            <?php if ($datum instanceof Tabulatable\TabulatableItemInterface): ?>
+            <?php if ($datum instanceof Tabulate\TabulateItemInterface): ?>
             <tr>
                 <td>
                     <input type="checkbox" name="ids[]" value="<?php echo $datum->getId(); ?>">
                 </td>
-                <?php echo $this->partial($datum->getTableRowPartial(), array('item' => $datum)); ?>
+                <?php echo $this->partial($datum->getTabulateRowPartial(), array('item' => $datum)); ?>
             </tr>
             <?php endif; ?>
             <?php endforeach; ?>

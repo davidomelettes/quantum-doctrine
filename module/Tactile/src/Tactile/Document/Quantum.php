@@ -25,18 +25,15 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
     protected $assignedTo;
     
     /**
-     * @var ArrayCollection
-     * @ODM\ReferenceMany(
-     *     strategy="addToSet",
-     *     targetDocument="Tactile\Document\Note",
-     *     sort={"created": "desc"}
-     * )
+     * @var Array
+     * @ODM\Collection
+     * @ODM\Index
      */
-    protected $notes;
+    protected $tags = array();
     
     public function __construct()
     {
-        $this->notes = new ArrayCollection();
+        //$this->tags = new ArrayCollection();
     }
     
     public function setResource(Resource $resource)
@@ -59,33 +56,35 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
     public function getAssignedTo()
     {
         return $this->assignedTo;
-    } 
+    }
     
-    public function setNotes($notes)
+    public function setTags($tags)
     {
-        $this->notes = $notes;
+        $this->tags = $tags;
         return $this;
     }
     
-    public function getNotes()
+    public function getTags()
     {
-        return $this->notes;
+        return $this->tags;
     }
     
-    public function addNotes($toAdd)
+    /*
+    public function addTags($toAdd)
     {
         foreach ($toAdd as $add) {
-            $this->notes->add($add);
+            $this->tags->add($add);
         }
         return $this;
     }
     
-    public function removeNotes($toRemove)
+    public function removeTags($toRemove)
     {
         foreach ($toRemove as $remove) {
-            $this->notes->removeElement($remove);
+            $this->tags->removeElement($remove);
         }
         return $this;
     }
+    */
     
 }

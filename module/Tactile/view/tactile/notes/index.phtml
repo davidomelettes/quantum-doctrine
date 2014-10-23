@@ -1,0 +1,22 @@
+<?php
+
+$mock = $this->mock;
+$notes = $this->notes;
+
+?>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <?php echo $this->paginationControl($notes, 'Sliding', 'paginate'); ?>
+                <div class="crud pull-right">
+                    <a class="btn btn-default" href="<?php echo $this->url(null, array('action' => 'new')); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('New Contact'); ?></a>
+                </div>
+                <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
+            </div>
+            <div class="panel-body">
+                <?php echo $this->listify($notes); ?>
+            </div>
+        </div>
+    </div>
+</div>

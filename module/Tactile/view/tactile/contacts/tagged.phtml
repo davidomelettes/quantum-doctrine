@@ -7,14 +7,14 @@ $contacts = $this->contacts;
     <div class="col-lg-9">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <?php echo $this->paginationControl($contacts, 'Sliding', 'paginate'); ?>
+                <?php #echo $this->paginationControl($contacts, 'Sliding', 'paginate'); ?>
                 <div class="crud pull-right">
-                    <a class="btn btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'new')); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('New Contact'); ?></a>
+                    <a class="btn btn-default" href="<?php #echo $this->url(null, array('action' => 'new')); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('New Contact'); ?></a>
                 </div>
                 <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
             </div>
             <div class="panel-body">
-                <?php echo $this->tabulate($contacts); ?>
+                <?php echo $this->tabulate($contacts, array('base_route'=>'contacts')); ?>
             </div>
         </div>
     </div>
@@ -26,10 +26,10 @@ $contacts = $this->contacts;
             <div class="panel-body">
                 <ul class="list-unstyled">
                     <li>
-                        <a href="<?php echo $this->url(null); ?>"><?php echo $this->translate('Import Contacts'); ?></a>
+                        <a href="<?php #echo $this->url(null); ?>"><?php echo $this->translate('Import Contacts'); ?></a>
                     </li>
                     <li>
-                        <a href="<?php echo $this->url(null); ?>"><?php echo $this->translate('Export Contacts'); ?></a>
+                        <a href="<?php #echo $this->url(null); ?>"><?php echo $this->translate('Export Contacts'); ?></a>
                     </li>
                 </ul>
             </div>

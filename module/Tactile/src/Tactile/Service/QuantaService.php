@@ -31,10 +31,27 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
     
     public function save(Doc\Quantum $quantum)
     {
-        //$resource = $this->getResource();
-        //$quantum->setResource($resource);
+        $resource = $this->getResource();
+        $quantum->setResource($resource);
     
         return parent::save($quantum);
+    }
+    
+    public function fetchByTags(array $tags)
+    {
+        $qb = $this->createDefaultFindQuery();
+        $qb->field('tags')->in($tags);
+        /*
+        foreach ($tags as $tagString) {
+            $tagsService = $this->getServiceLocator()->get('Tactile\Service\TagsService');
+            if (false !== ($tag = $tagsService->findBy('tag', $tagString))) {
+                $qb->field('tags')->includesReferenceTo($tag);
+            }
+        }
+        */
+        
+        $cursor = $qb->getQuery()->execute();
+        return $this->getPaginator($cursor);
     }
     
 }

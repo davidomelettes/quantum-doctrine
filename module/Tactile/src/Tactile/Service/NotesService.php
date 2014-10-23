@@ -18,4 +18,12 @@ class NotesService extends OmService\AbstractAccountBoundHistoricDocumentService
         return new Document\Note();
     }
     
+    public function fetchForQuantum(Document\Quantum $quantum)
+    {
+        $qb = $this->createDefaultFindQuery();
+        $qb->field('attachedTo')->includesReferenceTo($quantum);
+        $cursor = $qb->getQuery()->execute();
+        return $this->getPaginator($cursor);
+    }
+    
 }

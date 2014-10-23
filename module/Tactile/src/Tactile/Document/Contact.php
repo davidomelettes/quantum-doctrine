@@ -4,7 +4,7 @@ namespace Tactile\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Omelettes\Tabulatable\TabulatableItemInterface;
+use Omelettes\Tabulate\TabulateItemInterface;
 use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
 use Zend\InputFilter;
@@ -12,7 +12,7 @@ use Zend\InputFilter;
 /**
  * @ODM\Document(collection="contacts", requireIndexes=true)
  */
-class Contact extends Quantum implements TabulatableItemInterface
+class Contact extends Quantum implements TabulateItemInterface
 {
     /**
      * @var string
@@ -202,12 +202,12 @@ class Contact extends Quantum implements TabulatableItemInterface
         return $this->inputFilter;
     }
     
-    public function getTableRowPartial()
+    public function getTabulateRowPartial()
     {
         return 'tabulate/contact';
     }
     
-    public function getTableHeadings()
+    public function getTabulateHeadings()
     {
         return array(
             'fullName'       => 'Contact Name',

@@ -6194,6 +6194,9 @@ button.close {
 .panel .panel-body > :last-child {
   margin-bottom: 0;
 }
+form.form-inline fieldset {
+  display: inline-block;
+}
 form .form-group-hidden,
 form fieldset.submit .form-group-submit {
   margin-bottom: 0;

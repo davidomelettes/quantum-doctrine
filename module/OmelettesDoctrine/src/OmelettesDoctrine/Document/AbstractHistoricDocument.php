@@ -12,24 +12,28 @@ abstract class AbstractHistoricDocument extends AbstractDocument
     /**
      * @var \DateTime
      * @ODM\Date
+     * @ODM\Index
      */
     protected $created;
     
     /**
      * @var User
      * @ODM\ReferenceOne(targetDocument="OmelettesDoctrine\Document\User")
+     * @ODM\Index
      */
     protected $createdBy;
     
     /**
      * @var \DateTime
      * @ODM\Date
+     * @ODM\Index
      */
     protected $updated;
     
     /**
      * @var User
      * @ODM\ReferenceOne(targetDocument="OmelettesDoctrine\Document\User")
+     * @ODM\Index
      */
     protected $updatedBy;
     

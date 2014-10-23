@@ -4,9 +4,9 @@ namespace OmelettesDoctrine\Paginator;
 
 use Zend\Paginator\Paginator as ZendPaginator;
 use OmelettesDoctrine\Document as OmDoc;
-use Omelettes\Tabulatable\TabulatableSetInterface;
+use Omelettes\Tabulate\TabulateSetInterface;
 
-class Paginator extends ZendPaginator implements TabulatableSetInterface
+class Paginator extends ZendPaginator implements TabulateSetInterface
 {
     /**
      * @var OmDoc\AbstractDocument
@@ -27,9 +27,14 @@ class Paginator extends ZendPaginator implements TabulatableSetInterface
         return $this->mockDocument;
     }
     
-    public function getTableMock()
+    public function getTabulateMock()
     {
         return $this->getMockDocument();
+    }
+    
+    public function getTabulateItems()
+    {
+        return $this->getCurrentItems();
     }
     
 }

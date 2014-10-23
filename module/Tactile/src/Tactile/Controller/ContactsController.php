@@ -16,9 +16,20 @@ class ContactsController extends AbstractDoctrineController
         return $this->getServiceLocator()->get('Tactile\Service\ContactsService');
     }
     
+    /**
+     * @return Service\NotesService
+     */
     public function getNotesService()
     {
         return $this->getServiceLocator()->get('Tactile\Service\NotesService');
+    }
+    
+    /**
+     * @return Service\TagsService
+     */
+    public function getTagsService()
+    {
+        return $this->getServiceLocator()->get('Tactile\Service\TagsService');
     }
     
     public function indexAction()
@@ -78,26 +89,16 @@ class ContactsController extends AbstractDoctrineController
         }
         
         $noteForm = $this->getManagedForm('Tactile\Form\NoteForm');
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $note = new Document\Note();
-            $noteForm->bind($note);
-            $noteForm->setData($request->getPost());
-            if ($noteForm->isValid()) {
-                $notesService = $this->getNotesService();
-                $notesService->save($note);
-                $contact->getNotes()->add($note);
-                $notesService->commit();
-                $this->flashSuccess('Note addded');
-            } else {
-                $this->flashError('There was a problem adding your Note');
-            }
-        }
+        $tagForm = $this->getManagedForm('Tactile\Form\TagForm');
+        
+        $notes = $this->getNotesService()->fetchForQuantum($contact);
         
         return $this->returnViewModel(array(
             'title'    => $contact->getFullName(),
             'item'     => $contact,
+            'notes'    => $notes,
             'noteForm' => $noteForm,
+            'tagForm'  => $tagForm,
         ));
     }
     
@@ -203,9 +204,9 @@ class ContactsController extends AbstractDoctrineController
             $noteForm->bind($note);
             $noteForm->setData($request->getPost());
             if ($noteForm->isValid()) {
+                $note->getAttachedTo()->add($contact);
                 $notesService = $this->getNotesService();
                 $notesService->save($note);
-                $contact->getNotes()->add($note);
                 $notesService->commit();
                 $this->flashSuccess('Note addded');
             } else {
@@ -213,6 +214,77 @@ class ContactsController extends AbstractDoctrineController
             }
         }
         return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+    }
+    
+    public function addTagAction()
+    {
+        $contact = $this->loadRequestedContact();
+        if (!$contact) {
+            $this->flashError('Unable to locate requested Contact');
+            return $this->redirect()->toRoute('contacts');
+        }
+        
+        $tagsService = $this->getTagsService();
+        $tagForm = $this->getManagedForm('Tactile\Form\TagForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $tagForm->setData($request->getPost());
+            if ($tagForm->isValid()) {
+                $tags = preg_split('/,\s*/', $tagForm->getData()['tags']);
+                foreach ($tags as $tagString) {
+                    $tag = $tagsService->findBy('tag', $tagString);
+                    if (!$tag) {
+                        $tag = new Document\Tag();
+                        $tag->setTag($tagString);
+                        $tagsService->save($tag);
+                    }
+                    $contact->getTags()->add($tag);
+                }
+                $tagsService->commit();
+                $this->flashSuccess('Tag addded');
+            } else {
+                $this->flashError('There was a problem adding your Tag');
+            }
+        }
+        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+    }
+    
+    public function setTagsAction()
+    {
+        $contact = $this->loadRequestedContact();
+        if (!$contact) {
+            $this->flashError('Unable to locate requested Contact');
+            return $this->redirect()->toRoute('contacts');
+        }
+        
+        $tagForm = $this->getManagedForm('Tactile\Form\TagForm');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $tagForm->setData($request->getPost());
+            if ($tagForm->isValid()) {
+                $tags = preg_split('/,\s*/', $tagForm->getData()['tags']);
+                $contact->setTags($tags);
+                $this->getContactsService()->commit();
+                $this->flashSuccess('Tags saved');
+            } else {
+                $this->flashError('There was a problem setting your tags');
+            }
+        }
+        
+        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+    }
+    
+    public function taggedAction()
+    {
+        $tags = preg_split('/,/', $this->params('extra'));
+        
+        $paginator = $this->getContactsService()->fetchByTags($tags);
+        $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
+        
+        return $this->returnViewModel(array(
+            'title'    => 'Tagged Contacts',
+            'contacts' => $paginator,
+        ));
     }
     
 }

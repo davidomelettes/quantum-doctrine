@@ -1044,12 +1044,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vixriihi/zf2.git",
-                "reference": "b8ce565f7b7200a9d4742a6af59cce1fd255964a"
+                "reference": "195487cac75d71e6d218122c5a592136c0bc4cc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vixriihi/zf2/zipball/b8ce565f7b7200a9d4742a6af59cce1fd255964a",
-                "reference": "b8ce565f7b7200a9d4742a6af59cce1fd255964a",
+                "url": "https://api.github.com/repos/vixriihi/zf2/zipball/195487cac75d71e6d218122c5a592136c0bc4cc6",
+                "reference": "195487cac75d71e6d218122c5a592136c0bc4cc6",
                 "shasum": ""
             },
             "require": {
@@ -1111,7 +1111,7 @@
             },
             "require-dev": {
                 "doctrine/annotations": ">=1.0",
-                "fabpot/php-cs-fixer": "dev-master",
+                "fabpot/php-cs-fixer": "dev-master#fcbb09b5204",
                 "ircmaxell/random-lib": "dev-master",
                 "ircmaxell/security-lib": "dev-master",
                 "mikey179/vfsstream": "1.2.*",
@@ -1161,7 +1161,7 @@
             "support": {
                 "source": "https://github.com/vixriihi/zf2/tree/fix/adding-collections-dynamically"
             },
-            "time": "2014-10-03 14:09:04"
+            "time": "2014-10-05 07:32:43"
         },
         {
             "name": "zendframework/zendxml",

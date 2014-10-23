@@ -3,6 +3,9 @@
     <div class="media-body">
         <?php echo $this->prettyUser($note->getCreatedBy()); ?>
         <?php echo $this->escapeHtml($note->getBody()); ?>
+        <?php foreach ($note->getAttachedTo() as $item): ?>
+        <?php echo $item->getFullName(); ?>
+        <?php endforeach; ?>
         <br>
         <span class="text-muted"><?php echo $this->prettyTime($note->getCreated()); ?></span>
     </div>

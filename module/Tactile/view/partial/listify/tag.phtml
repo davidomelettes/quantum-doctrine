@@ -1,0 +1,9 @@
+<?php
+
+$options = $this->options;
+$tag = $this->item;
+
+?>
+<li class="tag">
+    <a href="<?php echo $this->url($options['route_name'], array('tags' => $tag->getTag())); ?>" class="btn btn-xs btn-info"><?php echo $this->escapeHtml($tag->getTag()); ?></a>
+</li>

@@ -1,0 +1,30 @@
+<?php
+
+use Zend\Form;
+
+$form = $this->form;
+if (!$form->getAttribute('action')) {
+    $form->setAttribute('action', $this->url(null, array(), array(), true));
+}
+$form->setAttribute('class', ($form->getAttribute('class') ? ' ' : '') . 'form-inline');
+$form->prepare();
+
+?>
+
+<?php echo $this->form()->openTag($form); ?>
+<?php foreach ($form as $element): ?>
+<?php if ($element instanceof Form\Fieldset): ?>
+<?php echo $this->partial(
+    'form/inline/fieldset',
+    array(
+        'element' => $element,
+    )); ?>
+<?php else: ?>
+<?php echo $this->partial(
+    'form/inline/group',
+    array(
+        'element' => $element,
+    )); ?>
+<?php endif; ?>
+<?php endforeach; ?>
+<?php echo $this->form()->closeTag($form); ?>
