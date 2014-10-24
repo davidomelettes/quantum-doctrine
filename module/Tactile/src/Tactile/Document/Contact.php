@@ -12,10 +12,7 @@ use Zend\InputFilter;
 /**
  * @ODM\Document(
  *     collection="contacts",
- *     requireIndexes=true,
- *     indexes={
- *         @ODM\Index(keys={"tags.name"="asc"})
- *     }
+ *     requireIndexes=true
  * )
  */
 class Contact extends Quantum implements TabulateItemInterface

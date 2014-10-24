@@ -2,7 +2,7 @@
 
 namespace Tactile\Service;
 
-use Tactile\Document as Doc;
+use Tactile\Document;
 use OmelettesDoctrine\Service\AbstractAccountBoundHistoricDocumentService;
 
 abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
@@ -12,7 +12,7 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
      */
     protected $resource;
     
-    public function setResource(Doc\Resource $resource)
+    public function setResource(Document\Resource $resource)
     {
         $this->resource = $resource;
         return $this;
@@ -23,13 +23,13 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
      */
     public function getResource()
     {
-        if (!$this->resource instanceof Doc\Resource) {
+        if (!$this->resource instanceof Document\Resource) {
             throw new \Exception('Resource not set');
         }
         return $this->resource;
     }
     
-    public function save(Doc\Quantum $quantum)
+    public function save(Document\Quantum $quantum)
     {
         $resource = $this->getResource();
         $quantum->setResource($resource);
@@ -37,19 +37,15 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
         return parent::save($quantum);
     }
     
-    public function fetchByTags(array $tags)
+    public function fetchByTags($tags)
     {
         $qb = $this->createDefaultFindQuery();
-        //$qb->field('tags')->in($tags);
-        $qb->field('tags.name')->in($tags);
-        /*
-        foreach ($tags as $tagString) {
-            $tagsService = $this->getServiceLocator()->get('Tactile\Service\TagsService');
-            if (false !== ($tag = $tagsService->findBy('tag', $tagString))) {
-                
+        foreach ($tags as $tag) {
+            if (!$tag instanceof Document\Tag) {
+                throw new \Exception('Expected a Tag');
             }
+            $qb->field('tags')->includesReferenceTo($tag);
         }
-        */
         
         $cursor = $qb->getQuery()->execute();
         return $this->getPaginator($cursor);

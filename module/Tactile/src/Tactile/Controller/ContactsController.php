@@ -292,14 +292,23 @@ class ContactsController extends AbstractDoctrineController
     
     public function taggedAction()
     {
-        $tags = preg_split('/,/', $this->params('extra'));
+        $tagStrings = preg_split('/,/', $this->params('extra'));
+        $tags = $this->getTagsService()->fetchWithNames($tagStrings);
+        $title = 'Contacts Tagged: ';
+        $tagNames = array();
+        foreach ($tags as $tag) {
+            $tagNames[] = '"' . $tag->getName() . '"';
+        }
+        $title .= implode(', ', $tagNames);
         
         $paginator = $this->getContactsService()->fetchByTags($tags);
         $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
         
         return $this->returnViewModel(array(
-            'title'    => 'Tagged Contacts',
+            'title'    => $title,
+            'resource' => $this->getContactsService()->getResource(),
             'contacts' => $paginator,
+            'tags'     => $tags,
         ));
     }
     

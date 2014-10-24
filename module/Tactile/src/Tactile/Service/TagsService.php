@@ -18,4 +18,12 @@ class TagsService extends OmService\AbstractAccountBoundDocumentService
         return new Document\Tag();
     }
     
+    public function fetchWithNames(array $names)
+    {
+        $qb = $this->createDefaultFindQuery();
+        $qb->field('name')->in($names);
+        $cursor = $qb->getQuery()->execute();
+        return $this->getPaginator($cursor);
+    }
+    
 }

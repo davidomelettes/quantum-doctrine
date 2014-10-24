@@ -8,18 +8,19 @@ $identity = $this->identity();
 <nav class="navbar navbar-fixed-bottom navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="om-bottom-navbar">
+            <?php if (count($identity->getRememberedRoutes()) > 0): ?>
+            <p class="navbar-text">
+                <span class="glyphicon glyphicon-time"></span>
+                Recently Viewed:
+            </p>
             <ul class="nav navbar-nav">
-                <li>
-                    <a>
-                    <span class="glyphicon glyphicon-time"></span>
-                    </a>
-                </li>
                 <?php foreach ($identity->getRememberedRoutes() as $route): ?>
                 <li>
                     <a href="<?php echo $this->url($route->getName(), $route->getOptions()); ?>"><?php echo $this->escapeHtml($route->getLabel()); ?></a>
                 </li>
                 <?php endforeach; ?>
             </ul>
+            <?php endif; ?>
         </div>
     </div>
 </nav>

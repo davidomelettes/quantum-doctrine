@@ -147,16 +147,6 @@ class User extends AbstractAccountBoundHistoricDocument
         return $this->rememberedRoutes;
     }
     
-    public function hasRememberedRoute(RememberedRoute $route)
-    {
-        foreach ($this->getRememberedRoutes() as $rr) {
-            if ($rr->getName() === $route->getName() && $rr->getOptions() === $route->getOptions()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
