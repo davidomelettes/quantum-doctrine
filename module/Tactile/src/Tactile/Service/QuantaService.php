@@ -40,12 +40,13 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
     public function fetchByTags(array $tags)
     {
         $qb = $this->createDefaultFindQuery();
-        $qb->field('tags')->in($tags);
+        //$qb->field('tags')->in($tags);
+        $qb->field('tags.name')->in($tags);
         /*
         foreach ($tags as $tagString) {
             $tagsService = $this->getServiceLocator()->get('Tactile\Service\TagsService');
             if (false !== ($tag = $tagsService->findBy('tag', $tagString))) {
-                $qb->field('tags')->includesReferenceTo($tag);
+                
             }
         }
         */

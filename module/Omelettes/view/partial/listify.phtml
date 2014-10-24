@@ -6,7 +6,7 @@ $options = $this->options;
 ?>
 <ul class="<?php echo $options['list_class']; ?>">
     <?php if (count($data) < 1): ?>
-    <li><?php echo $this->translate('No items'); ?></li>
+    <li><?php echo $this->translate($options['list_empty_text']); ?></li>
     <?php endif; ?>
     <?php foreach($data as $item): ?>
     <?php echo $this->partial($item->getListifyItemPartial(), array('item' => $item, 'options' => $options)); ?>

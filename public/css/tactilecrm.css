@@ -6251,6 +6251,9 @@ body {
 .navbar-inverse .navbar-brand {
   color: #fff;
 }
+table.table ul {
+  margin: 0;
+}
 form .collection.addresses fieldset {
   border-top: 1px solid #eee;
   padding-top: 1em;

@@ -10,7 +10,7 @@ class TagsService extends OmService\AbstractAccountBoundDocumentService
 {
     public function defaultSort(Query\Builder $qb)
     {
-        return $qb->sort('tag', 'asc');
+        return $qb->sort('name', 'asc');
     }
     
     public function createDocument()

@@ -100,13 +100,12 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'id' => array(
+                    'noid' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'       => '/:id[/:action]',
+                            'route'       => '/:action[/:extra]',
                             'constraints' => array(
-                                'id'     => '[a-f0-9]{32}',
-                                'action' => '[a-z][a-z0-9_-]+',
+                                'action' => '[a-z][a-z0-9_-]{1,30}',
                             ),
                             'defaults'    => array(
                                 'controller' => 'Tactile\Controller\Contacts',
@@ -114,11 +113,12 @@ return array(
                             ),
                         ),
                     ),
-                    'noid' => array(
+                    'id' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'       => '/:action[/:extra]',
+                            'route'       => '/:id[/:action]',
                             'constraints' => array(
+                                'id'     => '[a-z0-9]{32}',
                                 'action' => '[a-z][a-z0-9_-]+',
                             ),
                             'defaults'    => array(
@@ -183,16 +183,17 @@ return array(
         'not_found_template'		=> 'error/404',
         'exception_template'		=> 'error/index',
         'template_map' => array(
-            'form/fieldset/address'        => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
-            'form/fieldset/contact-method' => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
-            'form/note'                    => __DIR__ . '/../view/partial/form/note.phtml',
-            'html/head'                    => __DIR__ . '/../view/partial/html/head.phtml',
-            'listify/address'              => __DIR__ . '/../view/partial/listify/address.phtml',
-            'listify/contact-method'       => __DIR__ . '/../view/partial/listify/contact-method.phtml',
-            'listify/note'                 => __DIR__ . '/../view/partial/listify/note.phtml',
-            'listify/tag'                  => __DIR__ . '/../view/partial/listify/tag.phtml',
-            'navigation/navbar-fixed-top'  => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
-            'tabulate/contact'             => __DIR__ . '/../view/partial/tabulate/contact.phtml',
+            'form/fieldset/address'          => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
+            'form/fieldset/contact-method'   => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
+            'form/note'                      => __DIR__ . '/../view/partial/form/note.phtml',
+            'html/head'                      => __DIR__ . '/../view/partial/html/head.phtml',
+            'listify/address'                => __DIR__ . '/../view/partial/listify/address.phtml',
+            'listify/contact-method'         => __DIR__ . '/../view/partial/listify/contact-method.phtml',
+            'listify/note'                   => __DIR__ . '/../view/partial/listify/note.phtml',
+            'listify/tag'                    => __DIR__ . '/../view/partial/listify/tag.phtml',
+            'navigation/navbar-fixed-top'    => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
+            'navigation/navbar-fixed-bottom' => __DIR__ . '/../view/partial/navigation/navbar-fixed-bottom.phtml',
+            'tabulate/contact'               => __DIR__ . '/../view/partial/tabulate/contact.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

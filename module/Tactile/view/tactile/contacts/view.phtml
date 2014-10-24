@@ -12,13 +12,11 @@
             <div class="panel-heading">
                 <div class="tags">
                     <div class="pull-right">
-                        <?php $this->tagForm->setAttribute('action', $this->url(null, array('action' => 'set-tags'), true)); ?>
+                        <?php $this->tagForm->setAttribute('action', $this->url('contacts/id', array('action' => 'set-tags'), true)); ?>
                         <?php echo $this->partial('form/inline', array('form' => $this->tagForm)); ?>
                     </div>
                     <ul class="tags list-inline" style="margin: 0;">
-                        <?php foreach ($item->getTags() as $tag): ?>
-                        <li><a class="btn btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag))); ?>"><?php echo $this->escapeHtml($tag); ?></a></li>
-                        <?php endforeach; ?>
+                        <?php echo $this->listify($item->getTags(), array('list_class' => 'list-inline', 'list_empty_text' => 'No Tags', 'route_name' => 'contacts/noid')); ?>
                     </ul>
                 </div>
             </div>

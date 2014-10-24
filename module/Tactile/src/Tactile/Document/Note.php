@@ -9,8 +9,7 @@ use OmelettesDoctrine\Document as OmDoc;
 
 /**
  * @ODM\Document(
- *     collection="notes",
- *     requireIndexes=true
+ *     collection="notes"
  * )
  */
 class Note extends OmDoc\AbstractAccountBoundHistoricDocument implements ListifyItemInterface

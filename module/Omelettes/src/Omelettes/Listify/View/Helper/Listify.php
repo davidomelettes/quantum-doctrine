@@ -9,7 +9,9 @@ use Omelettes\Listify\ListifyItemInterface;
 class Listify extends AbstractHelper
 {
     protected $options = array(
-        'list_class' => 'list-unstyled',
+        'list_class'      => 'list-unstyled',
+        'list_empty_text' => 'No items',
+        'route_name'      => null,
     );
     
     public function __invoke($data, array $options = array())

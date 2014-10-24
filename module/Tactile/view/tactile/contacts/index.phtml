@@ -26,9 +26,11 @@ $contacts = $this->contacts;
             <div class="panel-body">
                 <ul class="list-unstyled">
                     <li>
+                        <span class="glyphicon glyphicon-upload"></span>
                         <a href="<?php echo $this->url(null); ?>"><?php echo $this->translate('Import Contacts'); ?></a>
                     </li>
                     <li>
+                        <span class="glyphicon glyphicon-download"></span>
                         <a href="<?php echo $this->url(null); ?>"><?php echo $this->translate('Export Contacts'); ?></a>
                     </li>
                 </ul>
@@ -39,7 +41,10 @@ $contacts = $this->contacts;
                 <h3 class="panel-title"><?php echo $this->translate('Contact Tags'); ?></h3>
             </div>
             <div class="panel-body">
-                <ul class="list-unstyled">
+                <ul class="list-inline">
+                    <?php foreach ($this->resource->getTags() as $tag): ?>
+                    <li><a class="btn btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag))); ?>"><?php echo $this->escapeHtml($tag); ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </div>

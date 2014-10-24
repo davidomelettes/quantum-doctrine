@@ -99,6 +99,26 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
         return $this->tags;
     }
     
+    public function addTags(array $toAdd)
+    {
+        foreach ($toAdd as $add) {
+            if (!in_array($add, $this->tags)) {
+                $this->tags[] = $add;
+            }
+        }
+        return $this;
+    }
+    
+    public function removeTags($toRemove)
+    {
+        foreach ($toRemove as $remove) {
+            if (false !== ($found = array_search($remove, $this->tags))) {
+                unset($this->tags[$found]);
+            }
+        }
+        return $this;
+    }
+    
     public function getInputFilter()
     {
         if (!$this->inputFilter) {

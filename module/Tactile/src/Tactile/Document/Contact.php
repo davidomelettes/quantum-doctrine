@@ -10,7 +10,13 @@ use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
 use Zend\InputFilter;
 
 /**
- * @ODM\Document(collection="contacts", requireIndexes=true)
+ * @ODM\Document(
+ *     collection="contacts",
+ *     requireIndexes=true,
+ *     indexes={
+ *         @ODM\Index(keys={"tags.name"="asc"})
+ *     }
+ * )
  */
 class Contact extends Quantum implements TabulateItemInterface
 {
@@ -211,8 +217,8 @@ class Contact extends Quantum implements TabulateItemInterface
     {
         return array(
             'fullName'       => 'Contact Name',
+            'contactMethods' => 'Contact Details',
             'created'        => 'Last Contacted',
-            'lastContacted'  => 'Created',
         );
     }
     

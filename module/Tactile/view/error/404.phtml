@@ -6,6 +6,7 @@
 <?php if (isset($this->reason) && $this->reason): ?>
 
 <?php
+$sm = $this->getHelperPluginManager()->getServiceLocator();
 $reasonMessage= '';
 switch ($this->reason) {
     case 'error-controller-cannot-dispatch':

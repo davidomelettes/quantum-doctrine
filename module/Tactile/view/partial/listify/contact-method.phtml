@@ -2,7 +2,7 @@
 <li>
 <?php switch ($item->getType()): ?>
 <?php case 'e': ?>
-    <span class="glyphicon glyphicon-envelope"></span> <a href=""><?php echo $this->escapeHtml($item->getDetail()); ?></a>
+    <span class="glyphicon glyphicon-envelope"></span> <a href="mailto:<?php echo $this->escapeHtmlAttr($item->getDetail()); ?>"><?php echo $this->escapeHtml($item->getDetail()); ?></a>
 <?php break; ?>
 <?php case 'f': ?>
     <span class="glyphicon glyphicon-print"></span> <?php echo $this->escapeHtml($item->getDetail()); ?>

@@ -17,22 +17,17 @@ class Tag extends OmDoc\AbstractAccountBoundDocument implements ListifyItemInter
      * @ODM\String
      * @ODM\Index
      */
-    protected $tag;
+    protected $name;
     
-    public function __construct()
+    public function setName($tag)
     {
-        $this->attachedTo = new ArrayCollection();
-    }
-    
-    public function setTag($tag)
-    {
-        $this->tag = $tag;
+        $this->name = $tag;
         return $this;
     }
     
-    public function getTag()
+    public function getName()
     {
-        return $this->tag;
+        return $this->name;
     }
     
     public function getInputFilter()
@@ -41,7 +36,7 @@ class Tag extends OmDoc\AbstractAccountBoundDocument implements ListifyItemInter
             $filter = parent::getInputFilter();
             
             $filter->add(array(
-                'name'			=> 'tag',
+                'name'			=> 'name',
                 'required'		=> true,
                 'filters'		=> array(
                     array('name' => 'StringTrim'),
@@ -52,7 +47,7 @@ class Tag extends OmDoc\AbstractAccountBoundDocument implements ListifyItemInter
                         'options'	=> array(
                             'encoding'	=> 'UTF-8',
                             'min'		=> 1,
-                            'max'		=> 255,
+                            'max'		=> 32,
                         ),
                     ),
                 ),

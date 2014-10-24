@@ -3,8 +3,8 @@
     <a href="<?php echo $this->url('contacts/id', array('id' => $item->getId())); ?>"><?php echo $this->escapeHtml($item->getFullName()); ?></a>
 </td>
 <td>
-    <?php echo $this->prettyTime($item->getLastContacted()->getDate()); ?>
+    <?php echo $this->listify($item->getContactMethods()); ?>
 </td>
 <td>
-    <?php echo $this->prettyTime($item->getCreated()); ?>
+    <?php echo ucfirst($this->prettyTime($item->getLastContacted()->getDate())); ?>
 </td>

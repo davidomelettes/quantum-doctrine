@@ -26,14 +26,15 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
     
     /**
      * @var Array
-     * @ODM\Collection
-     * @ODM\Index
+     * @ODM\ReferenceMany(
+     *     targetDocument="Tactile\Document\Tag"
+     * )
      */
     protected $tags = array();
     
     public function __construct()
     {
-        //$this->tags = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
     
     public function setResource(Resource $resource)
@@ -69,7 +70,6 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
         return $this->tags;
     }
     
-    /*
     public function addTags($toAdd)
     {
         foreach ($toAdd as $add) {
@@ -85,6 +85,5 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
         }
         return $this;
     }
-    */
     
 }

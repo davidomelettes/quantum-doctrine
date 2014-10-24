@@ -5,6 +5,7 @@ namespace Tactile\Controller;
 use Tactile\Document;
 use Tactile\Service;
 use OmelettesDoctrine\Controller\AbstractDoctrineController;
+use Zend\Filter;
 
 class ContactsController extends AbstractDoctrineController
 {
@@ -39,6 +40,7 @@ class ContactsController extends AbstractDoctrineController
         
         return $this->returnViewModel(array(
             'title'    => 'Contacts',
+            'resource' => $this->getContactsService()->getResource(),
             'contacts' => $paginator,
         ));
     }
@@ -58,7 +60,7 @@ class ContactsController extends AbstractDoctrineController
                 $contactsService->save($contact);
                 $contactsService->commit();
                 $this->flashSuccess('Contact created successfully');
-                return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+                return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
             } else {
                 $this->flashError('There was a problem saving the Contact');
             }
@@ -87,6 +89,7 @@ class ContactsController extends AbstractDoctrineController
             $this->flashError('Unable to locate requested Contact');
             return $this->redirect()->toRoute('contacts');
         }
+        $this->rememberRoute($contact->getFullName());
         
         $noteForm = $this->getManagedForm('Tactile\Form\NoteForm');
         $tagForm = $this->getManagedForm('Tactile\Form\TagForm');
@@ -140,7 +143,7 @@ class ContactsController extends AbstractDoctrineController
                 $contactsService->save($contact);
                 $contactsService->commit();
                 $this->flashSuccess('Contact updated successfully');
-                return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+                return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
             } else {
                 $this->flashError('There was a problem updating the Contact');
             }
@@ -213,7 +216,7 @@ class ContactsController extends AbstractDoctrineController
                 $this->flashError('There was a problem adding your Note');
             }
         }
-        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+        return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
     }
     
     public function addTagAction()
@@ -246,7 +249,7 @@ class ContactsController extends AbstractDoctrineController
                 $this->flashError('There was a problem adding your Tag');
             }
         }
-        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+        return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
     }
     
     public function setTagsAction()
@@ -263,15 +266,28 @@ class ContactsController extends AbstractDoctrineController
             $tagForm->setData($request->getPost());
             if ($tagForm->isValid()) {
                 $tags = preg_split('/,\s*/', $tagForm->getData()['tags']);
-                $contact->setTags($tags);
-                $this->getContactsService()->commit();
+                $trimFilter = new Filter\StringTrim();
+                $tagsService = $this->getTagsService();
+                foreach ($tags as $tagString) {
+                    $tagString = $trimFilter->filter($tagString);
+                    $tag = $tagsService->findBy('name', $tagString);
+                    if (!$tag) {
+                        $tag = new Document\Tag();
+                        $tag->setName($tagString);
+                        $tagsService->save($tag);
+                    }
+                    $contact->getTags()->add($tag);
+                }
+                $contactsService = $this->getContactsService();
+                //$contactsService->getResource()->addTags($tags);
+                $contactsService->commit();
                 $this->flashSuccess('Tags saved');
             } else {
                 $this->flashError('There was a problem setting your tags');
             }
         }
         
-        return $this->redirect()->toRoute('contacts', array('action' => 'view', 'id' => $contact->getId()));
+        return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
     }
     
     public function taggedAction()

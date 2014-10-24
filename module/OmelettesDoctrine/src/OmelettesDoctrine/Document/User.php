@@ -50,6 +50,20 @@ class User extends AbstractAccountBoundHistoricDocument
      */
     protected $prefs;
     
+    /**
+     * @var ArrayCollection
+     * @ODM\EmbedMany(
+     *     targetDocument="OmelettesDoctrine\Document\RememberedRoute",
+     *     strategy="addToSet",
+     * )
+     */
+    protected $rememberedRoutes;
+    
+    public function __construct()
+    {
+        $this->rememberedRoutes = new ArrayCollection();
+    }
+    
     public function setAclRole($role)
     {
         $this->aclRole = $role;
@@ -120,6 +134,27 @@ class User extends AbstractAccountBoundHistoricDocument
     public function getPrefs()
     {
         return $this->prefs;
+    }
+    
+    public function setRememberedRoutes($routes)
+    {
+        $this->rememberedRoutes = $routes;
+        return $this;
+    }
+    
+    public function getRememberedRoutes()
+    {
+        return $this->rememberedRoutes;
+    }
+    
+    public function hasRememberedRoute(RememberedRoute $route)
+    {
+        foreach ($this->getRememberedRoutes() as $rr) {
+            if ($rr->getName() === $route->getName() && $rr->getOptions() === $route->getOptions()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public function getInputFilter()

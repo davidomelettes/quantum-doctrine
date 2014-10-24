@@ -5,5 +5,5 @@ $tag = $this->item;
 
 ?>
 <li class="tag">
-    <a href="<?php echo $this->url($options['route_name'], array('tags' => $tag->getTag())); ?>" class="btn btn-xs btn-info"><?php echo $this->escapeHtml($tag->getTag()); ?></a>
+    <a href="<?php echo $this->url($options['route_name'], array('extra' => $tag->getName())); ?>" class="btn btn-xs btn-info"><?php echo $this->escapeHtml($tag->getName()); ?></a>
 </li>
