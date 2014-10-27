@@ -8,7 +8,10 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
 
 /**
- * @ODM\Document(collection="resources", requireIndexes=true)
+ * @ODM\Document(
+ *     collection="resources",
+ *     requireIndexes=true
+ * )
  * @ODM\UniqueIndex(keys={"account.id"="asc", "slug"="asc"})
  */
 class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
@@ -40,7 +43,10 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
     
     /**
      * @var Array
-     * @ODM\Collection
+     * @ODM\ReferenceMany(
+     *     targetDocument="Tactile\Document\Tag"
+     * )
+     * @ODM\Index
      */
     protected $tags = array();
     
@@ -99,12 +105,10 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
         return $this->tags;
     }
     
-    public function addTags(array $toAdd)
+    public function addTags($toAdd)
     {
         foreach ($toAdd as $add) {
-            if (!in_array($add, $this->tags)) {
-                $this->tags[] = $add;
-            }
+            $this->tags->add($add);
         }
         return $this;
     }
@@ -112,9 +116,7 @@ class Resource extends OmDoc\AbstractAccountBoundHistoricDocument
     public function removeTags($toRemove)
     {
         foreach ($toRemove as $remove) {
-            if (false !== ($found = array_search($remove, $this->tags))) {
-                unset($this->tags[$found]);
-            }
+            $this->tags->removeElement($remove);
         }
         return $this;
     }

@@ -43,7 +43,9 @@ $contacts = $this->contacts;
             <div class="panel-body">
                 <ul class="list-inline">
                     <?php foreach ($this->resource->getTags() as $tag): ?>
-                    <li><a class="btn btn-sm btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag))); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tag); ?></a></li>
+                    <li>
+                        <a class="btn btn-xs btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag->getName()))); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tag->getName()); ?></a>
+                    </li>
                     <?php endforeach; ?>
                 </ul>
             </div>

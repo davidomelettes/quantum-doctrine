@@ -219,39 +219,6 @@ class ContactsController extends AbstractDoctrineController
         return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
     }
     
-    public function addTagAction()
-    {
-        $contact = $this->loadRequestedContact();
-        if (!$contact) {
-            $this->flashError('Unable to locate requested Contact');
-            return $this->redirect()->toRoute('contacts');
-        }
-        
-        $tagsService = $this->getTagsService();
-        $tagForm = $this->getManagedForm('Tactile\Form\TagForm');
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $tagForm->setData($request->getPost());
-            if ($tagForm->isValid()) {
-                $tags = preg_split('/,\s*/', $tagForm->getData()['tags']);
-                foreach ($tags as $tagString) {
-                    $tag = $tagsService->findBy('tag', $tagString);
-                    if (!$tag) {
-                        $tag = new Document\Tag();
-                        $tag->setTag($tagString);
-                        $tagsService->save($tag);
-                    }
-                    $contact->getTags()->add($tag);
-                }
-                $tagsService->commit();
-                $this->flashSuccess('Tag addded');
-            } else {
-                $this->flashError('There was a problem adding your Tag');
-            }
-        }
-        return $this->redirect()->toRoute('contacts/id', array('id' => $contact->getId()));
-    }
-    
     public function setTagsAction()
     {
         $contact = $this->loadRequestedContact();
@@ -268,6 +235,7 @@ class ContactsController extends AbstractDoctrineController
                 $tags = preg_split('/,\s*/', $tagForm->getData()['tags']);
                 $trimFilter = new Filter\StringTrim();
                 $tagsService = $this->getTagsService();
+                $contactsService = $this->getContactsService();
                 foreach ($tags as $tagString) {
                     $tagString = $trimFilter->filter($tagString);
                     $tag = $tagsService->findBy('name', $tagString);
@@ -277,9 +245,8 @@ class ContactsController extends AbstractDoctrineController
                         $tagsService->save($tag);
                     }
                     $contact->getTags()->add($tag);
+                    $contactsService->getResource()->getTags()->add($tag);
                 }
-                $contactsService = $this->getContactsService();
-                //$contactsService->getResource()->addTags($tags);
                 $contactsService->commit();
                 $this->flashSuccess('Tags saved');
             } else {
@@ -305,10 +272,10 @@ class ContactsController extends AbstractDoctrineController
         $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
         
         return $this->returnViewModel(array(
-            'title'    => $title,
-            'resource' => $this->getContactsService()->getResource(),
-            'contacts' => $paginator,
-            'tags'     => $tags,
+            'title'              => $title,
+            'resource'           => $this->getContactsService()->getResource(),
+            'contacts'           => $paginator,
+            'selectedTags'       => $tagStrings,
         ));
     }
     

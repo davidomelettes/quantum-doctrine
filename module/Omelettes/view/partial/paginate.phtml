@@ -4,9 +4,15 @@
     <?php else: ?>
     <li class="disabled"><a href="#">&laquo;</a></li>
     <?php endif; ?>
+    <?php if ($this->totalItemCount): ?>
     <li>
         <a href="#"><?php echo $this->firstItemNumber; ?> &ndash; <?php echo $this->lastItemNumber ?> of <?php echo $this->totalItemCount; ?></a>
     </li>
+    <?php else: ?>
+    <li class="disabled">
+        <a href="#">No Results</a>
+    </li>
+    <?php endif; ?>
     <?php if (isset($this->next)): ?>
     <li><a href="<?php echo $this->url(null, array(), array('query' => array('page' => $this->next)), true); ?>">&raquo;</a></li>
     <?php else: ?>

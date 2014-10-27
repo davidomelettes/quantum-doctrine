@@ -7,7 +7,7 @@ $contacts = $this->contacts;
     <div class="col-lg-9">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <?php #echo $this->paginationControl($contacts, 'Sliding', 'paginate'); ?>
+                <?php echo $this->paginationControl($contacts, 'Sliding', 'paginate'); ?>
                 <div class="crud pull-right">
                     <a class="btn btn-default" href="<?php #echo $this->url(null, array('action' => 'new')); ?>"><span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('New Contact'); ?></a>
                 </div>
@@ -40,8 +40,23 @@ $contacts = $this->contacts;
             </div>
             <div class="panel-body">
                 <ul class="list-inline">
+                    <?php $extraTags = $this->selectedTags; ?>
                     <?php foreach ($this->resource->getTags() as $tag): ?>
-                    <li><a class="btn btn-sm btn-default" href="<?php echo $this->url('contacts/noid', array('action' => 'tagged', 'extra' => $this->escapeHtml($tag))); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tag); ?></a></li>
+                    <?php
+                        if (in_array($tag->getName(), $extraTags)) {
+                            $btnClass = 'btn-info';
+                            $newSelection = array_diff($extraTags, [$tag->getName()]);
+                        } else {
+                            $btnClass = 'btn-default';
+                            $newSelection = array_merge($extraTags, [$tag->getName()]);
+                        }
+                        $route = empty($newSelection) ? 'contacts' : 'contacts/noid';
+                        $action = empty($newSelection) ? 'index' : 'tagged';
+                        $extra = empty($newSelection) ? null : implode(',', $newSelection);
+                    ?>
+                    <li>
+                        <a class="btn btn-xs <?php echo $btnClass; ?>" href="<?php echo $this->url($route, array('action' => $action, 'extra' => $extra)); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tag->getName()); ?></a>
+                    </li>
                     <?php endforeach; ?>
                 </ul>
             </div>

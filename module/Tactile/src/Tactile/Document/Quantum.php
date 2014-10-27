@@ -29,6 +29,7 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
      * @ODM\ReferenceMany(
      *     targetDocument="Tactile\Document\Tag"
      * )
+     * @ODM\Index
      */
     protected $tags = array();
     
