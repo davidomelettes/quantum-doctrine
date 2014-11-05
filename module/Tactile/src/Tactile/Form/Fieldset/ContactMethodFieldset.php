@@ -3,7 +3,6 @@
 namespace Tactile\Form\Fieldset;
 
 use OmelettesDoctrine\Form\Fieldset\AbstractDocumentFieldset;
-use Tactile\Stdlib\Hydrator\ContactMethodHydrator;
 
 class ContactMethodFieldset extends AbstractDocumentFieldset
 {

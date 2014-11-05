@@ -9,10 +9,15 @@ use OmelettesDoctrine\Document as OmDoc;
 use OmelettesDoctrine\Form\Fieldset\WhenFieldset;
 use Zend\InputFilter;
 
+/*
+ * indexes={
+ *         @ODM\Index(keys={"tags"="asc"})
+ *     }
+ */
+
 /**
  * @ODM\Document(
- *     collection="contacts",
- *     requireIndexes=true
+ *     collection="contacts"
  * )
  */
 class Contact extends Quantum implements TabulateItemInterface
@@ -194,6 +199,11 @@ class Contact extends Quantum implements TabulateItemInterface
                         ),
                     ),
                 ),
+            ));
+            
+            $filter->add(array(
+                'name'			=> 'assignedTo',
+                'required'		=> false,
             ));
             
             $when = new OmDoc\When();

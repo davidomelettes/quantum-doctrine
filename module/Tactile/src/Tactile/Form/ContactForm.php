@@ -15,7 +15,7 @@ class ContactForm extends AbstractDocumentForm
             'name'       => 'fullName',
             'type'       => 'Zend\Form\Element\Text',
             'options'    => array(
-                'label'    => "Contact's Name",
+                'label'    => "Contact Name",
             ),
             'attributes' => array(
                 'id'       => $this->getName() . '-fullName',
@@ -36,7 +36,7 @@ class ContactForm extends AbstractDocumentForm
         
         $whenFieldset = $this->getServiceLocator()->get('OmelettesDoctrine\Form\Fieldset\WhenFieldset');
         $whenFieldset->setName('lastContacted')
-            ->setLabel('Last Contacted');
+                     ->setLabel('Last Contacted');
         $this->add($whenFieldset);
         
         $contactMethodFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\ContactMethodFieldset');
@@ -93,7 +93,7 @@ class ContactForm extends AbstractDocumentForm
         ));
         
         $usersService = $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Service\UsersService');
-        $userOptions = array();
+        $userOptions = array('' => 'Nobody');
         foreach ($usersService->fetchAllAccountUsers() as $user) {
             $userOptions[$user->getId()] = $user->getFullName();
         }
@@ -106,7 +106,18 @@ class ContactForm extends AbstractDocumentForm
             ),
             'attributes' => array(
                 'id'       => $this->getName() . '-assignedTo',
-                'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
+            'type' => 'Tactile\Form\Element\CommaSeparatedTags',
+            'name' => 'tags',
+            'options' => array(
+                'label'        => 'Tags',
+                'tags_service' => $this->getApplicationServiceLocator()->get('Tactile\Service\TagsService'),
+            ),
+            'attributes' => array(
+                'id'       => $this->getName() . '-tags',
             ),
         ));
         

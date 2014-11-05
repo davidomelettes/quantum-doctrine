@@ -185,6 +185,8 @@ return array(
         'template_map' => array(
             'form/fieldset/address'          => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
             'form/fieldset/contact-method'   => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
+            //'form/fieldset/tags'             => __DIR__ . '/../view/partial/form/horizontal/fieldset/tags.phtml',
+            'form/horizontal/element/tags'   => __DIR__ . '/../view/partial/form/horizontal/element/tags.phtml',
             'form/note'                      => __DIR__ . '/../view/partial/form/note.phtml',
             'html/head'                      => __DIR__ . '/../view/partial/html/head.phtml',
             'listify/address'                => __DIR__ . '/../view/partial/listify/address.phtml',

@@ -1,0 +1,18 @@
+<?php $element = $this->element; ?>
+<label class="col-md-<?php echo $this->labelColWidth; ?> control-label" for="<?php echo $element->getAttribute('id'); ?>">
+    <?php echo $element->getLabel(); ?>
+</label>
+<div class="col-md-<?php echo $this->inputColWidth; ?>">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="<?php echo $element->getAttribute('class'); ?>" id="<?php echo $element->getAttribute('id'); ?>" name="<?php echo $element->getName(); ?>" value="<?php echo $this->escapeHtmlAttr($element->getTagNames(true)); ?>">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <ul class="list-inline form-control-static"><?php foreach ($element->getTagNames() as $tagName): ?><li><span class="btn btn-xs btn-info" data-tag="<?php echo $this->escapeHtmlAttr($tagName); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tagName); ?></span></li><?php endforeach; ?></ul>
+        </div>
+    </div>
+    <?php echo $this->formElementErrors()->render($element, array('class' => 'help-block list-unstyled')); ?>
+</div>

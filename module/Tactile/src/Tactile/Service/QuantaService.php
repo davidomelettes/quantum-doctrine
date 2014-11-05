@@ -33,6 +33,17 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
     {
         $resource = $this->getResource();
         $quantum->setResource($resource);
+        
+        // Add tags to Resource
+        foreach ($quantum->getTags() as $tag) {
+            $tagName = $tag->getName();
+            $nameMatch = function ($t) use ($tagName) {
+                return $t->getName() === $tagName;
+            };
+            if ($resource->getTags()->filter($nameMatch)->count() < 1) {
+                $resource->getTags()->add($tag);
+            }
+        }
     
         return parent::save($quantum);
     }
@@ -40,12 +51,14 @@ abstract class QuantaService extends AbstractAccountBoundHistoricDocumentService
     public function fetchByTags($tags)
     {
         $qb = $this->createDefaultFindQuery();
+        $tagRefs = array();
         foreach ($tags as $tag) {
             if (!$tag instanceof Document\Tag) {
                 throw new \Exception('Expected a Tag');
             }
-            $qb->field('tags')->includesReferenceTo($tag);
+            $tagRefs[] = $qb->expr()->includesReferenceTo($tag)->getQuery();
         }
+        $qb->field('tags')->all($tagRefs);
         
         $cursor = $qb->getQuery()->execute();
         return $this->getPaginator($cursor);

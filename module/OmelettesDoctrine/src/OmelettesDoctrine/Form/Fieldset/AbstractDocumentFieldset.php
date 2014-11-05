@@ -26,8 +26,6 @@ class AbstractDocumentFieldset extends Fieldset implements ServiceLocatorAwareIn
     public function getHydrator()
     {
         return $this->getApplicationServiceLocator()->get('OmelettesDoctrine\Stdlib\Hydrator\UberHydrator');
-        //$dm = $this->getApplicationServiceLocator()->get('doctrine.documentmanager.odm_default');
-        //return new UberHydrator($dm);
     }
     
     /**

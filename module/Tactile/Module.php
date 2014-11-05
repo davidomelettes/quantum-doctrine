@@ -42,12 +42,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
                     $form->setDocumentService($sm->get('Tactile\Service\NotesService'));
                     return $form;
                 },
-                'Tactile\Form\TagForm' => function ($fm) {
-                    $sm = $fm->getServiceLocator();
-                    $form = new Form\TagForm();
-                    $form->setDocumentService($sm->get('Tactile\Service\TagsService'));
-                    return $form;
-                },
                 'Tactile\Form\UserPreferencesForm' => function ($fm) {
                     $sm = $fm->getServiceLocator();
                     $form = new Form\UserPreferencesForm();
@@ -65,6 +59,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Fo
                 // Hydration
                 'Tactile\Stdlib\Hydrator\ContactMethodHydrator' => function ($sm) {
                     $hydrator = new Stdlib\Hydrator\ContactMethodHydrator($sm->get('doctrine.documentmanager.odm_default'));
+                    return $hydrator;
+                },
+                'Tactile\Stdlib\Hydrator\TagsHydrator' => function ($sm) {
+                    $hydrator = new Stdlib\Hydrator\TagsHydrator($sm->get('doctrine.documentmanager.odm_default'));
                     return $hydrator;
                 },
                 

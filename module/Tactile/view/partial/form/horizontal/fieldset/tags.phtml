@@ -1,0 +1,31 @@
+<?php
+
+$fieldset = $this->element;
+$tagNamesInput = $fieldset->get('names');
+$tagNamesInput->setAttribute('class', 'form-control');
+$tagsString = $tagNamesInput->getValue();
+$tagNames = preg_split('/,/', $tagsString, -1, PREG_SPLIT_NO_EMPTY);
+
+?>
+
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <div class="form-group">
+        <label class="col-md-<?php echo $this->labelColWidth; ?> control-label" for="<?php echo $tagNamesInput->getAttribute('id'); ?>">
+            <?php echo $tagNamesInput->getLabel(); ?>
+        </label>
+        <div class="col-md-<?php echo $this->inputColWidth; ?>">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <?php echo $this->formText($tagNamesInput); ?>
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <ul class="list-inline form-control-static"><?php foreach($tagNames as $tagName): ?><li><span class="btn btn-xs btn-info" data-tag="<?php echo $this->escapeHtmlAttr($tagName); ?>"><span class="glyphicon glyphicon-tag"></span> <?php echo $this->escapeHtml($tagName); ?></span></li><?php endforeach; ?></ul>
+                </div>
+            </div>
+            <?php echo $this->formElementErrors()->render($tagNamesInput, array('class' => 'help-block list-unstyled')); ?>
+        </div>
+    </div>
+</fieldset>

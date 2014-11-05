@@ -9,15 +9,6 @@
                 </div>
                 <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
             </div>
-            <div class="panel-heading">
-                <div class="tags">
-                    <div class="pull-right">
-                        <?php $this->tagForm->setAttribute('action', $this->url('contacts/id', array('action' => 'set-tags'), true)); ?>
-                        <?php echo $this->partial('form/inline', array('form' => $this->tagForm)); ?>
-                    </div>
-                    <?php echo $this->listify($item->getTags(), array('list_class' => 'list-inline', 'list_empty_text' => 'No Tags', 'route_name' => 'contacts/noid')); ?>
-                </div>
-            </div>
             <div class="panel-body">
                 <dl class="dl-horizontal">
                     <dt><?php echo $this->translate('Description'); ?></dt>
@@ -31,6 +22,10 @@
                     <dt><?php echo $this->translate('Assigned To'); ?></dt>
                     <dd>
                         <?php echo $this->prettyUser($item->getAssignedTo()); ?>
+                    </dd>
+                    <dt><?php echo $this->translate('Tags'); ?></dt>
+                    <dd>
+                        <?php echo $this->listify($item->getTags(), array('list_class' => 'list-inline', 'list_empty_text' => 'No Tags', 'route_name' => 'contacts/noid')); ?>
                     </dd>
                 </dl>
                 <dl class="authorship text-muted text-right">
