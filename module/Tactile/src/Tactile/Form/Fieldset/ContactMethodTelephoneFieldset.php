@@ -2,10 +2,9 @@
 
 namespace Tactile\Form\Fieldset;
 
-use Omelettes\Form\ViewPartialInterface;
 use Tactile\Document;
 
-class ContactMethodTelephoneFieldset extends ContactMethodFieldset implements ViewPartialInterface
+class ContactMethodTelephoneFieldset extends ContactMethodFieldset
 {
     public function init()
     {
@@ -34,8 +33,4 @@ class ContactMethodTelephoneFieldset extends ContactMethodFieldset implements Vi
         ));
     }
     
-    public function getViewPartial()
-    {
-        return 'form/fieldset/contact-method';
-    }
 }

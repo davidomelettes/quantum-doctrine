@@ -4,7 +4,7 @@ namespace Tactile\Stdlib\Hydrator;
 
 use OmelettesDoctrine\Stdlib\Hydrator\UberHydrator;
 
-class ContactMethodHydrator extends UberHydrator
+class MultiTypeCollectionHydrator extends UberHydrator
 {
     public function extract($object)
     {

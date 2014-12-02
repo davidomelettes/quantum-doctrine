@@ -8,18 +8,10 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Zend\InputFilter;
 
 /**
- * @ODM\Document(collection="resources.fields", requireIndexes=true)
- * @ODM\InheritanceType("SINGLE_COLLECTION")
- * @ODM\DiscriminatorField("type")
+ * @ODM\MappedSuperclass
  */
-class ResourceField extends OmDoc\AbstractAccountBoundHistoricDocument
+class ResourceField implements InputFilter\InputFilterAwareInterface
 {
-    /**
-     * @var Resource
-     * @ODM\ReferenceOne(targetDocument="Resource")
-     */
-    protected $resource;
-    
     /**
      * @var string
      * @ODM\String
@@ -34,27 +26,9 @@ class ResourceField extends OmDoc\AbstractAccountBoundHistoricDocument
     protected $label;
     
     /**
-     * @var boolean
-     * @ODM\Boolean
+     * @var InputFilter\InputFilter
      */
-    protected $required;
-    
-    /**
-     * @var Boolean
-     * @ODM\Boolean
-     */
-    protected $protected;
-    
-    public function setResource(Resource $resource)
-    {
-        $this->resource = $resource;
-        return $this;
-    }
-    
-    public function getResource()
-    {
-        return $this->resource;
-    }
+    protected $inputFilter;
     
     public function setName($name)
     {
@@ -78,32 +52,51 @@ class ResourceField extends OmDoc\AbstractAccountBoundHistoricDocument
         return $this->label;
     }
     
-    public function setRequired($required)
+    public function setInputFilter(InputFilter\InputFilterInterface $inputFilter)
     {
-        $this->required = (boolean) $required;
-        return $this;
-    }
-    
-    public function getRequired()
-    {
-        return $this->required;
-    }
-    
-    public function setProtected($protected)
-    {
-        $this->protected = (boolean) $protected;
-        return $this;
-    }
-    
-    public function getProtected()
-    {
-        return $this->protected;
+        throw new \Exception('Interface method not used');
     }
     
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
-            $filter = parent::getInputFilter();
+            $filter = new InputFilter\InputFilter();
+            
+            $filter->add(array(
+                'name'     => 'name',
+                'required' => true,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
+            ));
+            
+            $filter->add(array(
+                'name'     => 'label',
+                'required' => true,
+                'filters'		=> array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators'	=> array(
+                    array(
+                        'name'		=> 'StringLength',
+                        'options'	=> array(
+                            'encoding'	=> 'UTF-8',
+                            'min'		=> 1,
+                            'max'		=> 255,
+                        ),
+                    ),
+                ),
+            ));
             
             $this->inputFilter = $filter;
         }

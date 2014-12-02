@@ -11,6 +11,7 @@ $.fn.omCollection = function(options) {
 			var index = $new.data('index');
 			var $item = $($(this).data('template').replace(/__index__(?:\w__)?/g, index));
 			$item.find('.remove').click(remove);
+			$item.find('fieldset.collection').omCollection();
 			$new.data('index', index+1).parents('div.form-group:first').before($item);
 		});
 		$c.find('.remove').click(remove);

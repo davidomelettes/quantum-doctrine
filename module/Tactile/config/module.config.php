@@ -108,7 +108,6 @@ return array(
                                 'action' => '[a-z][a-z0-9_-]{1,30}',
                             ),
                             'defaults'    => array(
-                                'controller' => 'Tactile\Controller\Contacts',
                                 'action'     => 'view',
                             ),
                         ),
@@ -122,7 +121,6 @@ return array(
                                 'action' => '[a-z][a-z0-9_-]+',
                             ),
                             'defaults'    => array(
-                                'controller' => 'Tactile\Controller\Contacts',
                                 'action'     => 'view',
                             ),
                         ),
@@ -185,7 +183,6 @@ return array(
         'template_map' => array(
             'form/fieldset/address'          => __DIR__ . '/../view/partial/form/horizontal/fieldset/address.phtml',
             'form/fieldset/contact-method'   => __DIR__ . '/../view/partial/form/horizontal/fieldset/contact-method.phtml',
-            //'form/fieldset/tags'             => __DIR__ . '/../view/partial/form/horizontal/fieldset/tags.phtml',
             'form/horizontal/element/tags'   => __DIR__ . '/../view/partial/form/horizontal/element/tags.phtml',
             'form/note'                      => __DIR__ . '/../view/partial/form/note.phtml',
             'html/head'                      => __DIR__ . '/../view/partial/html/head.phtml',
@@ -196,6 +193,7 @@ return array(
             'navigation/navbar-fixed-top'    => __DIR__ . '/../view/partial/navigation/navbar-fixed-top.phtml',
             'navigation/navbar-fixed-bottom' => __DIR__ . '/../view/partial/navigation/navbar-fixed-bottom.phtml',
             'tabulate/contact'               => __DIR__ . '/../view/partial/tabulate/contact.phtml',
+            'tabulate/resource'              => __DIR__ . '/../view/partial/tabulate/resource.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

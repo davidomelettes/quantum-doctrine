@@ -34,7 +34,7 @@ if ($templateElement instanceof ViewPartialInterface) {
                             <span class="glyphicon glyphicon-plus"></span> <?php echo $this->translate('Add ' . $templateElement->getLabel()); ?>
                             <span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
                         </button>
-                        <div class="dropdown-menu" role="menu">
+                        <ul class="dropdown-menu" role="menu">
                             <?php foreach ($collection->getTargetMap() as $type => $target): ?>
                             <?php
 
@@ -60,7 +60,7 @@ if ($templateElement instanceof ViewPartialInterface) {
                                 <a class="template" href="#" data-index="<?php echo count($collection->getIterator()); ?>" data-type="<?php echo $this->escapeHtmlAttr($type); ?>" data-template="<?php echo $this->escapeHtmlAttr($templateMarkup); ?>"><?php echo $this->translate($collection->getTypeLabel($type)); ?></a>
                             </li>
                             <?php endforeach; ?>
-                        </div>
+                        </ul>
                     </div>
                 </div>
             </div>

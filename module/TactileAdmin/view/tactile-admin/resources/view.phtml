@@ -1,0 +1,46 @@
+<?php $item = $this->item; ?>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="crud pull-right">
+                    <a class="btn btn-default" href="<?php echo $this->url('admin/resources/id', array('action' => 'edit', 'id' => $item->getId())); ?>"><span class="glyphicon glyphicon-pencil"></span> <?php echo $this->translate('Edit'); ?></a>
+                </div>
+                <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt><?php echo $this->translate('Tags'); ?></dt>
+                    <dd>
+                        <?php echo $this->listify($item->getTags(), array('list_class' => 'list-inline', 'list_empty_text' => 'No Tags', 'route_name' => 'contacts/noid')); ?>
+                    </dd>
+                </dl>
+                <dl class="authorship text-muted text-right">
+                    <dt><span class="glyphicon glyphicon-time"></span> Created</dt>
+                    <dd><?php echo $this->prettyTime($item->getCreated()); ?> by <?php echo $this->prettyUser($item->getCreatedBy()); ?></dd>
+                    <?php if ($item->getUpdated()->format('U') !== $item->getCreated()->format('U')): ?>
+                    <dt>Last Updated</dt>
+                    <dd>
+                        <?php echo $this->prettyTime($item->getUpdated()); ?>
+                        <?php if ($item->getUpdatedBy() !== $item->getCreatedBy()): ?>
+                        by <?php echo $this->prettyUser($item->getUpdatedBy()); ?>
+                        <?php endif; ?>
+                    </dd>
+                    <?php endif; ?>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Linked Items</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    <li>No linked items</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

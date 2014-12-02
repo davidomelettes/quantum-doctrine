@@ -2,10 +2,7 @@
 
 namespace Tactile\Form;
 
-use OmelettesDoctrine\Form\AbstractDocumentForm;
-use OmelettesDoctrine\Form\Fieldset;
-
-class ContactForm extends AbstractDocumentForm
+class ContactForm extends AbstractQuantumForm
 {
     public function init()
     {
@@ -120,6 +117,10 @@ class ContactForm extends AbstractDocumentForm
                 'id'       => $this->getName() . '-tags',
             ),
         ));
+        
+        $customValuesFieldset = $this->getServiceLocator()->get('Tactile\Form\Fieldset\CustomValuesFieldset');
+        $customValuesFieldset->setResource($this->getDocumentService()->getResource());
+        $this->add($customValuesFieldset);
         
         $this->addSubmitFieldset('Save Contact');
     }

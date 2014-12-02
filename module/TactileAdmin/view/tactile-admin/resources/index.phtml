@@ -1,1 +1,28 @@
-Resources
+<?php
+
+$resources = $this->resources;
+
+?>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title"><?php echo $this->translate($this->title); ?></h2>
+            </div>
+            <div class="panel-body">
+                <?php echo $this->tabulate($resources); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?php echo $this->translate('Resource Tasks'); ?></h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

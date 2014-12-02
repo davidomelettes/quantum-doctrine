@@ -33,9 +33,23 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
      */
     protected $tags = array();
     
+    /**
+     * @var ArrayCollection
+     * @ODM\EmbedMany(
+     *     strategy="setArray",
+     *     discriminatorField="type",
+     *     discriminatorMap={
+     *         "t"="Tactile\Document\CustomValueText",
+     *         "n"="Tactile\Document\CustomValueNumeric",
+     *     }
+     * )
+     */
+    protected $customValues;
+    
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->customValues = new ArrayCollection();
     }
     
     public function setResource(Resource $resource)
@@ -83,6 +97,33 @@ class Quantum extends OmDoc\AbstractAccountBoundHistoricDocument
     {
         foreach ($toRemove as $remove) {
             $this->tags->removeElement($remove);
+        }
+        return $this;
+    }
+    
+    public function setCustomValues($customValues)
+    {
+        $this->customValues = $customValues;
+        return $this;
+    }
+    
+    public function getCustomValues()
+    {
+        return $this->customValues;
+    }
+    
+    public function addCustomValues($toAdd)
+    {
+        foreach ($toAdd as $add) {
+            $this->customValues->add($add);
+        }
+        return $this;
+    }
+    
+    public function removeCustomValues($toRemove)
+    {
+        foreach ($toRemove as $remove) {
+            $this->customValues->removeElement($remove);
         }
         return $this;
     }

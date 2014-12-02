@@ -28,12 +28,12 @@ class SignupResources implements FixtureInterface
                 'plural'    => 'Contacts',
             ),
             'opportunities' => array(
-                'singular'  => 'Contact',
-                'plural'    => 'Contacts',
+                'singular'  => 'Opportunity',
+                'plural'    => 'Opportunities',
             ),
             'activities'    => array(
-                'singular'  => 'Contact',
-                'plural'    => 'Contacts',
+                'singular'  => 'Activity',
+                'plural'    => 'Activities',
             ),
         );
         

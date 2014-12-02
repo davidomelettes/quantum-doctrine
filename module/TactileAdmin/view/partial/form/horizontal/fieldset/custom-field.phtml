@@ -1,0 +1,52 @@
+<?php
+
+$fieldset = $this->element;
+$typeInput = $fieldset->get('type');
+$hasErrors = $typeInput->getMessages();
+
+$nameInput = $fieldset->get('name');
+$nameInput->setAttribute('class', 'form-control');
+$labelInput = $fieldset->get('label');
+$labelInput->setAttribute('class', 'form-control');
+$defaultInput = $fieldset->get('default');
+$defaultInput->setAttribute('class', 'form-control');
+
+?>
+
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <div class="form-group">
+        <label class="control-label col-md-3">
+            <?php echo $this->escapeHtml($nameInput->getLabel()); ?>
+        </label>
+        <div class="col-md-9">
+            <?php echo $this->formInput($nameInput); ?>
+            <?php echo $this->formElementErrors()->render($nameInput, array('class' => 'help-block list-unstyled')); ?>
+        </div>
+    </div>
+    <div class="form-group<?php echo $hasErrors ? " has-error" : ''; ?>">
+        <?php echo $this->formHidden($typeInput); ?>
+        <label class="control-label col-md-3">
+            <?php echo $this->escapeHtml($labelInput->getLabel()); ?>
+        </label>
+        <div class="col-md-4">
+            <div class="input-group">
+                <?php echo $this->formText($labelInput); ?>
+                <span class="input-group-addon remove">
+                    <span class="glyphicon glyphicon-remove text-danger"></span>
+                </span>
+            </div>
+            <?php echo $this->formElementErrors()->render($labelInput, array('class' => 'help-block list-unstyled')); ?>
+        </div>
+        <label class="control-label col-md-2">
+            <?php echo $this->escapeHtml($defaultInput->getLabel()); ?>
+        </label>
+        <div class="col-md-3">
+            <?php if ($defaultInput->getAttribute('type') === 'select'): ?>
+            <?php echo $this->formSelect($defaultInput); ?>
+            <?php else: ?>
+            <?php echo $this->formInput($defaultInput); ?>
+            <?php endif; ?>
+            <?php echo $this->formElementErrors()->render($defaultInput, array('class' => 'help-block list-unstyled')); ?>
+        </div>
+    </div>
+</fieldset>

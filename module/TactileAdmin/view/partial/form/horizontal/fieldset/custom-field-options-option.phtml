@@ -1,0 +1,25 @@
+<?php
+
+$fieldset = $this->element;
+$optionInput = $fieldset->get('option');
+$optionInput->setAttribute('class', 'form-control');
+$hasErrors = $optionInput->getMessages();
+
+?>
+
+<fieldset<?php echo $fieldset->getAttribute('class') ? ' class="'.$fieldset->getAttribute('class').'"' : ''; ?>>
+    <div class="form-group form-group-custom-field<?php echo $hasErrors ? " has-error" : ''; ?>">
+        <label class="control-label col-md-3">
+            <?php echo $this->escapeHtml($optionInput->getLabel()); ?>
+        </label>
+        <div class="col-md-9">
+            <div class="input-group">
+                <?php echo $this->formText($optionInput); ?>
+                <span class="input-group-addon remove">
+                    <span class="glyphicon glyphicon-remove text-danger"></span>
+                </span>
+            </div>
+            <?php echo $this->formElementErrors()->render($optionInput, array('class' => 'help-block list-unstyled')); ?>
+        </div>
+    </div>
+</fieldset>

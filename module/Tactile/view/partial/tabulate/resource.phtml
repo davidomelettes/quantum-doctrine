@@ -1,0 +1,4 @@
+<?php $item = $this->item; ?>
+<td>
+    <a href="<?php echo $this->url('admin/resources/id', array('id' => $item->getId())); ?>"><?php echo $this->escapeHtml($item->getPlural()); ?></a>
+</td>

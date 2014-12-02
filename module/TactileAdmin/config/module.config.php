@@ -8,6 +8,8 @@ return array(
                 'admin' => array(),
                 'admin/account' => array(),
                 'admin/resources' => array(),
+                'admin/resources/id' => array(),
+                'admin/resources/noid' => array(),
                 'admin/users' => array(),
             ),
         ),
@@ -15,6 +17,8 @@ return array(
             'admin' => array(),
             'admin/account' => array(),
             'admin/resources' => array(),
+            'admin/resources/id' => array(),
+            'admin/resources/noid' => array(),
             'admin/users' => array(),
         ),
     ),
@@ -66,10 +70,38 @@ return array(
                     'resources' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/resources[/:action][/:resource_name]',
+                            'route'    => '/resources',
                             'defaults' => array(
                                 'controller' => 'Admin\Controller\Resources',
                                 'action'     => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'noid' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'       => '/:action[/:extra]',
+                                    'constraints' => array(
+                                        'action' => '[a-z][a-z0-9_-]{1,30}',
+                                    ),
+                                    'defaults'    => array(
+                                        'action'     => 'view',
+                                    ),
+                                ),
+                            ),
+                            'id' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'       => '/:id[/:action]',
+                                    'constraints' => array(
+                                        'id'     => '[a-z0-9]{32}',
+                                        'action' => '[a-z][a-z0-9_-]+',
+                                    ),
+                                    'defaults'    => array(
+                                        'action'     => 'view',
+                                    ),
+                                ),
                             ),
                         ),
                     ),
@@ -80,6 +112,9 @@ return array(
     
     'view_manager' => array(
         'template_map' => array(
+            'form/fieldset/custom-field'                => __DIR__ . '/../view/partial/form/horizontal/fieldset/custom-field.phtml',
+            'form/fieldset/custom-field-options'        => __DIR__ . '/../view/partial/form/horizontal/fieldset/custom-field-options.phtml',
+            'form/fieldset/custom-field-options-option' => __DIR__ . '/../view/partial/form/horizontal/fieldset/custom-field-options-option.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
